@@ -1,7 +1,19 @@
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 
 .login-form > div {
     margin-top: 10px;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.todos-createDescription {
+    margin-right: 10px;
 }

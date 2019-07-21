@@ -1,36 +1,121 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block content %}
 
-{% block content %}
-<div class="col-md-4 col-md-offset-4">
+<div id="todos" class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
-        {% for todo in todos %}
-            <tr>
-                <td>{{ todo.id }}</td>
-                <td>{{ todo.user_id }}</td>
-                <td>
-                    <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
-                       {{ todo.description }}
-                    </a>
-                </td>
-                <td>
-                    <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                        <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
+        <th>#</th>
+        <th>User</th>
+        <th>Description</th>
+        <th></th>
+
+        <tr v-for="todo in toDoList" v-bind:key="todo.id">
+            <td>${ todo.id }</td>
+            <td>${ todo.user_id }</td>
+            <td>
+                <a :href="`{{ app.request.baseurl }}/todo/${todo.id}`">
+                    ${ todo.description }
+                </a>
+            </td>
+            <td>
+                <button v-on:click="deleteToDo(todo)" type="button" class="btn btn-xs btn-danger">
+                    <span class="glyphicon glyphicon-remove glyphicon-white"></span>
+                </button>
+            </td>
+        </tr>
         <tr>
-            <form method="post" action="{{ app.request.baseurl }}/todo/add">
-                <td colspan="3">
-                    <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary">Add</button>
-                </td>
-            </form>
+            <td colspan="4">
+                <form @submit.prevent="createToDo">
+                    <div class="flex">
+                        <input
+                            v-model="createDescription"
+                            type="textbox"
+                            name="description"
+                            class="todos-createDescription flex-grow"
+                            placeholder="Description..."
+                        />
+                        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                    </div>
+                </form>
+            </td>
         </tr>
     </table>
 </div>
+
+<script>
+    var todos = new Vue({
+        el: '#todos',
+        data: {
+            user_id: '{{ user.id }}',
+            isError: false,
+            toDoList: [],
+            toDoListIsLoading: true,
+            createDescription: '',
+        },
+        methods: {
+            getToDos: function() {
+                this.toDoListIsLoading = true;
+                axios({
+                    method: 'get',
+                    url: '{{app.request.baseurl}}/todo',
+                    data: {},
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(result => {
+                        this.toDoList = result.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.isError = true;
+                    })
+                    .finally(() => {
+                        this.toDoListIsLoading = false;
+                    });
+            },
+            createToDo: function() {
+                // Clear the input now, so the user gets instant feedback
+                const description = this.createDescription;
+                this.createDescription = '';
+
+                axios({
+                    method: 'post',
+                    url: '{{app.request.baseurl}}/todo/add',
+                    data: { description },
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(result => {
+                        this.toDoList.push(result.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.isError = true;
+                    });
+            },
+            deleteToDo: function(toDo) {
+                // Remember the index so we can add it back if deleting fails
+                const toDoToDeleteIndex = this.toDoList.findIndex(t => t.id === toDo.id);
+
+                // Eager delete
+                const toDoToDeleteId = toDo.id;
+                const toDoToDelete = this.toDoList.splice(toDoToDeleteIndex, 1);
+
+                // Call the API
+                axios({
+                    method: 'put',
+                    url: `{{app.request.baseurl}}/todo/delete/${toDoToDeleteId}`,
+                    data: {},
+                    headers: { 'Content-Type': 'application/json' },
+                }).catch(error => {
+                    // Add it back
+                    this.toDoList.splice(toDoToDeleteIndex, 0, toDoToDelete);
+                    console.error(error);
+                    this.isError = true;
+                });
+            },
+        },
+        created: function() {
+            this.getToDos();
+        },
+        delimiters: ['${', '}'],
+    });
+</script>
 {% endblock %}

@@ -82,16 +82,22 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     }
 
     $user_id = $user['id'];
-    $description = $request->get('description');
     $contentType = $request->headers->get('Content-Type');
+    if (strpos($contentType, 'application/json') === false) {
+      $description = $request->get('description');
+    } else {
+      $description = json_decode(file_get_contents('php://input'), true)['description'];
+    }
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
     $app['db']->executeUpdate($sql);
+    $db_id = $app['db']->lastInsertId();
 
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        // Give back the object so it can eager update in the future
+        return json_encode(array('success' => true, 'id' => $db_id, 'user_id' => $user_id, 'description' => $description));
     }
 });
 
