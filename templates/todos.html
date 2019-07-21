@@ -5,25 +5,25 @@
     <div class="d-flex">
         <h1 class="flex-grow-1 mr-2">To Do</h1>
         <div class="d-flex align-items-center">
-            <input aria-label="Hide completed" v-model="hideCompleted" v-on:click="toggleHideCompleted()" type="checkbox" class="mr-2">
+            <input aria-label="Hide completed" v-model="hideCompleted" v-on:click="toggleHideCompleted()" type="checkbox" class="mr-2" data-testid="todos-toggleHideCompleted">
             <span>Hide completed</span>
         </div>
     </div>
 
-    <transition-group tag="ul" name="todoList" class="list-group">
+    <transition-group tag="ul" name="todoList" class="list-group" data-testid="toDoList">
         <li
             v-for="todo in toDoList"
             v-bind:key="todo.id"
             v-bind:class="{ 'todo-completed': todo.completed }"
             v-if="!hideCompleted || !todo.completed"
             class="list-group-item my-2 py-3 shadow-sm d-flex align-items-center rounded todo">
-            <input aria-label="Toggle completed" v-model="todo.completed" v-on:click="toggleCompleted(todo)" type="checkbox" class="mr-2">
+            <input aria-label="Toggle completed" v-model="todo.completed" v-on:click="toggleCompleted(todo)" type="checkbox" class="mr-2" data-testid="todos-checkbox">
             <div class="flex-grow-1">
                 <a :href="`{{ app.request.baseurl }}/todo/${todo.id}`">
                     ${ todo.description }
                 </a>
             </div>
-            <button aria-label="Delete To Do" v-on:click="deleteToDo(todo)" type="button" class="button-clear-properties">
+            <button aria-label="Delete To Do" v-on:click="deleteToDo(todo)" type="button" class="button-clear-properties" data-testid="todos-deleteButton">
                 <span class="fas fa-times text-black-50"></span>
             </button>
         </li>

@@ -28,9 +28,9 @@
             </ul>
             <ul class="navbar-nav ml-md-auto">
             {% if user %}
-                <li class="nav-item"><a class="nav-link" href="/logout"><span class="fas fa-user"></span> {{ user.username }} - Logout</a></li>
+                <li class="nav-item"><a class="nav-link" data-testid="logout" href="/logout"><span class="fas fa-user"></span> {{ user.username }} - Logout</a></li>
             {% else %}
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" data-testid="login" href="/login">Login</a></li>
             {% endif %}
             </ul>
         </div>
