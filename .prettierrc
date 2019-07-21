@@ -1,0 +1,11 @@
+{
+  "singleQuote": true,
+  "printWidth": 140,
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": { "parser": "markdown" }
+    }
+  ]
+}
