@@ -117,8 +117,14 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+    // If no parameters are given, assume old behaviour of always setting to true
+    $params = json_decode(file_get_contents('php://input'), true);
+    $completed = 1;
+    if (isset($params['completed'])) {
+        $completed = $params['completed'] === true ? 1 : 0;
+    }
 
-    $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
+    $sql = "UPDATE todos SET completed = $completed WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');

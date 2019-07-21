@@ -3,12 +3,16 @@
 <div id="todos" class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
+        <th></th>
         <th>#</th>
         <th>User</th>
         <th>Description</th>
         <th></th>
 
         <tr v-for="todo in toDoList" v-bind:key="todo.id">
+            <td>
+                <input v-model="todo.completed" v-on:click="toggleCompleted(todo)" type="checkbox">
+            </td>
             <td>${ todo.id }</td>
             <td>${ todo.user_id }</td>
             <td>
@@ -23,7 +27,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 <form @submit.prevent="createToDo">
                     <div class="flex">
                         <input
@@ -61,7 +65,8 @@
                     headers: { 'Content-Type': 'application/json' },
                 })
                     .then(result => {
-                        this.toDoList = result.data;
+                        // Map string 1/0 (completed/incomplete) to boolean for easier use
+                        this.toDoList = result.data.map(d => { return {...d, completed: d.completed === '1'}});
                     })
                     .catch(error => {
                         console.log(error);
@@ -105,8 +110,27 @@
                     data: {},
                     headers: { 'Content-Type': 'application/json' },
                 }).catch(error => {
-                    // Add it back
+                    // Undo on failure
                     this.toDoList.splice(toDoToDeleteIndex, 0, toDoToDelete);
+                    console.error(error);
+                    this.isError = true;
+                });
+            },
+            toggleCompleted: function(toDo) {
+                // Eager update
+                toDo.completed = !toDo.completed;
+
+                // Call the API
+                axios({
+                    method: 'put',
+                    url: `{{app.request.baseurl}}/todo/complete/${toDo.id}`,
+                    data: {
+                        completed: toDo.completed,
+                    },
+                    headers: { 'Content-Type': 'application/json' },
+                }).catch(error => {
+                    // Undo on failure
+                    toDo.completed = !toDo.completed;
                     console.error(error);
                     this.isError = true;
                 });
