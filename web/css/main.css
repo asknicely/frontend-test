@@ -6,14 +6,35 @@ body {
     margin-top: 10px;
 }
 
-.flex {
-    display: flex;
+.button-clear-properties {
+    background: inherit;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.5;
 }
 
-.flex-grow {
-    flex-grow: 1;
+.todo,
+.todoList {
+    transition: all 0.25s ease;
 }
 
-.todos-createDescription {
-    margin-right: 10px;
+.todo-completed {
+    text-decoration: line-through;
+    filter: opacity(0.5);
+}
+
+.todo-deleted {
+    filter: opacity(0);
+}
+
+.todo-checkbox {
+    font-size: 32px;
+}
+
+.todoList-enter,
+.todoList-leave-to {
+    opacity: 0;
 }

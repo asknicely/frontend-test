@@ -1,21 +1,38 @@
 {% extends "layout.html" %}
-
 {% block content %}
-<div class="col-md-4 col-md-offset-4">
-    <h1>Todo:</h1>
-    <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
-        <tr>
-            <td>{{ todo.id }}</td>
-            <td>{{ todo.user_id }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-                <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                    <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                </form>
-            </td>
-        </tr>
-    </table>
+<div class="container-fluid">
+    <h1>To Do</h1>
+    <li class="list-group-item my-2 py-3 shadow-sm d-flex align-items-center rounded">
+        <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}" class="mr-3">
+            {% if todo.completed == '0' %}
+            <button aria-label="Complete To Do" type="submit" class="button-clear-properties">
+                <span class="far fa-circle todo-checkbox"></span>
+            </button>
+            {% else %}
+            <button aria-label="Mark to do as incomplete" type="submit" class="button-clear-properties">
+                <span class="far fa-check-circle todo-checkbox"></span>
+            </button>
+            {% endif %}
+        </form>
+
+        <div class="flex-grow-1">
+            <div>
+                {{ todo.description }}
+                {% if todo.completed == '1' %}
+                <span class="sr-only">Completed</span>
+                {% endif %}
+            </div>
+            <div class="text-muted">
+                <small>ID: {{ todo.id }} - User ID: {{ todo.user_id }}</small>
+            </div>
+        </div>
+
+        <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
+            <button aria-label="Delete To Do" type="submit" class="button-clear-properties">
+                <span class="fas fa-times text-black-50"></span>
+            </button>
+        </form>
+    </li>
 </div>
 
 {% endblock %}

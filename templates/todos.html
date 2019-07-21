@@ -1,48 +1,46 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %}
+{% block content %}
 
-<div id="todos" class="col-md-4 col-md-offset-4">
-    <h1>Todo List:</h1>
-    <table class="table table-striped">
-        <th></th>
-        <th>#</th>
-        <th>User</th>
-        <th>Description</th>
-        <th></th>
+<div id="todos" class="container-fluid">
+    <div class="d-flex">
+        <h1 class="flex-grow-1 mr-2">To Do</h1>
+        <div class="d-flex align-items-center">
+            <input aria-label="Hide completed" v-model="hideCompleted" v-on:click="toggleHideCompleted()" type="checkbox" class="mr-2">
+            <span>Hide completed</span>
+        </div>
+    </div>
 
-        <tr v-for="todo in toDoList" v-bind:key="todo.id">
-            <td>
-                <input v-model="todo.completed" v-on:click="toggleCompleted(todo)" type="checkbox">
-            </td>
-            <td>${ todo.id }</td>
-            <td>${ todo.user_id }</td>
-            <td>
+    <transition-group tag="ul" name="todoList" class="list-group">
+        <li
+            v-for="todo in toDoList"
+            v-bind:key="todo.id"
+            v-bind:class="{ 'todo-completed': todo.completed }"
+            v-if="!hideCompleted || !todo.completed"
+            class="list-group-item my-2 py-3 shadow-sm d-flex align-items-center rounded todo">
+            <input aria-label="Toggle completed" v-model="todo.completed" v-on:click="toggleCompleted(todo)" type="checkbox" class="mr-2">
+            <div class="flex-grow-1">
                 <a :href="`{{ app.request.baseurl }}/todo/${todo.id}`">
                     ${ todo.description }
                 </a>
-            </td>
-            <td>
-                <button v-on:click="deleteToDo(todo)" type="button" class="btn btn-xs btn-danger">
-                    <span class="fas fa-times"></span>
-                </button>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5">
-                <form @submit.prevent="createToDo">
-                    <div class="flex">
-                        <input
-                            v-model="createDescription"
-                            type="textbox"
-                            name="description"
-                            class="todos-createDescription flex-grow"
-                            placeholder="Description..."
-                        />
-                        <button type="submit" class="btn btn-sm btn-primary">Add</button>
-                    </div>
-                </form>
-            </td>
-        </tr>
-    </table>
+            </div>
+            <button aria-label="Delete To Do" v-on:click="deleteToDo(todo)" type="button" class="button-clear-properties">
+                <span class="fas fa-times text-black-50"></span>
+            </button>
+        </li>
+    </transition-group>
+
+    <form @submit.prevent="createToDo">
+        <div class="list-group-item my-2 py-3 shadow-sm d-flex align-items-center rounded">
+            <input
+                v-model="createDescription"
+                type="textbox"
+                name="description"
+                class="todos-createDescription flex-grow-1 ml-4 mr-2"
+                placeholder="Add a to do"
+            />
+            <button type="submit" class="btn btn-sm btn-primary">Add <span class="sr-only">To Do</span></button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -54,6 +52,7 @@
             toDoList: [],
             toDoListIsLoading: true,
             createDescription: '',
+            hideCompleted: false,
         },
         methods: {
             getToDos: function() {
@@ -135,6 +134,9 @@
                     this.isError = true;
                 });
             },
+            toggleHideCompleted: function() {
+                this.hideCompleted = !this.hideCompleted;
+            }
         },
         created: function() {
             this.getToDos();

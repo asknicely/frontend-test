@@ -58,6 +58,8 @@ You can complete the tasks in any order.
 Extra tasks:
 - Fix any bugs you may find.
 - Fix any security issues you may find.
+    - Not fixed, but SQL injection is a major security issue
+    - As well as no authentication checks for delete/edit apis (you can edit/delete other user's todos)
 - Adding a few unit tests to show us that you understand how they work is a bonus. 
 
 ### Documentation
