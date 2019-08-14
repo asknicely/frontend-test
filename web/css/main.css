@@ -5,3 +5,8 @@ body {
 .login-form > div {
     margin-top: 10px;
 }
+
+.btn-transparent {
+  background: transparent;
+  padding: 0;
+}
