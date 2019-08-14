@@ -102,6 +102,7 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
+
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
@@ -112,10 +113,12 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
 
-    $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
+    // toggle completed state of todo
+    $sql = "UPDATE todos SET completed = 1 - completed WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
+
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {

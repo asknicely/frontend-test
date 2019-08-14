@@ -1,0 +1,5 @@
+# Composer generated files
+vendor/
+
+# Development database configuration
+config/config.yml

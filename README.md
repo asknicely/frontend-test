@@ -29,7 +29,7 @@ Credentials:
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
-php composer.phar install
+php composer.phar install (if Composer_Setup.exe has been used on Windows then use composer install instead)
 cp config/config.yml.dist config/config.yml
 mysql -u root <database> < resources/database.sql
 mysql -u root <database> < resources/fixtures.sql
