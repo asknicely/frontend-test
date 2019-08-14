@@ -4,15 +4,24 @@
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
+        <th>#</th><th>User</th><th>Description</th><th colspan="2"></th>
         {% for todo in todos %}
             <tr>
                 <td>{{ todo.id }}</td>
-                <td>{{ todo.user_id }}</td>
+                <td>{{ todo.user_id }}{{ todo.completed }}</td>
                 <td>
                     <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
                        {{ todo.description }}
                     </a>
+                </td>
+                <td>
+                    <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
+                        {% if todo.completed == 1 %}
+                        <button type="submit" class="btn btn-sm btn-transparent"><span class="glyphicon glyphicon-check glyphicon-white"></span></div>
+                        {% else %}
+                        <button type="submit" class="btn btn-sm btn-transparent"><span class="glyphicon glyphicon-unchecked glyphicon-white"></span></button>
+                        {% endif %}
+                    </form>
                 </td>
                 <td>
                     <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
@@ -23,7 +32,7 @@
         {% endfor %}
         <tr>
             <form method="post" action="{{ app.request.baseurl }}/todo/add">
-                <td colspan="3">
+                <td colspan="4">
                     <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
                 </td>
                 <td>
