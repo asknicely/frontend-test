@@ -1,21 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<noscript>
+    <strong>We're sorry but frontend-test doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
-        <tr>
-            <td>{{ todo.id }}</td>
-            <td>{{ todo.user_id }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-                <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                    <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                </form>
-            </td>
-        </tr>
+        <tbody>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Description</th>
+                <th>Completed</th>
+                <th>Delete</th>
+            </tr>
+            <tr id="todo"></tr>
+        </tbody>
     </table>
 </div>
-
 {% endblock %}

@@ -6,6 +6,20 @@ use Symfony\Component\HttpFoundation\Response;
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
+    $distStyles = array_filter(scandir('web/dist/css'), function ($filename) {
+        return endsWith($filename, '.css');
+    });
+
+    // reverse to give chunk-vendors priority
+    $twig->addGlobal('dist_styles', $distStyles);
+
+    $distScripts = array_filter(scandir('web/dist/js'), function ($filename) {
+        return endsWith($filename, '.js');
+    });
+
+    // reverse to give chunk-vendors priority
+    $twig->addGlobal('dist_scripts', array_reverse($distScripts));
+
     return $twig;
 }));
 
@@ -25,7 +39,7 @@ $app->match('/login', function (Request $request) use ($app) {
         $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
         $user = $app['db']->fetchAssoc($sql);
 
-        if ($user){
+        if ($user) {
             $app['session']->set('user', $user);
             return $app->redirect('/todo');
         }
@@ -46,13 +60,13 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
-    $contentType = $request->headers->get('Content-Type');
+    $accept = $request->headers->get('Accept');
 
-    if ($id){
+    if ($id) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
 
-        if (strpos($contentType, 'application/json') === false) {
+        if (strpos($accept, 'application/json') === false) {
             return $app['twig']->render('todo.html', [
                 'todo' => $todo,
             ]);
@@ -64,7 +78,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
         $todos = $app['db']->fetchAll($sql);
 
-        if (strpos($contentType, 'application/json') === false) {
+        if (strpos($accept, 'application/json') === false) {
             return $app['twig']->render('todos.html', [
                 'todos' => $todos,
             ]);
@@ -96,32 +110,20 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 });
 
 
-$app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
+$app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
 
     $sql = "DELETE FROM todos WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
-    $contentType = $request->headers->get('Content-Type');
-
-    if (strpos($contentType, 'application/json') === false) {
-        return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
-    }
+    return json_encode(array('success' => true));
 });
 
 
-$app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+$app->patch('/todo/{id}', function (Request $request, $id) use ($app) {
 
     // toggle completed state of todo
     $sql = "UPDATE todos SET completed = 1 - completed WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
-    $contentType = $request->headers->get('Content-Type');
-
-    if (strpos($contentType, 'application/json') === false) {
-        return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
-    }
+    return json_encode(array('success' => true));
 });
