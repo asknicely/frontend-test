@@ -11,21 +11,21 @@
       <td>{{ todo.id }}</td>
       <td>{{ todo.user_id }}</td>
       <td v-bind:class="{ completed: todo.completed == 1 }">
-          <a :href="'/todo/' + todo.id" v-if="!individualMode">
-            {{ todo.description }}
-          </a>
-          <span v-else>
+          <span v-if="individualMode">
             {{ todo.description }}
           </span>
+          <a :href="'/todo/' + todo.id" v-else>
+            {{ todo.description }}
+          </a>
       </td>
       <td>
         <input
           type="checkbox"
           :checked="todo.completed == 1 ? 'checked' : ''"
-          v-on:change="toggleTodo()">
+          @change="toggleTodo()">
       </td>
       <td>
-        <button type="button" class="btn btn-xs btn-danger" v-on:click="deleteToDo()">
+        <button type="button" class="btn btn-xs btn-danger" @click="deleteToDo()">
           <span class="glyphicon glyphicon-remove glyphicon-white"></span>
         </button>
       </td>

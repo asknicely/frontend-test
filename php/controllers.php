@@ -10,7 +10,6 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
         return endsWith($filename, '.css');
     });
 
-    // reverse to give chunk-vendors priority
     $twig->addGlobal('dist_styles', $distStyles);
 
     $distScripts = array_filter(scandir('web/dist/js'), function ($filename) {

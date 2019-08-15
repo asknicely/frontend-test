@@ -36,7 +36,7 @@
             </div>
           </td>
           <td>
-            <button type="button" class="btn btn-sm btn-primary" v-on:click="addToDo()">Add</button>
+            <button type="button" class="btn btn-sm btn-primary" @click="addToDo()">Add</button>
           </td>
         </tr>
       </tbody>
