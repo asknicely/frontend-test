@@ -66,6 +66,9 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
     
+        // encode user input description to prevent xss attacks
+        $todo['description'] = $app->escape($todo['description']);
+
         if ($user_id != $todo['user_id']) {
             if (strpos($accept, 'application/json') === false) {
                 return $app->redirect('/login');
@@ -85,6 +88,11 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     } else {
         $sql = "SELECT * FROM todos WHERE user_id = '$user_id'";
         $todos = $app['db']->fetchAll($sql);
+
+        foreach ($todos as $todo) {
+            // encode user input description to prevent xss attacks
+            $todo['description'] = $app->escape($todo['description']);
+        }
 
         if (strpos($accept, 'application/json') === false) {
             return $app['twig']->render('todos.html', [
