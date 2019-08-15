@@ -6,7 +6,7 @@
       </div>
     </td>
   </tr>
-  <tr v-else>
+  <tr v-else class="trans-backg-color" v-bind:class="{ delete: deleteHover }">
     <template v-if="todo != undefined">
       <td v-bind:class="{ completed: todo.completed == 1 }">
           <span v-if="individualMode">
@@ -23,7 +23,11 @@
           @change="toggleTodo()">
       </td>
       <td>
-        <button type="button" class="btn btn-xs btn-danger" @click="deleteToDo()">
+        <button type="button"
+          class="btn btn-xs btn-danger"
+          @click="deleteToDo()"
+          @mouseover="deleteHover = true"
+          @mouseleave="deleteHover = false">
           <span class="glyphicon glyphicon-remove glyphicon-white"></span>
         </button>
       </td>
@@ -43,6 +47,7 @@ export default {
     return {
       loading: false,
       individualMode: false,
+      deleteHover: false,
     };
   },
   created() {

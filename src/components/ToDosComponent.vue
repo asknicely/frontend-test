@@ -123,4 +123,12 @@ export default {
   .completed {
     text-decoration: line-through;
   }
+
+  .trans-backg-color {
+    transition: background-color 0.5s ease;
+  }
+
+  .delete {
+    background-color: #f7dddc !important;
+  }
 </style>
