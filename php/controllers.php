@@ -60,10 +60,19 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     }
 
     $accept = $request->headers->get('Accept');
+    $user_id = $user['id'];
 
     if ($id) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
+    
+        if ($user_id != $todo['user_id']) {
+            if (strpos($accept, 'application/json') === false) {
+                return $app->redirect('/login');
+            } else {
+                return new Response('Forbidden access', 403);
+            }
+        }
 
         if (strpos($accept, 'application/json') === false) {
             return $app['twig']->render('todo.html', [
@@ -74,7 +83,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
 
     } else {
-        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+        $sql = "SELECT * FROM todos WHERE user_id = '$user_id'";
         $todos = $app['db']->fetchAll($sql);
 
         if (strpos($accept, 'application/json') === false) {
@@ -91,7 +100,11 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
 
 $app->post('/todo/add', function (Request $request) use ($app) {
     if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
+        if (strpos($contentType, 'application/json') === false) {
+            return $app->redirect('/login');
+        } else {
+            return new Response('Unauthenticated access', 401);
+        }
     }
 
     $user_id = $user['id'];
@@ -110,8 +123,19 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 
 
 $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return new Response('Unauthenticated access', 401);
+    }
 
-    $sql = "DELETE FROM todos WHERE id = '$id'";
+    $user_id = $user['id'];
+    $sql = "SELECT * FROM todos WHERE id = '$id'";
+    $todo = $app['db']->fetchAssoc($sql);
+
+    if ($user_id != $todo['user_id']) {
+        return new Response('Forbidden access', 403);
+    }
+
+    $sql = "DELETE FROM todos WHERE id = '$id' AND user_id = '$user_id'";
     $app['db']->executeUpdate($sql);
 
     return json_encode(array('success' => true));
@@ -119,9 +143,20 @@ $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->patch('/todo/{id}', function (Request $request, $id) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return new Response('Unauthenticated access', 401);
+    }
+
+    $user_id = $user['id'];
+    $sql = "SELECT * FROM todos WHERE id = '$id'";
+    $todo = $app['db']->fetchAssoc($sql);
+
+    if ($user_id != $todo['user_id']) {
+        return new Response('Forbidden access', 403);
+    }
 
     // toggle completed state of todo
-    $sql = "UPDATE todos SET completed = 1 - completed WHERE id = '$id'";
+    $sql = "UPDATE todos SET completed = 1 - completed WHERE id = '$id' AND user_id = '$user_id'";
     $app['db']->executeUpdate($sql);
 
     return json_encode(array('success' => true));

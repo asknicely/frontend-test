@@ -38,8 +38,6 @@ describe('ToDoComponent.vue', () => {
     const wrapper = shallowMount(ToDoComponent, {
       propsData: { todo },
     });
-    expect(wrapper.text()).to.include(todo.id);
-    expect(wrapper.text()).to.include(todo.user_id);
     expect(wrapper.text()).to.include(todo.description);
   });
 });

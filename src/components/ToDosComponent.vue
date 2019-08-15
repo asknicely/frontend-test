@@ -1,14 +1,12 @@
 <template>
   <div class="col-md-4 col-md-offset-4">
-    <h1>Todo List:</h1>
+    <h1>My Todo List:</h1>
     <table class="table table-striped">
       <tbody>
         <tr>
-          <th>#</th>
-          <th>User</th>
           <th>Description</th>
           <th>Completed</th>
-          <th>Delete</th>
+          <th></th>
         </tr>
         <template v-if="loading">
           <tr>
@@ -25,7 +23,7 @@
           </template>
         </template>
         <tr>
-          <td colspan="4">
+          <td colspan="2">
             <div class="form-group">
               <input
                 type="textbox"

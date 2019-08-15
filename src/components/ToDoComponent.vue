@@ -8,8 +8,6 @@
   </tr>
   <tr v-else>
     <template v-if="todo != undefined">
-      <td>{{ todo.id }}</td>
-      <td>{{ todo.user_id }}</td>
       <td v-bind:class="{ completed: todo.completed == 1 }">
           <span v-if="individualMode">
             {{ todo.description }}
