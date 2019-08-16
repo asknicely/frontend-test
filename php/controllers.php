@@ -66,6 +66,10 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
     
+        if ($todo == null) {
+            return new Response('Not found', 404);
+        }
+
         // encode user input description to prevent xss attacks
         $todo['description'] = $app->escape($todo['description']);
 
@@ -111,7 +115,7 @@ $app->post('/todo/add', function (Request $request) use ($app) {
         if (strpos($contentType, 'application/json') === false) {
             return $app->redirect('/login');
         } else {
-            return new Response('Unauthenticated access', 401);
+            return new Response('Unauthenticated', 401);
         }
     }
 
@@ -132,12 +136,16 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 
 $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
     if (null === $user = $app['session']->get('user')) {
-        return new Response('Unauthenticated access', 401);
+        return new Response('Unauthenticated', 401);
     }
 
     $user_id = $user['id'];
     $sql = "SELECT * FROM todos WHERE id = '$id'";
     $todo = $app['db']->fetchAssoc($sql);
+
+    if ($todo == null) {
+        return new Response('Not found', 404);
+    }
 
     if ($user_id != $todo['user_id']) {
         return new Response('Forbidden access', 403);
@@ -152,12 +160,16 @@ $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
 
 $app->patch('/todo/{id}', function (Request $request, $id) use ($app) {
     if (null === $user = $app['session']->get('user')) {
-        return new Response('Unauthenticated access', 401);
+        return new Response('Unauthenticated', 401);
     }
 
     $user_id = $user['id'];
     $sql = "SELECT * FROM todos WHERE id = '$id'";
     $todo = $app['db']->fetchAssoc($sql);
+
+    if ($todo == null) {
+        return new Response('Not found', 404);
+    }
 
     if ($user_id != $todo['user_id']) {
         return new Response('Forbidden access', 403);
