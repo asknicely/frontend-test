@@ -1,7 +1,7 @@
 <template>
-  <div class="col-md-4 col-md-offset-4">
+  <div class="todo-container">
     <h1>My Todo List:</h1>
-    <table class="table table-striped">
+    <table class="todos table table-striped">
       <tbody>
         <tr>
           <th>Description</th>

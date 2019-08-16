@@ -1,5 +1,19 @@
 @import "bootstrap";
 
+.login-container {
+    @include make-md-column(4);
+    @include make-md-column-offset(4);
+}
+
+.todo-container {
+    @include make-md-column(6);
+    @include make-md-column-offset(3);
+}
+
+.login-controls {
+    @include make-sm-column(12);
+}
+
 .loader-container {
     min-height: 100px;
     position: relative;
@@ -30,14 +44,16 @@
     100% { transform: rotate(360deg); }
 }
 
-.completed {
-    text-decoration: line-through;
-}
+.todos {
+    .completed {
+        text-decoration: line-through;
+    }
 
-.trans-backg-color {
-    transition: background-color 0.5s ease;
-}
-
-.delete {
-    background-color: #f7dddc !important;
+    .trans-backg-color {
+        transition: background-color 0.5s ease;
+    }
+    
+    .delete {
+        background-color: #f7dddc !important;
+    }
 }
