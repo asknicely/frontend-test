@@ -12,6 +12,18 @@
 .todo-container {
     @include make-md-column(6);
     @include make-md-column-offset(3);
+
+    .completed {
+        text-decoration: line-through;
+    }
+
+    .trans-backg-color {
+        transition: background-color 0.5s ease;
+    }
+
+    .delete {
+        background-color: #faebea !important;
+    }
 }
 
 .error-container {
@@ -58,19 +70,5 @@
 
     .alert {
         margin-bottom: 2px;
-    }
-}
-
-.todos {
-    .completed {
-        text-decoration: line-through;
-    }
-
-    .trans-backg-color {
-        transition: background-color 0.5s ease;
-    }
-
-    .delete {
-        background-color: #faebea !important;
     }
 }

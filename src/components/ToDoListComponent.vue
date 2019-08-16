@@ -1,7 +1,7 @@
 <template>
   <div class="todo-container">
     <h1>My Todo List:</h1>
-    <table class="todos table table-striped table-hover">
+    <table class="table table-striped table-hover">
       <tbody>
         <tr>
           <th>Description</th>
