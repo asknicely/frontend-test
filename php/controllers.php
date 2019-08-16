@@ -74,11 +74,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $todo['description'] = $app->escape($todo['description']);
 
         if ($user_id != $todo['user_id']) {
-            if (strpos($accept, 'application/json') === false) {
-                return $app->redirect('/login');
-            } else {
-                return new Response('Forbidden access', 403);
-            }
+            return new Response('Forbidden access', 403);
         }
 
         if (strpos($accept, 'application/json') === false) {
