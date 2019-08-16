@@ -61,12 +61,16 @@ export default {
         return;
       }
 
-      this.loading = true;
-      this.individualMode = true;
-
       const path = window.location.pathname;
       const parts = path.split('/');
-      const id = parts[parts.length - 1];
+      const id = Number(parts[parts.length - 1]);
+
+      if (!Number.isInteger(id)) {
+        return;
+      }
+
+      this.loading = true;
+      this.individualMode = true;
 
       axios.get(`/todo/${id}`)
         .then((response) => {
@@ -90,6 +94,7 @@ export default {
     deleteToDo() {
       axios.delete(`/todo/${this.todo.id}`)
         .then(() => {
+          this.$emit('deleted', this.todo);
           this.todo = undefined;
         })
         .catch((error) => {

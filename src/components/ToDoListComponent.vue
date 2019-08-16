@@ -19,7 +19,11 @@
         </template>
         <template v-else>
           <template v-for="todo in todos">
-            <ToDoComponent :todo="todo" :value="todo" :key="todo.id" />
+            <ToDoComponent
+              :todo="todo"
+              :value="todo"
+              :key="todo.id"
+              @deleted="showDeletedAlert($event)" />
           </template>
         </template>
         <tr>
@@ -30,7 +34,8 @@
                 name="description"
                 class="form-control small-6 small-center"
                 placeholder="Description..."
-                v-model="description">
+                v-model="description"
+                @keyup.enter="addToDo()">
             </div>
           </td>
           <td>
@@ -47,7 +52,7 @@ import axios from 'axios';
 import ToDoComponent from './ToDoComponent.vue';
 
 export default {
-  name: 'ToDosComponent',
+  name: 'ToDoListComponent',
   components: {
     ToDoComponent,
   },
@@ -75,14 +80,45 @@ export default {
           console.log(error);
         });
     },
+    showDeletedAlert(todo) {
+      this.showAlert(`Todo '${todo.description}' deleted`);
+    },
     addToDo() {
       axios.post(`/todo/add?description=${this.description}`)
         .then(() => {
+          this.showAlert(`Todo '${this.description}' added`);
           this.getToDos();
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    showAlert(message) {
+      const el = document.createElement('div');
+
+      el.appendChild(document.createTextNode(message));
+
+      el.classList.add('alert');
+      el.classList.add('alert-success');
+      el.classList.add('fade');
+
+      const containerEl = document.getElementById('alert-container');
+
+      // insert latest alerts at the top so earlier alerts pushed down fade out in a trail effect
+      containerEl.insertBefore(el, containerEl.childNodes[0]);
+
+      // fade in alert
+      el.classList.add('in');
+
+      // fade out alert after 3 seconds
+      window.setTimeout(() => {
+        el.classList.remove('in');
+
+        window.setTimeout(() => {
+          // remove element after fade out is complete
+          containerEl.removeChild(el);
+        }, 300);
+      }, 3000);
     },
   },
 };

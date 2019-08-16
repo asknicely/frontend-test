@@ -50,6 +50,17 @@
     }
 }
 
+#alert-container {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-Index: 1032;
+
+    .alert {
+        margin-bottom: 2px;
+    }
+}
+
 .todos {
     .completed {
         text-decoration: line-through;

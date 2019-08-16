@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import ToDosComponent from '@/components/ToDosComponent.vue';
+import ToDoListComponent from '@/components/ToDoListComponent.vue';
 import ToDoComponent from '@/components/ToDoComponent.vue';
 
-describe('ToDosComponent.vue', () => {
+describe('ToDoListComponent.vue', () => {
   it('has a created hook', () => {
-    expect(typeof ToDosComponent.created).to.eq('function');
+    expect(typeof ToDoListComponent.created).to.eq('function');
   });
 
   it('sets the correct default data', () => {
-    expect(typeof ToDosComponent.data).to.eq('function');
-    const defaultData = ToDosComponent.data();
+    expect(typeof ToDoListComponent.data).to.eq('function');
+    const defaultData = ToDoListComponent.data();
     expect(defaultData.loading).to.eq(false);
     expect(defaultData.description).to.eq('');
   });
