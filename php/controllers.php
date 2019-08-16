@@ -67,14 +67,20 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $todo = $app['db']->fetchAssoc($sql);
     
         if ($todo == null) {
-            return new Response('Not found', 404);
+            return new Response($app['twig']->render('error.html', [
+                'code' => 404,
+                'message' => 'Todo not found'
+            ]), 404);
         }
 
         // encode user input description to prevent xss attacks
         $todo['description'] = $app->escape($todo['description']);
 
         if ($user_id != $todo['user_id']) {
-            return new Response('Forbidden access', 403);
+            return new Response($app['twig']->render('error.html', [
+                'code' => 403,
+                'message' => 'Access to Todo denied'
+            ]), 403);
         }
 
         if (strpos($accept, 'application/json') === false) {
