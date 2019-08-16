@@ -17,11 +17,9 @@ function isJsonRequest(String $method, Request $request) {
         ? $request->headers->get('Accept')
         : $request->headers->get('Content-Type');
 
-    $isJson = (strpos($header, 'application/json') === false)
+    return (strpos($header, 'application/json') === false)
         ? false
         : true;
-
-    return $isJson;
 }
 
 ?>
