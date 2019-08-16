@@ -3,10 +3,10 @@
 .login-container {
     @include make-md-column(4);
     @include make-md-column-offset(4);
-}
 
-.login-controls {
-    @include make-sm-column(12);
+    .login-controls {
+        @include make-sm-column(12);
+    }
 }
 
 .todo-container {
@@ -51,7 +51,7 @@
 }
 
 #alert-container {
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 100%;
     z-Index: 1032;

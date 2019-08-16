@@ -87,6 +87,7 @@ export default {
       axios.post(`/todo/add?description=${this.description}`)
         .then(() => {
           this.showAlert(`Todo '${this.description}' added`);
+          this.description = '';
           this.getToDos();
         })
         .catch((error) => {
