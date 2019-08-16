@@ -89,46 +89,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-  .loader-container {
-    min-height: 100px;
-    position: relative;
-    width: 100%;
-  }
-
-  .loader {
-    border: 5px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 5px solid #555;
-    left: calc(50% - 25px);
-    position: absolute;
-    top: calc(50% - 25px);
-    width: 50px;
-    height: 50px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
-  }
-
-  /* Safari */
-  @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  .completed {
-    text-decoration: line-through;
-  }
-
-  .trans-backg-color {
-    transition: background-color 0.5s ease;
-  }
-
-  .delete {
-    background-color: #f7dddc !important;
-  }
+<style lang="scss">
+  @import '../styles/main.scss';
 </style>
