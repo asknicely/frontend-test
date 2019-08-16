@@ -59,36 +59,44 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
-    $accept = $request->headers->get('Accept');
     $user_id = $user['id'];
+    $jsonRequest = isJsonRequest('GET', $request);
 
     if ($id) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
     
         if ($todo == null) {
-            return new Response($app['twig']->render('error.html', [
-                'code' => 404,
-                'message' => 'Todo not found'
-            ]), 404);
+            $responseText = $jsonRequest
+                ? 'Not found'
+                : $app['twig']->render('error.html', [
+                        'code' => 404,
+                        'message' => 'Todo not found'
+                    ]);
+
+            return new Response($responseText, 404);
         }
 
         // encode user input description to prevent xss attacks
         $todo['description'] = $app->escape($todo['description']);
 
         if ($user_id != $todo['user_id']) {
-            return new Response($app['twig']->render('error.html', [
-                'code' => 403,
-                'message' => 'Access to Todo denied'
-            ]), 403);
+            $responseText = $jsonRequest
+                ? 'Forbidden'
+                : $app['twig']->render('error.html', [
+                        'code' => 403,
+                        'message' => 'Access to Todo denied'
+                    ]);
+
+            return new Response($responseText, 403);
         }
 
-        if (strpos($accept, 'application/json') === false) {
+        if ($jsonRequest) {
+            return json_encode($todo);
+        } else {
             return $app['twig']->render('todo.html', [
                 'todo' => $todo,
             ]);
-        } else {
-            return json_encode($todo);
         }
 
     } else {
@@ -100,12 +108,12 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
             $todo['description'] = $app->escape($todo['description']);
         }
 
-        if (strpos($accept, 'application/json') === false) {
+        if ($jsonRequest) {
+            return json_encode($todos);
+        } else {
             return $app['twig']->render('todos.html', [
                 'todos' => $todos,
             ]);
-        } else {
-            return json_encode($todos);
         }
     }
 })
@@ -117,18 +125,18 @@ $app->post('/todo/add', function (Request $request) use ($app) {
         if (strpos($contentType, 'application/json') === false) {
             return $app->redirect('/login');
         } else {
-            return new Response('Unauthenticated', 401);
+            return new Response('Unauthorized', 401);
         }
     }
 
     $user_id = $user['id'];
     $description = $request->get('description');
-    $contentType = $request->headers->get('Content-Type');
+    $jsonRequest = isJsonRequest('POST', $request);
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
     $app['db']->executeUpdate($sql);
 
-    if (strpos($contentType, 'application/json') === false) {
+    if ($jsonRequest) {
         return $app->redirect('/todo');
     } else {
         return json_encode(array('success' => true));
@@ -138,7 +146,7 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 
 $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
     if (null === $user = $app['session']->get('user')) {
-        return new Response('Unauthenticated', 401);
+        return new Response('Unauthorized', 401);
     }
 
     $user_id = $user['id'];
@@ -150,7 +158,7 @@ $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
     }
 
     if ($user_id != $todo['user_id']) {
-        return new Response('Forbidden access', 403);
+        return new Response('Forbidden', 403);
     }
 
     $sql = "DELETE FROM todos WHERE id = '$id' AND user_id = '$user_id'";
@@ -162,7 +170,7 @@ $app->delete('/todo/{id}', function (Request $request, $id) use ($app) {
 
 $app->patch('/todo/{id}', function (Request $request, $id) use ($app) {
     if (null === $user = $app['session']->get('user')) {
-        return new Response('Unauthenticated', 401);
+        return new Response('Unauthorized', 401);
     }
 
     $user_id = $user['id'];
@@ -174,7 +182,7 @@ $app->patch('/todo/{id}', function (Request $request, $id) use ($app) {
     }
 
     if ($user_id != $todo['user_id']) {
-        return new Response('Forbidden access', 403);
+        return new Response('Forbidden', 403);
     }
 
     // toggle completed state of todo
