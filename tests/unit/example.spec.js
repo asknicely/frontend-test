@@ -13,6 +13,7 @@ describe('ToDoListComponent.vue', () => {
     const defaultData = ToDoListComponent.data();
     expect(defaultData.loading).to.eq(false);
     expect(defaultData.description).to.eq('');
+    expect(defaultData.invalidDescription).to.eq(false);
   });
 });
 
@@ -26,6 +27,7 @@ describe('ToDoComponent.vue', () => {
     const defaultData = ToDoComponent.data();
     expect(defaultData.loading).to.eq(false);
     expect(defaultData.individualMode).to.eq(false);
+    expect(defaultData.deleteHover).to.eq(false);
   });
 
   it('renders props.todo when passed', () => {

@@ -28,18 +28,25 @@
         </template>
         <tr>
           <td colspan="2">
-            <div class="form-group">
+            <div class="form-group has-feedback" v-bind:class="{ 'has-error': invalidDescription }">
               <input
                 type="textbox"
                 name="description"
                 class="form-control small-6 small-center"
                 placeholder="Description..."
                 v-model="description"
+                @keyup="validateDescription()"
                 @keyup.enter="addToDo()">
+              <span class="glyphicon glyphicon-remove form-control-feedback"
+                v-if="invalidDescription"></span>
             </div>
           </td>
           <td>
-            <button type="button" class="btn btn-sm btn-primary" @click="addToDo()">Add</button>
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              @click="addToDo()">
+              Add</button>
           </td>
         </tr>
       </tbody>
@@ -61,6 +68,7 @@ export default {
       loading: false,
       todos: [],
       description: '',
+      invalidDescription: false,
     };
   },
   created() {
@@ -83,11 +91,29 @@ export default {
     showDeletedAlert(todo) {
       this.showAlert(`Todo '${todo.description}' deleted`);
     },
+    validateDescription() {
+      this.invalidDescription = (this.description === undefined
+        || this.description === null
+        || this.description === '');
+    },
     addToDo() {
-      axios.post(`/todo/add?description=${this.description}`)
+      this.validateDescription();
+
+      if (this.invalidDescription) {
+        return;
+      }
+
+      axios.post('/todo/add', {
+        description: this.description,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
         .then(() => {
           this.showAlert(`Todo '${this.description}' added`);
           this.description = '';
+          this.invalidDescription = false;
           this.getToDos();
         })
         .catch((error) => {

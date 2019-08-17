@@ -121,25 +121,43 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
+    $jsonRequest = isJsonRequest('POST', $request);
+
     if (null === $user = $app['session']->get('user')) {
-        if (strpos($contentType, 'application/json') === false) {
-            return $app->redirect('/login');
-        } else {
+        if ($jsonRequest) {
             return new Response('Unauthorized', 401);
+        } else {
+            return $app->redirect('/login');
         }
     }
 
     $user_id = $user['id'];
-    $description = $request->get('description');
-    $jsonRequest = isJsonRequest('POST', $request);
+
+    if ($jsonRequest) {
+        $data = json_decode($request->getContent(), true);
+        $description = $data['description'];
+    } else {
+        $description = $request->get('description');
+    }
+
+    if ($description == null || $description == '') {
+        $responseText = $jsonRequest
+            ? 'Bad request'
+            : $app['twig']->render('error.html', [
+                    'code' => 400,
+                    'message' => 'Invalid Todo description'
+                ]);
+
+        return new Response($responseText, 400);
+    }
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
     $app['db']->executeUpdate($sql);
 
     if ($jsonRequest) {
-        return $app->redirect('/todo');
-    } else {
         return json_encode(array('success' => true));
+    } else {
+        return $app->redirect('/todo');
     }
 });
 
