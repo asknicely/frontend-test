@@ -37,6 +37,7 @@
 
 <script>
 import axios from 'axios';
+import AlertService from '../services/AlertService';
 
 export default {
   name: 'ToDoComponent',
@@ -94,7 +95,7 @@ export default {
     deleteToDo() {
       axios.delete(`/todo/${this.todo.id}`)
         .then(() => {
-          this.$emit('deleted', this.todo);
+          AlertService.showAlert(`Todo '${this.todo.description}' deleted`);
           this.todo = undefined;
         })
         .catch((error) => {

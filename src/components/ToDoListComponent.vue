@@ -22,13 +22,13 @@
             <ToDoComponent
               :todo="todo"
               :value="todo"
-              :key="todo.id"
-              @deleted="showDeletedAlert($event)" />
+              :key="todo.id" />
           </template>
         </template>
         <tr>
           <td colspan="2">
-            <div class="form-group has-feedback" v-bind:class="{ 'has-error': invalidDescription }">
+            <div class="form-group has-feedback" v-bind:class="{ 'has-error': invalidDescription,
+              'has-success': !invalidDescription && description != '' }">
               <input
                 type="textbox"
                 name="description"
@@ -37,8 +37,9 @@
                 v-model="description"
                 @keyup="validateDescription()"
                 @keyup.enter="addToDo()">
-              <span class="glyphicon glyphicon-remove form-control-feedback"
-                v-if="invalidDescription"></span>
+              <span class="glyphicon form-control-feedback"
+                v-bind:class="{ 'glyphicon-remove': invalidDescription,
+                'glyphicon-ok': !invalidDescription && description != '' }"></span>
             </div>
           </td>
           <td>
@@ -56,6 +57,7 @@
 
 <script>
 import axios from 'axios';
+import AlertService from '../services/AlertService';
 import ToDoComponent from './ToDoComponent.vue';
 
 export default {
@@ -88,9 +90,6 @@ export default {
           console.log(error);
         });
     },
-    showDeletedAlert(todo) {
-      this.showAlert(`Todo '${todo.description}' deleted`);
-    },
     validateDescription() {
       this.invalidDescription = (this.description === undefined
         || this.description === null
@@ -111,7 +110,7 @@ export default {
         },
       })
         .then(() => {
-          this.showAlert(`Todo '${this.description}' added`);
+          AlertService.showAlert(`Todo '${this.description}' added`);
           this.description = '';
           this.invalidDescription = false;
           this.getToDos();
@@ -119,33 +118,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-    showAlert(message) {
-      const el = document.createElement('div');
-
-      el.appendChild(document.createTextNode(message));
-
-      el.classList.add('alert');
-      el.classList.add('alert-success');
-      el.classList.add('fade');
-
-      const containerEl = document.getElementById('alert-container');
-
-      // insert latest alerts at the top so earlier alerts pushed down fade out in a trail effect
-      containerEl.insertBefore(el, containerEl.childNodes[0]);
-
-      // fade in alert
-      el.classList.add('in');
-
-      // fade out alert after 3 seconds
-      window.setTimeout(() => {
-        el.classList.remove('in');
-
-        window.setTimeout(() => {
-          // remove element after fade out is complete
-          containerEl.removeChild(el);
-        }, 300);
-      }, 3000);
     },
   },
 };
