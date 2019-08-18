@@ -1,40 +1,5 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="col-md-4 col-md-offset-4">
-    <vue-todos 
-    baseurl="{{ app.request.baseurl }}"
-    inline-template
-    >
-        <div class="container">
-            <h1 v-text="title"></h1>
-            <table class="table table-striped">
-                <th>#</th><th>User</th><th>Description</th><th colspan="2"></th>
-                <tr v-for="todo in todos">
-                    <td v-text="todo.id"></td>
-                    <td v-text="todo.user_id"></td>
-                    <td>
-                        <a :href="'/todo/' + todo.id" v-text="todo.description"></a>
-                    </td>
-                    <td>
-                        <button v-if="todo.completed == 1" type="submit" class="btn btn-sm btn-transparent"><span class="glyphicon glyphicon-check glyphicon-white"></span></div>
-                        <button v-else @click="complete(todo.id)" class="btn btn-sm btn-transparent"><span class="glyphicon glyphicon-unchecked glyphicon-white"></span></button>
-                    </td>
-                    <td>
-                        <button @click="remove(todo.id)" type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <input v-model="todoDescription" type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
-                    </td>
-                    <td>
-                        <button v-if="todoDescription" @click="add()" class="btn btn-sm btn-primary">Add</button>
-                        <button v-else type="submit" disabled class="btn btn-sm btn-primary disabled">Add</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </vue-cart>
-</div>
+<todos baseurl="{{ app.request.baseurl }}" />
 {% endblock %}

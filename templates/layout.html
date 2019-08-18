@@ -7,6 +7,7 @@
         <title>{% block title '' %} - Todos</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ app.request.basepath }}/assets/vue/app.css" rel="stylesheet" type="text/css" />
     <link href="{{ app.request.basepath }}/css/main.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
@@ -39,8 +40,6 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="{{ app.request.basepath }}/js/vue/axios.min.js"></script>
-    <script src="{{ app.request.basepath }}/js/vue/vue.min.js"></script>
-    <script type="module" src="{{ app.request.basepath }}/js/app.js"></script>
+    <script type="module" src="{{ app.request.basepath }}/assets/vue/app.js"></script>
   </body>
 </html>
