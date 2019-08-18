@@ -111,8 +111,10 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
-
-    $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
+    /*
+        Allow toggle completed value
+    */ 
+    $sql = "UPDATE todos SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
