@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "app": {
+      "css": [
+        "/vue/app.css"
+      ],
+      "js": [
+        "/vue/app.js"
+      ]
+    }
+  }
+}
