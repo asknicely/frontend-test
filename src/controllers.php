@@ -112,7 +112,7 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     /*
-        Allow toggle completed value
+        [Update] Toggle completed value
     */ 
     $sql = "UPDATE todos SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = '$id'";
     $app['db']->executeUpdate($sql);

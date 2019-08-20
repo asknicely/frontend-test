@@ -1,5 +1,6 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<todos baseurl="{{ app.request.baseurl }}" />
+{% extends "layout.html" %} {% block title %}Todos list{% endblock %} {% block
+content %}
+<div class="row">
+  <todos baseurl="{{ app.request.baseurl }}" />
+</div>
 {% endblock %}
