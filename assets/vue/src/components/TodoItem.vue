@@ -9,35 +9,47 @@
           checked
         />
         <input @change="complete(id)" v-else type="checkbox" />
-        <span :class="{ checked: completed == 1 }" class="slider round"></span>
+        <span :class="{ checked: completed == 1 }" class="slider round"> </span>
       </label>
     </td>
     <td>{{ id }}</td>
     <td>
-      <a :href="'/todo/' + id">{{ description }}</a>
+      <button
+        v-if="!isActive"
+        class="todo-item__link text-primary"
+        @click="$emit('update:activeId', id)"
+      >
+        {{ description }}
+      </button>
+      <template v-else>{{ description }}</template>
     </td>
     <td>{{ user_id }}</td>
-    <td class="remove">
-      <button @click="remove(id)" type="submit" class="btn btn-xs btn-danger">
-        <span class="glyphicon glyphicon-remove glyphicon-white"></span>
+    <td class="remove" width="20" align="center">
+      <button
+        @click="remove(id)"
+        type="submit"
+        class="btn btn-xs btn-transparent"
+      >
+        <span class="glyphicon glyphicon-trash glyphicon-white"></span>
       </button>
     </td>
   </tr>
 </template>
 <script>
-import TodoMixin from "../lib/Misc/TodoMixin";
+import TodoMixin from '../lib/Misc/TodoMixin'
 
 export default {
-  name: "TodoItem",
+  name: 'TodoItem',
   mixins: [TodoMixin],
   props: {
     id: String,
     user_id: String,
     description: String,
     completed: String,
-    baseurl: String
+    baseurl: String,
+    isActive: Boolean
   }
-};
+}
 </script>
 
 <style type="text/css">
@@ -48,9 +60,18 @@ tr.todo.completed td:not(.complete):not(.remove) {
   opacity: 0.2;
   transition: ease opacity 0.2s;
 }
+.todo-item__link {
+  background: transparent;
+  border: 0;
+  color: #3399ff;
+  padding: 0;
+  text-align: left;
+  white-space: inherit;
+}
 .switch {
   position: relative;
   display: inline-block;
+  margin: 0;
   width: 2.5em;
   height: 1.6em;
 }
@@ -93,7 +114,7 @@ tr.todo.completed td:not(.complete):not(.remove) {
   color: #fff;
   height: 1.6em;
   border-radius: 100px;
-  background-color: #337ab7;
+  background-color: #3399ff;
   transform: translateX(-1em);
   transition: all 0.4s ease-in-out;
 }

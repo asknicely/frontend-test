@@ -8,5 +8,27 @@ body {
 
 .btn-transparent {
   background: transparent;
+  border: 0;
   padding: 0;
+}
+
+.btn-menu-hamburger {
+  color: #9d9d9d;
+  padding: 15px;
+}
+
+@media (min-width: 768px) {
+  .btn-menu-hamburger {
+    display: none;
+  }
+}
+
+.navbar-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar-header::before,
+.navbar-header::after {
+  display: none;
 }

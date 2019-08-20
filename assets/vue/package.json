@@ -1,0 +1,50 @@
+{
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "axios": "^0.18.0",
+    "chai": "^4.2.0",
+    "eslint": "5.16.0",
+    "nyc": "^14.1.1",
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.+(js|css|vue)\"",
+    "test": "nyc vue-cli-service test:unit 'src/**/*.spec.js'",
+    "test:watch": "npm run test -- --watch",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "prettier": "^1.18.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}
