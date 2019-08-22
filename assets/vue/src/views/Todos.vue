@@ -1,17 +1,17 @@
 <template>
   <div class="col-md-4 col-md-offset-4">
     <h1>{{ title }}</h1>
-    <table class="table table-striped todos-list">
+    <table class="table table-striped todos-list table-borderless">
       <thead>
         <tr>
+          <th width="30"></th>
           <th>#</th>
           <th>Description</th>
           <th align="center">User</th>
-          <th width="20"></th>
           <th width="54"></th>
         </tr>
       </thead>
-      <tbody is="transition-group" name="rowtrans">
+      <tbody is="transition-group" name="rowtrans" v-if="todos">
         <template v-if="activeId">
           <TodoItem
             @update-todos="load()"
@@ -172,6 +172,11 @@ export default {
 .todos-list-description__input:focus ~ .focus-border {
   width: 100%;
   transition: 0.4s;
+}
+
+table.table.table-borderless tbody td,
+table.table.table-borderless thead th {
+  border: 0;
 }
 tfoot td {
   position: relative;

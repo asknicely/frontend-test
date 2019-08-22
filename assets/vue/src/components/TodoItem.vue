@@ -1,8 +1,13 @@
 <template>
   <tr
-    class="todo"
+    class="todo-item__todo"
     :class="{ completed: completed == 1, 'is-visible': isTodoVisible }"
   >
+    <td class="remove" align="center" padding="0">
+      <button @click="remove(id)" type="submit" class="todo-item-btn__remove">
+        <span class="glyphicon glyphicon-trash glyphicon-white"></span>
+      </button>
+    </td>
     <td>{{ id }}</td>
     <td>
       <button
@@ -15,15 +20,6 @@
       <template v-else>{{ description }}</template>
     </td>
     <td>{{ user_id }}</td>
-    <td class="remove" width="20" align="center">
-      <button
-        @click="remove(id)"
-        type="submit"
-        class="btn btn-xs btn-transparent"
-      >
-        <span class="glyphicon glyphicon-trash glyphicon-white"></span>
-      </button>
-    </td>
     <td width="54" class="complete">
       <div class="todo-item__checkbox">
         <input
@@ -88,25 +84,70 @@ export default {
 </script>
 
 <style type="text/css">
-tr td {
+.todo-item__todo td:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.todo-item__todo td:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.todo-item__todo > td {
+  border: 0;
+  border-top: 0;
+  overflow: hidden;
+  position: relative;
   transition: ease opacity 0.2s;
 }
 
-tr.todo.completed td:not(.complete):not(.remove) {
+.todo-item__todo > td.remove {
+  padding: 0;
+}
+
+.todo-item__todo.todo-item__todo.completed td:not(.complete):not(.remove) {
   opacity: 0.2;
   transition: ease opacity 0.2s;
 }
 
-tbody tr.is-visible {
+.todo-item__todo.is-visible {
   opacity: 1;
   transform: translateX(0);
   transition: opacity 0.2s linear;
 }
 
-tbody tr:not(.is-visible) {
+.todo-item__todo:not(.is-visible) {
   opacity: 0;
   transform: translateX(20px);
   transition: transform 0.1s linear, opacity 0.2s linear;
+}
+
+.todo-item-btn__remove {
+  background-color: #d11a2a;
+  border: 0;
+  color: #fff;
+  height: 100%;
+  left: 0;
+  padding: 0;
+  position: absolute;
+  width: 5px;
+  top: 0;
+  transition: ease width 0.2s;
+}
+
+.todo-item-btn__remove .glyphicon {
+  font-size: 1.2rem;
+  display: none;
+}
+
+.todo-item__todo:hover .todo-item-btn__remove {
+  width: 2.4rem;
+  transition: ease width 0.2s;
+}
+
+.todo-item__todo:hover .todo-item-btn__remove .glyphicon {
+  display: block;
 }
 
 .todo-item__link {
@@ -170,13 +211,15 @@ tbody tr:not(.is-visible) {
   height: 35px;
   transform: scale(0);
   border-radius: 50%;
-  border: 4px solid #8bbabb;
+  border: 3px solid #8bbabb;
+  top: -7px;
   animation: circle-rev 0.5s;
 }
 
 .todo-item__circle-2 {
   width: 50px;
   height: 50px;
+  top: -14px;
 }
 
 .todo-item__circle-2 .todo-item__line-group {
