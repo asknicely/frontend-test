@@ -3,7 +3,7 @@
     class="todo-item__todo"
     :class="{ completed: completed == 1, 'is-visible': isTodoVisible }"
   >
-    <td class="remove" align="center" padding="0">
+    <td class="remove" align="center" width="30">
       <button @click="remove(id)" type="submit" class="todo-item-btn__remove">
         <span class="glyphicon glyphicon-trash glyphicon-white"></span>
       </button>
@@ -102,10 +102,6 @@ export default {
   transition: ease opacity 0.2s;
 }
 
-.todo-item__todo > td.remove {
-  padding: 0;
-}
-
 .todo-item__todo.todo-item__todo.completed td:not(.complete):not(.remove) {
   opacity: 0.2;
   transition: ease opacity 0.2s;
@@ -124,26 +120,29 @@ export default {
 }
 
 .todo-item-btn__remove {
-  background-color: #d11a2a;
+  align-items: center;
+  background-color: #3399ff;
   border: 0;
+  border-radius: 100%;
   color: #fff;
-  height: 100%;
-  left: 0;
+  display: flex;
+  justify-content: center;
   padding: 0;
-  position: absolute;
-  width: 5px;
-  top: 0;
-  transition: ease width 0.2s;
+  transform: scale(0);
+  transition: ease width 0.2s, ease transform .2s;
 }
 
 .todo-item-btn__remove .glyphicon {
   font-size: 1.2rem;
+  transform: translate(-1px, 0);
   display: none;
 }
 
 .todo-item__todo:hover .todo-item-btn__remove {
+  height: 2.4rem;
   width: 2.4rem;
-  transition: ease width 0.2s;
+  transform: scale(1);
+  transition: ease width 0.2s, ease transform .2s;
 }
 
 .todo-item__todo:hover .todo-item-btn__remove .glyphicon {
