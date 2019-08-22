@@ -8,6 +8,10 @@ import store from './store'
 import VeeValidate from 'vee-validate';
 
 
+
+
+console.log(process.env)
+
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(Vuex)
