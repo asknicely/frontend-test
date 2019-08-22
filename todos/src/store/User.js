@@ -1,3 +1,6 @@
+import UserService from '../services/user'
+const userService = new UserService('localhost:1337');
+
 export default {
     namespaced: true,
     state: {
@@ -7,7 +10,7 @@ export default {
     mutations: {  },
     actions: {  
         login({}, {username, password}){
-            console.log(username, password)
+            userService.loginAsync({username, password})
             
         }
     }
