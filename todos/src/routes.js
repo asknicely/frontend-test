@@ -1,6 +1,6 @@
-import Login from './components/Login.vue'
-import Todos from './components/Todos.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Login from './pages/Login.vue'
+import Todos from './pages/Todos.vue'
+import HelloWorld from './pages/HelloWorld.vue'
 
 
 // 2. Define some routes
@@ -9,9 +9,9 @@ import HelloWorld from './components/HelloWorld.vue'
 // `Vue.extend()`, or just a component options object.
 // We'll talk about nested routes later.
 const routes = [
-    { path: '/', component: Login },
-    { path: '/todos', component: Todos },
-    { path: '/hello', component: HelloWorld },
+    { path: '/', name: "index", component: Login },
+    { path: '/todos', name: "todos", component: Todos },
+    { path: '/hello', name: "hello", component: HelloWorld },
 ]
 
 export default routes;

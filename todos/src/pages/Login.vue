@@ -13,6 +13,9 @@
                 <input type="password" v-validate="'required'" placeholder="password"  name="Password" v-model="formData.password"/>
                 <div class="error-message">{{ errors.first('Password') }}</div>
                 </div>
+                <div class="input-group"  v-bind:class="{ error: this.hasServerError }">
+                <div class="error-message">User not found or your password is not correct.</div>
+                </div>
                 <button type="submit" value="Submit">Submit</button>
             </form>
         </div>
@@ -27,17 +30,25 @@
                 formData: {
                     username: undefined,
                     password: undefined
-                }
+                },
+                hasServerError:false
             };
         },
         methods:{
             async login(){
 
                const isValid = await this.$validator.validate();
+               this.hasServerError=false;
                if(isValid){
-                   console.log(this.formData.username);
-                   const response = await this.$store.dispatch('user/login',
-                       {username: this.formData.username, password: this.formData.password});
+                   try {
+                       const response = await this.$store.dispatch('user/login',
+                           {username: this.formData.username, password: this.formData.password});
+                       this.$router.push({ name: 'todos' });
+                   }
+                   catch (e) {
+                       console.log(e);
+                       this.hasServerError=true
+                   }
                }
             }
         }

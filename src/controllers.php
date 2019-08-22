@@ -45,12 +45,13 @@ $app->match('/login', function (Request $request) use ($app) {
         if ($user){
             $app['session']->set('user', $user);
              return $app->json(json_encode($user), 200);
-          // return json_encode($user);//
            
-           
+        }else{
+          $error = array('error' => 'User not found');
+           return new Response(json_encode($error), 400);
         }
     }
-    return json_encode($username);
+    return $app->json('', 204);
 
 });
 
