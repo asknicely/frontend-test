@@ -4,14 +4,14 @@
     <table class="table table-striped todos-list table-borderless">
       <thead>
         <tr>
-          <th width="30"></th>
+          <th width="40"></th>
           <th>#</th>
           <th>Description</th>
           <th align="center">User</th>
           <th width="54"></th>
         </tr>
       </thead>
-      <tbody is="transition-group" name="rowtrans" v-if="todos">
+      <tbody v-if="todos">
         <template v-if="activeId">
           <TodoItem
             @update-todos="load()"
