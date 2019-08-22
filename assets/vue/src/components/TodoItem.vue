@@ -64,10 +64,10 @@
   </tr>
 </template>
 <script>
-import TodoMixin from "../lib/Misc/TodoMixin";
+import TodoMixin from '../lib/Misc/TodoMixin'
 
 export default {
-  name: "TodoItem",
+  name: 'TodoItem',
   mixins: [TodoMixin],
   props: {
     id: String,
@@ -80,7 +80,7 @@ export default {
     baseurl: String,
     isActive: Boolean
   }
-};
+}
 </script>
 
 <style type="text/css">

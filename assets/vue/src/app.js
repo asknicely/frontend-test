@@ -4,23 +4,23 @@
 /*
   Import Vue components
 */
-import Vue from "vue";
-import Todos from "./views/Todos";
+import Vue from 'vue'
+import Todos from './views/Todos'
 
 /*
   VUE CONFIG
 */
-Vue.config.devtools = true; // Remove for production
-Vue.config.productionTip = false; // Update for production
+Vue.config.devtools = true // Remove for production
+Vue.config.productionTip = false // Update for production
 
 /*
   Init vue app
 */
+/* eslint-disable no-new */
 new Vue({
-  // eslint-disable-line no-new
-  delimiters: ["${", "}"],
-  el: "#app",
+  delimiters: ['${', '}'],
+  el: '#app',
   components: {
     Todos: Todos
   }
-});
+})
