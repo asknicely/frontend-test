@@ -1,5 +1,8 @@
 <template>
-  <tr class="todo" :class="{ completed: completed == 1 }">
+  <tr
+    class="todo"
+    :class="{ completed: completed == 1, 'is-visible': isTodoVisible }"
+  >
     <td>{{ id }}</td>
     <td>
       <button
@@ -38,7 +41,11 @@
           type="checkbox"
           class="todo-item__btn"
         />
-        <label class="todo-item__check" :for="'btn-' + id">
+        <label
+          class="todo-item__check"
+          :class="{ checked: completed == 1 }"
+          :for="'btn-' + id"
+        >
           <div class="todo-item__inner-check"></div>
         </label>
         <div class="todo-item__circle-1"></div>
@@ -90,6 +97,18 @@ tr.todo.completed td:not(.complete):not(.remove) {
   transition: ease opacity 0.2s;
 }
 
+tbody tr.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.2s linear;
+}
+
+tbody tr:not(.is-visible) {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: transform 0.1s linear, opacity 0.2s linear;
+}
+
 .todo-item__link {
   background: transparent;
   border: 0;
@@ -109,15 +128,15 @@ tr.todo.completed td:not(.complete):not(.remove) {
   display: none;
 }
 
-.todo-item__btn:checked ~ .todo-item__circle-1 {
+.todo-item__check.checked ~ .todo-item__circle-1 {
   animation: circle 0.6s forwards;
 }
 
-.todo-item__btn:checked ~ .todo-item__circle-2 {
+.todo-item__check.checked ~ .todo-item__circle-2 {
   animation: circle 0.5s ease 0.1s forwards;
 }
 
-.todo-item__btn:checked ~ .todo-item__check .todo-item__inner-check {
+.todo-item__check.checked .todo-item__inner-check {
   animation: inner-check 0.6s cubic-bezier(0.1, 1, 0.1, 1) forwards;
 }
 

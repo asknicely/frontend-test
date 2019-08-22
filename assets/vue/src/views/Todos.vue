@@ -2,7 +2,7 @@
   <div class="col-md-4 col-md-offset-4">
     <h1>{{ title }}</h1>
     <table class="table table-striped todos-list">
-      <tbody>
+      <thead>
         <tr>
           <th>#</th>
           <th>Description</th>
@@ -10,19 +10,19 @@
           <th width="20"></th>
           <th width="54"></th>
         </tr>
+      </thead>
+      <tbody is="transition-group" name="rowtrans">
         <template v-if="activeId">
-          <transition name="fade">
-            <TodoItem
-              @update-todos="load()"
-              v-on:update:activeId="activeId = $event"
-              :isActive="true"
-              :id="filterdTodos[0].id"
-              :user_id="filterdTodos[0].user_id"
-              :description="filterdTodos[0].description"
-              :completed="filterdTodos[0].completed"
-              :baseurl="baseurl"
-            />
-          </transition>
+          <TodoItem
+            @update-todos="load()"
+            v-on:update:activeId="activeId = $event"
+            :isActive="true"
+            :id="filterdTodos[0].id"
+            :user_id="filterdTodos[0].user_id"
+            :description="filterdTodos[0].description"
+            :completed="filterdTodos[0].completed"
+            :baseurl="baseurl"
+          />
         </template>
         <template v-else>
           <TodoItem
@@ -44,6 +44,16 @@
             <div class="todos-list__description">
               <input
                 v-model="todoDescription"
+                v-if="todoDescription"
+                type="text"
+                name="description"
+                class="small-6 small-center todos-list-description__input"
+                placeholder="Description..."
+                v-on:keyup.enter="add()"
+              />
+              <input
+                v-model="todoDescription"
+                v-else
                 type="text"
                 name="description"
                 class="small-6 small-center todos-list-description__input"

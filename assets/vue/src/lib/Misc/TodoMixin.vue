@@ -7,7 +7,8 @@ export default {
     return {
       todos: [],
       activeId: null,
-      todoDescription: ""
+      todoDescription: "",
+      isTodoVisible: true
     };
   },
   methods: {
@@ -71,8 +72,14 @@ export default {
       */
       axios.post(`${this.baseurl}/todo/delete/${id}`).then(response => {
         if (response.status === 200) {
-          this.$emit("update-todos");
-          this.$emit("update:activeId", null);
+          this.isTodoVisible = !this.isTodoVisible;
+          setTimeout(() => {
+            this.$emit("update-todos");
+            this.$emit("update:activeId", null);
+          }, 300);
+          setTimeout(() => {
+            this.isTodoVisible = true;
+          }, 500);
         } else {
           console.warn(response);
         }
