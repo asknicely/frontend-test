@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Todos.test.js has the expected html structure 1`] = `
+<div
+  class="col-md-4 col-md-offset-4"
+>
+  <h1>
+    Todo List:
+  </h1>
+   
+  <table
+    class="table table-striped todos-list"
+  >
+    <tbody>
+      <tr>
+        <th>
+          #
+        </th>
+         
+        <th>
+          Description
+        </th>
+         
+        <th
+          align="center"
+        >
+          User
+        </th>
+         
+        <th
+          width="20"
+        />
+         
+        <th
+          width="54"
+        />
+      </tr>
+       
+    </tbody>
+     
+    <tfoot>
+      <tr>
+        <td
+          colspan="4"
+        >
+          <div
+            class="todos-list__description"
+          >
+            <input
+              class="small-6 small-center todos-list-description__input"
+              name="description"
+              placeholder="Description..."
+              type="text"
+            />
+             
+            <span
+              class="focus-border"
+            />
+          </div>
+        </td>
+         
+        <td>
+          <button
+            class="btn btn-sm btn-primary disabled"
+            disabled="disabled"
+            type="submit"
+          >
+            
+            Add
+          
+          </button>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+`;
