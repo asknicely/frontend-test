@@ -16,10 +16,12 @@ describe("TodoItem", () => {
     });
 
     it("renders the correct markup", () => {
-      expect(wrapper.html()).toContain('<tr class="todo is-visible" isvisible="true">');
+      expect(wrapper.html()).toContain(
+        '<tr class="todo-item__todo is-visible" isvisible="true">'
+      );
     });
 
-    it("expect properties", () => {
+    it("it renders TodoItem properties", () => {
       expect(wrapper.vm.id).toBe("1");
       expect(wrapper.vm.user_id).toBe("1");
       expect(wrapper.vm.description).toBe("Write a test script.");
