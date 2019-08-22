@@ -9,8 +9,9 @@ export default {
     },
     mutations: {  },
     actions: {  
-        login({}, {username, password}){
-            userService.loginAsync({username, password})
+        async login({}, {username, password}){
+           const response =await userService.loginAsync({username, password});
+           console.log(response);
             
         }
     }

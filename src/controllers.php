@@ -3,6 +3,23 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
+$app->after(function (Request $request, Response $response) {
+    $response->headers->set('Access-Control-Allow-Origin', '*');
+    $response->headers->set('Content-Type', 'application/json');
+    $response->headers->set('Access-Control-Allow-Credentials', 'true');
+    $response->headers->set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    $response->headers->set('Access-Control-Allow-Headers', 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers');
+});
+
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
+});
+
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
@@ -18,8 +35,8 @@ $app->get('/', function () use ($app) {
 
 
 $app->match('/login', function (Request $request) use ($app) {
-    $username = $request->get('username');
-    $password = $request->get('password');
+    $username = $request->request->get('username');
+    $password = $request->request->get('password');
 
     if ($username) {
         $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
@@ -27,11 +44,13 @@ $app->match('/login', function (Request $request) use ($app) {
 
         if ($user){
             $app['session']->set('user', $user);
-            return $app->redirect('/todo');
+             return $app->json(json_encode($user), 200);
         }
     }
+    
+    $error = array('message' => 'User not found.');
+    return $app->json($error, 400);
 
-    return $app['twig']->render('login.html', array());
 });
 
 
