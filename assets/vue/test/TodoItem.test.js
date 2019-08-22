@@ -10,12 +10,13 @@ describe("TodoItem", () => {
         description: "Write a test script.",
         completed: "0",
         baseurl: "https://localhost:1337/",
-        isActive: false
+        isActive: false,
+        isVisible: true
       }
     });
 
     it("renders the correct markup", () => {
-      expect(wrapper.html()).toContain('<tr class="todo">');
+      expect(wrapper.html()).toContain('<tr class="todo is-visible" isvisible="true">');
     });
 
     it("expect properties", () => {
