@@ -4,11 +4,11 @@
     <table class="table table-striped todos-list">
       <tbody>
         <tr>
-          <th width="54"></th>
           <th>#</th>
           <th>Description</th>
-          <th>User</th>
+          <th align="center">User</th>
           <th width="20"></th>
+          <th width="54"></th>
         </tr>
         <template v-if="activeId">
           <transition name="fade">
@@ -82,51 +82,51 @@
   </div>
 </template>
 <script>
-import orderBy from 'lodash'
-import TodoMixin from '../lib/Misc/TodoMixin'
-import TodoItem from '../components/TodoItem'
+import orderBy from "lodash";
+import TodoMixin from "../lib/Misc/TodoMixin";
+import TodoItem from "../components/TodoItem";
 
 export default {
-  name: 'Todos',
+  name: "Todos",
   mixins: [TodoMixin],
   components: { TodoItem },
   computed: {
-    orderedtodos () {
+    orderedtodos() {
       /*
         reorder todo list if necessary
       */
-      return orderBy(this.todos, 'id')
+      return orderBy.orderBy(this.todos, "id");
     },
-    filterdTodos () {
+    filterdTodos() {
       /*
         show active todo
       */
       const result = this.todos.filter(obj => {
-        return obj.id === this.activeId
-      })
-      return result
+        return obj.id === this.activeId;
+      });
+      return result;
     },
-    title () {
+    title() {
       /*
         page title
       */
       if (this.activeId) {
-        return 'Todo:'
+        return "Todo:";
       } else {
-        return 'Todo List:'
+        return "Todo List:";
       }
     }
   },
-  data () {
+  data() {
     return {
-      baseurl: ''
-    }
+      baseurl: ""
+    };
   },
-  created () {
-    this.baseurl = this.$attrs.baseurl
-    this.load()
+  created() {
+    this.baseurl = this.$attrs.baseurl;
+    this.load();
   }
-}
+};
 </script>
 <style type="text/css">
 .btn-primary {
