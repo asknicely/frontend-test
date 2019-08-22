@@ -111,8 +111,15 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
-
+    
+    $sql = "SELECT * FROM todos WHERE id = '$id'";
+    $todo = $app['db']->fetchAssoc($sql);
+    
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
+    if($todo['completed']==1){
+     $sql = "UPDATE todos SET completed = 0 WHERE id = '$id'";
+    }
+    
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
