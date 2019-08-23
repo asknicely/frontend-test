@@ -16,7 +16,7 @@
                 <div class="input-group"  v-bind:class="{ error: this.hasServerError }">
                 <div class="error-message">User not found or your password is not correct.</div>
                 </div>
-                <button type="submit" value="Submit">Submit</button>
+                <button class='formbtn' type="submit" value="Submit">Submit</button>
             </form>
         </div>
     </div>

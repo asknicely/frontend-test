@@ -20,7 +20,6 @@
             </b-collapse>
         </b-navbar>
     </div>
-
 </template>
 <script>
     import { mapGetters } from "vuex";

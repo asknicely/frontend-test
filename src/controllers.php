@@ -97,39 +97,41 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
 ->value('id', null);
 
 
+$app->get('/todos/{id}', function ($id, Request $request) use ($app) {
 
+        $sql = "SELECT * FROM todos WHERE user_id = '$id'";
+        $todos = $app['db']->fetchAll($sql);
+        
+        return json_encode($todos);
+        
+})
+->value('id', null);
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
-
-    $user_id = $user['id'];
-    $description = $request->get('description');
+ 
+    $user_id = $request->request->get('userId');
+    $description = $request->request->get('description');
     $contentType = $request->headers->get('Content-Type');
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
     $app['db']->executeUpdate($sql);
 
-    if (strpos($contentType, 'application/json') === false) {
-        return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
-    }
+    return json_encode(array('success' => true));
+   
 });
 
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
     $sql = "DELETE FROM todos WHERE id = '$id'";
-    $app['db']->executeUpdate($sql);
+    $todo =$app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return json_encode($todo);
     }
 });
 
@@ -146,10 +148,6 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     
     $app['db']->executeUpdate($sql);
 
-    $contentType = $request->headers->get('Content-Type');
-    if (strpos($contentType, 'application/json') === false) {
-        return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
-    }
+    return json_encode(array('success' => true));
+    
 });
