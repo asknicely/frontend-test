@@ -21,7 +21,7 @@ export default {
             state.username = username;
         }
     },
-    actions: {  
+    actions: {
         async login({commit}, {username, password}){
            const response =await userService.loginAsync({username, password});
            const user = JSON.parse(response.data);
@@ -29,7 +29,6 @@ export default {
            return response;
         },
         logout({commit}){
-            console.log('logout');
             commit('setUser', {id:undefined, username: undefined});
         }
     }

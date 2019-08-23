@@ -44,7 +44,7 @@ $app->match('/login', function (Request $request) use ($app) {
 
         if ($user){
             $app['session']->set('user', $user);
-             return $app->json(json_encode($user), 200);
+            return $app->json(json_encode($user), 200);
            
         }else{
           $error = array('error' => 'User not found');
@@ -67,7 +67,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
-    $contentType = $request->headers->get('Content-Type');
+    //$contentType = $request->headers->get('Content-Type');
 
     if ($id){
         $sql = "SELECT * FROM todos WHERE id = '$id'";
@@ -95,6 +95,9 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     }
 })
 ->value('id', null);
+
+
+
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {

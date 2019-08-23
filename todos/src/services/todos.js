@@ -5,7 +5,7 @@ export default class UserService {
         this.url=url;
     }
 
-    loginAsync({username,password}) {
-        return Vue.axios.post(`http://${this.url}/login`,{username,password});
+     getTodosAsync() {
+        return Vue.axios.get(`http://${this.url}/todo`);
     }
 }

@@ -10,7 +10,7 @@
                     <input type="password" placeholder="password"/>
                     fadsfafasf
 
-                    <button>login</button>
+                    <button v-on:click="test">login</button>
                 </form>
             </div>
         </div>
@@ -30,7 +30,16 @@
             if(!this.getLoginedUser.id&&!this.getLoginedUser.username){
                 this.$router.push('/');
             }
+            this.$store.dispatch('todos/getTodos')
         },
+        
+        methods:{
+            test(){
+                console.log('test');
+                this.$store.dispatch('todos/getTodos')
+            }
+        },
+        
         components: {
             'Nav-Component': Nav
         }
