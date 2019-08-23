@@ -128,25 +128,36 @@ export default {
   display: flex;
   justify-content: center;
   padding: 0;
-  transform: scale(0);
-  transition: ease width 0.2s, ease transform .2s;
+  height: 2.4rem;
+  width: 2.4rem;
+}
+
+@media (min-width: 999px) {
+  .todo-item-btn__remove {
+    transform: scale(0);
+    transition: ease width 0.2s, ease transform 0.2s;
+  }
 }
 
 .todo-item-btn__remove .glyphicon {
   font-size: 1.2rem;
-  transform: translate(-1px, 0);
-  display: none;
+}
+
+@media (min-width: 999px) {
+  .todo-item-btn__remove .glyphicon {
+    display: none;
+  }
 }
 
 .todo-item__todo:hover .todo-item-btn__remove {
-  height: 2.4rem;
-  width: 2.4rem;
   transform: scale(1);
-  transition: ease width 0.2s, ease transform .2s;
+  transition: ease width 0.2s, ease transform 0.2s;
 }
 
-.todo-item__todo:hover .todo-item-btn__remove .glyphicon {
-  display: block;
+@media (min-width: 999px) {
+  .todo-item__todo:hover .todo-item-btn__remove .glyphicon {
+    display: block;
+  }
 }
 
 .todo-item__link {
