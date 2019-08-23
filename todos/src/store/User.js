@@ -16,7 +16,6 @@ export default {
     },
     
     mutations: {
-        
         setUser (state, {id, username}) {
             state.id = id;
             state.username = username;
@@ -28,7 +27,10 @@ export default {
            const user = JSON.parse(response.data);
            commit('setUser', {id:user.id, username: user.username});
            return response;
-            
+        },
+        logout({commit}){
+            console.log('logout');
+            commit('setUser', {id:undefined, username: undefined});
         }
     }
 }

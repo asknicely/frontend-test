@@ -14,8 +14,7 @@
                     <b-nav-item-dropdown right>
                         <!-- Using 'button-content' slot -->
                         <template slot="button-content"><em>{{this.getLoginedUser.username}}</em></template>
-                        <b-dropdown-item href="#">Profile</b-dropdown-item>
-                        <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+                        <b-dropdown-item @click.prevent="logout">Sign Out</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
             </b-collapse>
@@ -24,18 +23,16 @@
 
 </template>
 <script>
- 
     import { mapGetters } from "vuex";
     export default {
-  computed: {
-    ...mapGetters("user", ["getLoginedUser"])
-    },
-        mounted(){
-      console.log('adfa', this.getLoginedUser);
+        name: 'Todos',
+        computed: {
+            ...mapGetters("user", ["getLoginedUser"])
         },
         methods:{
-            async logout(){
-                
+             logout(){
+                 this.$store.dispatch('user/logout');
+                 this.$router.push('/')
             }
         }
     }

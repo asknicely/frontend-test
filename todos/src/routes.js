@@ -9,7 +9,7 @@ import HelloWorld from './pages/HelloWorld.vue'
 // `Vue.extend()`, or just a component options object.
 // We'll talk about nested routes later.
 const routes = [
-    { path: '/', name: "index", component: Login },
+    { path: '/', name: "/", component: Login },
     { path: '/todos', name: "todos", component: Todos },
     { path: '/hello', name: "hello", component: HelloWorld },
 ]
