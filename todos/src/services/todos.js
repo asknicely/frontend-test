@@ -5,8 +5,8 @@ export default class TodoService {
         this.url=url;
     }
 
-     getTodos({userId}) {
-        return Vue.axios.get(`http://${this.url}/todos/${userId}`);
+     getTodos() {
+        return Vue.axios.get(`http://${this.url}/todo`);
     }
 
     completeTodo(id){
@@ -14,7 +14,7 @@ export default class TodoService {
     }
 
     deleteTodo(id){
-        return Vue.axios.delete(`http://${this.url}/todo/delete/${id}`);
+        return Vue.axios.get(`http://${this.url}/todo/delete/${id}`);
     }
     
     addTodo({description,userId}) {

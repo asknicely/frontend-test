@@ -3,14 +3,23 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addGlobal('user', $app['session']->get('user'));
 
-$app->after(function (Request $request, Response $response) {
-    $response->headers->set('Access-Control-Allow-Origin', '*');
-    $response->headers->set('Content-Type', 'application/json');
-    $response->headers->set('Access-Control-Allow-Credentials', 'true');
-    $response->headers->set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,UPDATE,DELETE');
-    $response->headers->set('Access-Control-Allow-Headers', 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers');
-});
+    $distStyles = array_filter(scandir('web/dist/css'), function ($filename) {
+        return endsWith($filename, '.css');
+    });
+
+    $twig->addGlobal('dist_styles', $distStyles); 
+
+    $distScripts = array_filter(scandir('web/dist/js'), function ($filename) {
+        return endsWith($filename, '.js');
+    });
+    
+    $twig->addGlobal('dist_scripts', array_reverse($distScripts));
+     
+    return $twig;
+}));
 
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -18,13 +27,6 @@ $app->before(function (Request $request) {
         $request->request->replace(is_array($data) ? $data : array());
     }
 });
-
-
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addGlobal('user', $app['session']->get('user'));
-
-    return $twig;
-}));
 
 
 $app->get('/', function () use ($app) {
@@ -38,21 +40,20 @@ $app->match('/login', function (Request $request) use ($app) {
     $username = $request->request->get('username');
     $password = $request->request->get('password');
 
-    if ($username) {
-        $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
-        $user = $app['db']->fetchAssoc($sql);
-
-        if ($user){
-            $app['session']->set('user', $user);
-            return $app->json(json_encode($user), 200);
-           
-        }else{
-          $error = array('error' => 'User not found');
+  if ($username) {
+         $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
+         $user = $app['db']->fetchAssoc($sql);
+ 
+         if ($user){
+             $app['session']->set('user', $user);
+             return $app->json(json_encode($user), 200);
+            
+         }else{
+           $error = array('error' => 'User not found');
            return new Response(json_encode($error), 400);
-        }
-    }
-    return $app->json('', 204);
-
+         }
+     }
+     return $app->json('', 204);
 });
 
 
@@ -67,7 +68,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
-    //$contentType = $request->headers->get('Content-Type');
+    $contentType = $request->headers->get('Content-Type');
 
     if ($id){
         $sql = "SELECT * FROM todos WHERE id = '$id'";
@@ -84,35 +85,22 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     } else {
         $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
         $todos = $app['db']->fetchAll($sql);
-
-        if (strpos($contentType, 'application/json') === false) {
-            return $app['twig']->render('todos.html', [
-                'todos' => $todos,
-            ]);
-        } else {
-            return json_encode($todos);
-        }
+        return json_encode($todos);
     }
 })
 ->value('id', null);
 
 
-$app->get('/todos/{id}', function ($id, Request $request) use ($app) {
+$app->post('/todo/add', function (Request $request) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
 
-        $sql = "SELECT * FROM todos WHERE user_id = '$id'";
-        $todos = $app['db']->fetchAll($sql);
-        
-        return json_encode($todos);
-        
-})
-->value('id', null);
-
-
-$app->match('/todo/add', function (Request $request) use ($app) {
- 
-    $userId = (string)$request->request->get('userId');
+    $user_id = $user['id'];
     $description = $request->request->get('description');
-    $sql = "INSERT INTO todos (user_id, description) VALUES ('$userId', '$description')";
+    $contentType = $request->headers->get('Content-Type');
+
+    $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
     $app['db']->executeUpdate($sql);
 
     return json_encode(array('success' => true));
@@ -126,21 +114,19 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     $app['db']->executeUpdate($sql);
 
     return json_encode(array('success' => true));
+   
 });
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
-    
-    $sql = "SELECT * FROM todos WHERE id = '$id'";
-    $todo = $app['db']->fetchAssoc($sql);
-    
+
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
-    if($todo['completed']==1){
-     $sql = "UPDATE todos SET completed = 0 WHERE id = '$id'";
-    }
-    
     $app['db']->executeUpdate($sql);
 
-    return json_encode(array('success' => true));
-    
+    $contentType = $request->headers->get('Content-Type');
+    if (strpos($contentType, 'application/json') === false) {
+        return $app->redirect('/todo');
+    } else {
+        return json_encode(array('success' => true));
+    }
 });

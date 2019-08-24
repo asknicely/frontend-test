@@ -1,4 +1,5 @@
 <template>
+      
     <div class="login-page">
         <div class="form">
             <form class="login-form" @submit.prevent="login()">
@@ -35,6 +36,7 @@
             };
         },
         methods:{
+            
             async login(){
 
                const isValid = await this.$validator.validate();
