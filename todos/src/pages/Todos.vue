@@ -40,13 +40,7 @@
             if(!this.getLoginedUser.id&&!this.getLoginedUser.username){
                 this.$router.push('/');
             }
-            this.$store.dispatch('todos/getTodosAsync')
-        },
-        
-        methods:{
-            test(){
-                this.$store.dispatch('todos/getTodosAsync')
-            }
+            this.$store.dispatch('todos/getTodosAsync',{userId: this.getLoginedUser.id})
         },
         
         components: {

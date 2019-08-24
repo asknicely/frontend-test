@@ -25,8 +25,8 @@ export default {
         },
     },
     actions: {
-        async getTodosAsync({commit}){
-            const response = await todosService.getTodos();
+        async getTodosAsync({commit},{userId}){
+            const response = await todosService.getTodos({userId});
             const todos = response.data.map(todo=>{
                 return {
                     ...todo,
@@ -50,7 +50,7 @@ export default {
 
         async addTodoAsync({commit},{description,userId}){
             const response = await todosService.addTodo({description,userId});
-            
+            dispatch('getTodosAsync',{userId});
             return response;
         },
         

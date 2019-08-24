@@ -5,19 +5,20 @@ export default class TodoService {
         this.url=url;
     }
 
-     getTodos() {
-        return Vue.axios.get(`http://${this.url}/todos/1`);
+     getTodos({userId}) {
+        return Vue.axios.get(`http://${this.url}/todos/${userId}`);
     }
 
     completeTodo(id){
         return Vue.axios.get(`http://${this.url}/todo/complete/${id}`);
     }
-    
-    completeTodo(id){
+
+    deleteTodo(id){
         return Vue.axios.delete(`http://${this.url}/todo/delete/${id}`);
     }
     
     addTodo({description,userId}) {
-        return Vue.axios.post(`http://${this.url}/todo/add`,{description, userId});
+        return Vue.axios.post(`http://${this.url}/todo/add`,{userId,description});
+        
     }
 }

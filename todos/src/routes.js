@@ -1,6 +1,5 @@
 import Login from './pages/Login.vue'
 import Todos from './pages/Todos.vue'
-import HelloWorld from './pages/HelloWorld.vue'
 
 
 // 2. Define some routes
@@ -10,8 +9,7 @@ import HelloWorld from './pages/HelloWorld.vue'
 // We'll talk about nested routes later.
 const routes = [
     { path: '/', name: "/", component: Login },
-    { path: '/todos', name: "todos", component: Todos },
-    { path: '/hello', name: "hello", component: HelloWorld },
+    { path: '/todos', name: "todos", component: Todos }
 ]
 
 export default routes;
