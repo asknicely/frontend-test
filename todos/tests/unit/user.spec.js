@@ -1,47 +1,35 @@
 import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
-import userStore from "../../src/store/User";
+import UserStore from "../../src/store/User";
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
-function getTestState() {
-    const localState = {
-        people: {},
-        profileType: undefined,
-        relationships: [],
-        roles: [],
-        communicationTypes: [],
-        employers: {}
-    } as PersonModuleState;
-
-    return localState;
-}
 
 describe("Person actions", () => {
     it("person can be saved with correct data", async () => {
-        const mockFn = jest.fn(({ personId, personDto }) => {
-            return {
-                data: {
-                    id: personId,
-                    person: personDto
-                }
-            };
-        });
-
-
-        const testStore = personStore("");
+        const userService = {
+            loginAsync:
+                jest.fn().mockReturnValue({
+                    data: {
+                        id: "1", username: "user1"
+                    }
+                })
+        };
+        const userStore = UserStore(userService);
+  
+        
         const commit = jest.fn();
 
-        const testResult = await testStore.actions.login(
+        const testResult = await userStore.actions.login(
             { commit},
             {username:"username", password:"password"}
         );
 
         const expectResult = {
-           
+            id: "1", username: "user1"
         };
-        expect(commit).toHaveBeenCalledWith("setUser", {
-            people: [expectResult]
-        });
+        expect(commit).toHaveBeenCalledWith("setUser", 
+            expectResult
+        );
     });
 });

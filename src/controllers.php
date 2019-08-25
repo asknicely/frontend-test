@@ -46,7 +46,7 @@ $app->match('/login', function (Request $request) use ($app) {
  
          if ($user){
              $app['session']->set('user', $user);
-             return $app->json(json_encode($user), 200);
+             return $app->json($user, 200);
             
          }else{
            $error = array('error' => 'User not found');

@@ -6,6 +6,6 @@ export default class UserService {
     }
 
     loginAsync({username,password}) {
-        return Vue.axios.post(`http://${this.url}/login`,{username,password});
+        return Vue.axios.post(`/login`,{username,password});
     }
 }
