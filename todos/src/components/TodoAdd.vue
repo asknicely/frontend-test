@@ -1,7 +1,12 @@
 <template>
     <tr>
         <td colspan="3">
-            <input type="textbox" name="description" class="small-6 small-center" v-model="formData.description" placeholder="Description...">
+            <div class="input-group"
+                 v-bind:class="{ error: errors.first('Description') }">
+                <input type="textbox" v-validate="'required'"
+                       name="Description" class="small-6 small-center" v-model="formData.description" placeholder="Description...">
+                <div class="error-message">{{ errors.first('Description') }}</div>
+            </div>
         </td>
         <td>
             <button class="btn btn-sm btn-primary" @click.prevent="onAdd">Add</button>
@@ -25,9 +30,16 @@
             ...mapGetters("user", ["getLoginedUser"])
         },
         methods:{
-            onAdd(){
-             this.$store.dispatch('todos/addTodoAsync',{description: this.formData.description, userId: this.getLoginedUser.id});
-             this.formData.description=null;
+           async onAdd(){
+                const isValid = await this.$validator.validate();
+                if(isValid) {
+                    this.$store.dispatch('todos/addTodoAsync', {
+                        description: this.formData.description,
+                        userId: this.getLoginedUser.id
+                    });
+                    this.formData.description = null;
+                    this.errors.clear();
+                }
             },
           
         }

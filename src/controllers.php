@@ -28,7 +28,6 @@ $app->before(function (Request $request) {
     }
 });
 
-
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html', [
         'readme' => file_get_contents('README.md'),
