@@ -60,11 +60,13 @@
         methods:{
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown;
-                this.todoTitle=null;
+                if(dismissCountDown===0) {
+                    this.todoTitle = null;
+                }
             },
-            showAlert(todoTitle){
+            showAlert(todo){
                 this.dismissCountDown=5;
-                this.todoTitle=todoTitle;
+                this.todoTitle=todo.description; 
             }
         },
         components: {
