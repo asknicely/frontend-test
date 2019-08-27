@@ -15,9 +15,9 @@ function reloadTodos() {
                     row += '<td>'+data[i].id+'</td>'
                         +'<td>'+(data[i].completed === '1' ? 'Yes' : 'No')+'</td>'
                         +'<td><a href="todo/'+data[i].id+'">'+data[i].description+'</a></td>'
-                        +'<td><form method="post" action="todo/delete/'+data[i].id+'">'
-                        +'<button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>'
-                        +'</form></td></tr>';
+                        +'<td>'
+                        +'<button data-id="'+data[i].id+'" class="btn btn-xs btn-danger delete"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>'
+                        +'</td></tr>';
                 }
                 $('#todos').html(row);
             }
@@ -38,17 +38,16 @@ function reloadTodo() {
         success: function( data ) {
             if ('id' in data) {
                 let content;
-                console.log(data.completed);
                 content += '<tr><td>Item number</td><td>'+data.id+'</td> </tr>'
                     +'<tr><td>User</td><td>'+data.user_id+'</td></tr>'
                     +'<tr><td>Description</td><td>'+data.description+'</td></tr>'
                     +'<tr><td>Complete</td><td>'
                     +'<input type="checkbox" class="form-check-input" id="completed" data-id="'+data.id+'" '+(data.completed === '1' ? 'checked' : '')+'>' //check if todo is completed
                     +'</td></tr>'
-                    +'<tr><td></td><td>'
-                    +'<form method="post" action="todo/delete/"'+data.id+'">'
-                    +'<button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>'
-                    +'</form></td></tr>';
+                    +'<tr><td></td>'
+                    +'<td>'
+                    +'<button data-id="'+data.id+'" class="btn btn-xs btn-danger delete"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>'
+                    +'</td></tr>';
                 $('#todo').html(content);
             }
         }
@@ -64,6 +63,23 @@ $(document).on('change', '#completed', function() {
         contentType: 'application/json',
         success: function( data ) {
             reloadTodo();
+        }
+    });
+});
+
+//delegate listener for delete
+$(document).on('click', '.delete', function() {
+    const itemToDelete = $(this);
+    $.ajax({ 
+        type: 'GET',
+        url: ($('#completed').length ? '' : 'todo/')+'delete/'+itemToDelete.data('id'), 
+        contentType: 'application/json',
+        success: function( data ) {
+            if ($("#completed").length) {
+                window.location.href = '/todo';
+            } else {
+                reloadTodos();
+            }
         }
     });
 });
