@@ -52,3 +52,15 @@ function reloadTodo() {
         }
     });
 }
+
+$(document).on('change', '#completed', function() {
+    const status = $('#completed').prop('checked') ? 1 : 0;
+    $.ajax({ 
+        type: 'GET',
+        url: 'complete/'+$('#completed').data('id')+'/'+status, 
+        contentType: 'application/json',
+        success: function( data ) {
+            reloadTodo();
+        }
+    });
+});

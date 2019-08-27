@@ -110,9 +110,9 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 });
 
 
-$app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+$app->match('/todo/complete/{id}/{status}', function (Request $request, $id, $status) use ($app) { //change status based on what user has set
 
-    $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
+    $sql = "UPDATE todos SET completed = $status WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
     $contentType = $request->headers->get('Content-Type');
