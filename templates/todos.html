@@ -4,33 +4,24 @@
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
-        {% for todo in todos %}
+        <thead>
             <tr>
-                <td>{{ todo.id }}</td>
-                <td>{{ todo.user_id }}</td>
-                <td>
-                    <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
-                       {{ todo.description }}
-                    </a>
-                </td>
-                <td>
-                    <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                        <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                    </form>
-                </td>
+                <th>#</th>
+                <th>Completed</th>
+                <th>Description</th>
+                <th></th>
             </tr>
-        {% endfor %}
-        <tr>
-            <form method="post" action="{{ app.request.baseurl }}/todo/add">
-                <td colspan="3">
-                    <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary">Add</button>
-                </td>
-            </form>
-        </tr>
+        </thead>
+        
+        <tbody id="todos"></tbody>
     </table>
+    <form method="post" action="{{ app.request.baseurl }}/todo/add">
+        <div class="col-md-8">
+            <input type="textbox" name="description" class="" placeholder="Description..." style="width: 100%">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-sm btn-primary" style="width: 100%">Add todo</button>
+        </div>
+    </form>
 </div>
 {% endblock %}
