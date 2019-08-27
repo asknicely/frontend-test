@@ -1,6 +1,7 @@
 $("#todos").ready(function() {
     reloadTodos();
 });
+//function that gets multiple todo items then renders them
 function reloadTodos() {
     $.ajax({ 
         type: 'GET',
@@ -27,6 +28,7 @@ function reloadTodos() {
 $("#todo").ready(function() {
     reloadTodo();
 });
+//function that gets individual todo item then renders it
 function reloadTodo() {
     $.ajax({ 
         type: 'GET',
@@ -53,6 +55,7 @@ function reloadTodo() {
     });
 }
 
+//delegate listener for status change
 $(document).on('change', '#completed', function() {
     const status = $('#completed').prop('checked') ? 1 : 0;
     $.ajax({ 
