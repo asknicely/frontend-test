@@ -1,0 +1,18 @@
+:root {
+    --transparent: transparent;
+    --white: white;
+
+    --primary: #4CB987;
+    --primary-light: #47BA86;
+
+    --secondary: #337ab7; /* blue */
+    --secondary-dark: #286090; /* dark blue */
+
+    --tertiary: #A30034; /* green */
+    --tertiary-light: #ED0043;
+
+    --grey: #ddd;
+    --grey-light: #eee;
+    --grey-medium: #AFAFAF;
+    --grey-dark: #333333;
+}
