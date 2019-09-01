@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require('path');
 
 Encore.configureFilenames({
     js: '[name].js',
@@ -21,4 +22,13 @@ Encore
   .enableVueLoader()
   .enableSassLoader()
   .enablePostCssLoader();
-module.exports = Encore.getWebpackConfig();
+const config = Encore.getWebpackConfig();
+    config.resolve = {
+    extensions: ['.js', '.ts', '.vue', '.tsx'],
+    alias: {
+        '@src': path.resolve(__dirname, './src/')
+    }
+};
+
+
+module.exports = config;
