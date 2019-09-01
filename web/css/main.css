@@ -1,3 +1,6 @@
+@import './base/color.css';
+@import './base/typography.css';
+
 body {
   padding-top: 50px;
 }
