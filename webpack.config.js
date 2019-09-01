@@ -19,5 +19,6 @@ Encore
   .enableSourceMaps(!Encore.isProduction())
   .enableVersioning(Encore.isProduction())
   .enableVueLoader()
-  .enableSassLoader();
+  .enableSassLoader()
+  .enablePostCssLoader();
 module.exports = Encore.getWebpackConfig();
