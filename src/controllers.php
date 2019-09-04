@@ -3,6 +3,16 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+$validateCredentials = function (Request $request) use ($app) {
+    $accept_json = strpos($request->headers->get('Accept'), 'application/json') !== false;
+
+    if (null === $user = $app['session']->get('user')) {
+        return $accept_json 
+            ? $app->json(array('message' => 'Unauthorized'), 401)
+            : $app->redirect('/login');
+    }
+};
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
     return $twig;
@@ -54,12 +64,7 @@ $app->match('/logout', function (Request $request) use ($app) {
 
 $app->get('/todo/{id}', function (Request $request, $id) use ($app) {
     $accept_json = strpos($request->headers->get('Accept'), 'application/json') !== false;
-
-    if (null === $user = $app['session']->get('user')) {
-        return $accept_json 
-            ? $app->json(array('message' => 'Unauthorized'), 401)
-            : $app->redirect('/login');
-    }
+    $user = $app['session']->get('user');
 
     if ($id){
         $sql = "SELECT * FROM todos WHERE id = '$id'";
@@ -79,18 +84,13 @@ $app->get('/todo/{id}', function (Request $request, $id) use ($app) {
             ]);
     }
 })
-->value('id', null);
+->value('id', null)
+->before($validateCredentials);
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
     $accept_json = strpos($request->headers->get('Accept'), 'application/json') !== false;
-
-    if (null === $user = $app['session']->get('user')) {
-        return $accept_json 
-            ? $app->json(array('message' => 'Unauthorized'), 401)
-            : $app->redirect('/login');
-    }
-
+    $user = $app['session']->get('user');
     $user_id = $user['id'];
     $description = $request->get('description');
 
@@ -106,17 +106,12 @@ $app->post('/todo/add', function (Request $request) use ($app) {
             ? $app->json(array('success' => true, 'todo' => $todo), 201)
             : $app->json(array('message' => 'Interval Server Error', 500))) 
         : $app->redirect('/todo');
-});
+})
+->before($validateCredentials);
 
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     $accept_json = strpos($request->headers->get('Accept'), 'application/json') !== false;
-
-    if (null === $user = $app['session']->get('user')) {
-        return $accept_json 
-            ? $app->json(array('message' => 'Unauthorized'), 401)
-            : $app->redirect('/login');
-    }
     
     $sql = "DELETE FROM todos WHERE id = '$id'";
     $result = $app['db']->executeUpdate($sql);
@@ -124,17 +119,12 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     return $accept_json 
         ? $app->json(array('success' => $result === 1), $result === 1 ? 200 : 500)
         : $app->redirect('/todo');
-});
+})
+->before($validateCredentials);
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     $accept_json = strpos($request->headers->get('Accept'), 'application/json') !== false;
-
-    if (null === $user = $app['session']->get('user')) {
-        return $accept_json 
-            ? $app->json(array('message' => 'Unauthorized'), 401)
-            : $app->redirect('/login');
-    }
 
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
     $result = $app['db']->executeUpdate($sql);
@@ -142,4 +132,5 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     return $accept_json 
         ? $app->json(array('success' => $result === 1), $result === 1 ? 200 : 500)
         : $app->redirect('/todo');
-});
+})
+->before($validateCredentials);
