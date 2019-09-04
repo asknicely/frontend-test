@@ -1,0 +1,168 @@
+.todo-container {
+    color: #3d094c;
+
+    &--title {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    &--items {
+        position: relative;
+        margin-top: 15px;
+        border-collapse: collapse;
+        width: 100%;
+
+        thead {
+            th {
+                font-size: 17px;
+                border-bottom: 1px solid purple;
+                text-align: left;
+                padding: 5px 9px;
+            }
+        }
+    }
+
+    &--new-item-box {
+        position: relative;
+        display: flex;
+        margin-top: 31px;
+
+        &--description {
+            position: relative;
+            width: 100%;
+            margin-right: 15px;
+            font-size: 14px;
+            border: 1px solid #5e186b;
+            padding: 0px 11px;
+            border-radius: 2px;
+            height: 37px;
+            cursor: text;
+        }
+
+        &--add-button {
+            height: 39px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #8e3bc3;
+            color: #ddd;
+            width: 92px;
+            border-radius: 2px;
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+
+    &--delete-modal {
+        text-align: center;
+
+        &--description {
+            font-size: 19px;
+            font-weight: bold;
+            color: white;
+        }
+
+        &--buttons {
+            margin-top: 25px;
+        }
+
+        &--button {
+            margin: 0px 9px;
+            width: 120px;
+            height: 33px;
+            font-size: 14px;
+            font-weight: bold;
+
+            &.cancel-button {
+                color: #a964a9;
+
+                &:hover {
+                    color: #ce74ce;
+                }
+            }
+
+            &.delete-button {
+                color: #ddd;
+                background: #bd5669;
+
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.todo-item {
+    td {
+        font-size: 15px;
+        border-bottom: 1px solid #ded5de;
+        text-align: left;
+        padding: 7px 9px;
+        color: #5c3a69;
+
+        &.todo-item--actions {
+            text-align: right;
+        }
+    }
+
+    &--complete-button {
+        position: relative;
+        padding: 6px 0px;
+        font-size: 12px;
+        border: 1px solid transparent;
+        color: #834ba7;
+        font-weight: bold;
+        border-radius: 2px;
+        margin-right: 5px;
+
+        &.not-complete {
+            visibility: hidden;
+            border-color: #834ba7;
+            padding: 6px 9px;
+
+            &:hover {
+                color: #b36ae2;
+            }
+        }
+
+        @keyframes scale-up {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1.0); }
+        }
+
+        &.completed {
+            animation-name: scale-up;
+            animation-duration: 0.2s;
+        }
+
+        >svg {
+            transform: scale(1.2) translate(-3px, 1.5px);
+        }
+    }
+
+    &--remove-button {
+        font-size: 15px;
+        color: #d66278;
+        opacity: 0.7;
+        visibility: hidden;
+
+        &:hover {
+            opacity: 1.0;
+        }
+
+        >svg {
+            transform: translateY(3px);
+        }
+    }
+
+    &:hover {
+        .todo-item {
+            &--complete-button, &--remove-button {
+                visibility: visible;
+            }
+        }
+    }
+}
