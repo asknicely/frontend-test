@@ -14,6 +14,10 @@ export const secureFetch = (url, options={}) => {
                     type: AUTH_LOGOUT
                 })
             }
+        }).catch(() => {
+            dispatch({
+                type: AUTH_LOGOUT
+            })
         })
         return request
     }
