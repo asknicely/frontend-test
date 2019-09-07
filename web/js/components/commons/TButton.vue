@@ -72,6 +72,8 @@ import TSpinner from './TSpinner';
 .button[borderless] {
   position: relative;
   padding: 0;
+  border-width: 0px;
+  background: var(--transparent);
 }
 
 .button[borderless]::before {
