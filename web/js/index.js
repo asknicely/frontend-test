@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueToast from 'vue-toast-notification';
-import babelPolyfill from 'babel-polyfill'
+import 'vue-toast-notification/dist/index.css';
 import App from './App'
 
 // Vue Instance Global Plugins

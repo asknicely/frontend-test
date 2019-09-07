@@ -82,7 +82,8 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     }
 
     $user_id = $user['id'];
-    $description = $request->get('description');
+    $data = json_decode($request->getContent(), true);
+    $description = $data['description'];
     $contentType = $request->headers->get('Content-Type');
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
@@ -91,7 +92,9 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+        $todos = $app['db']->fetchAll($sql);
+        return json_encode(array('success' => true, 'data' => $todos));
     }
 });
 

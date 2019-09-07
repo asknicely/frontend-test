@@ -49,6 +49,7 @@ import TSpinner from './TSpinner';
   padding: 8px 10px;
   transition: 0.3s;
   cursor: pointer;
+  max-height: 40px;
 }
 
 .button:focus {

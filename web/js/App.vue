@@ -3,23 +3,42 @@
         <t-table title="Todo List:" :todoNumber="todoList.length">
           <t-table-row v-for="(todo, index) in todoList" :todo="todo" :key="index" @click="clickToDelete"></t-table-row>
         </t-table>
+        <br/><br/>
+        <t-form :model="model" :rules="rules" title="Add New Todo">
+          <t-input ref="tInput" placeholder="Description" prop="newTodo" v-model="model.newTodo"></t-input>
+          <t-button primary :loading="loading" type="submit" @submit="clickToAdd" @click="clickToAdd" label="add"></t-button>
+        </t-form>
     </div>
 </template>
 <script>
 import TTable from "./components/TTable.vue"
 import TTableRow from './components/TTableRow.vue';
 import apiCalls from './mixins/apiCalls.js';
+import TButton from "./components/commons/TButton.vue"
+import TInput from './components/commons/TInput.vue';
+import TForm from './components/TForm.vue';
 
 export default {
   name: "app",
   components: {
     TTable,
-    TTableRow
+    TTableRow,
+    TButton,
+    TInput,
+    TForm
   },
   mixins: [ apiCalls ],
   data() {
       return {
-        todoList: []
+        todoList: [],
+        loading: false, // add loading status to avoid double click when user add a TODO
+        model: { newTodo: '' },
+        rules: {
+          newTodo: [
+            { required: true, message: "Please input content" },
+            { min: 2, message: 'Two characters at least'}
+          ]
+        }
       }
   },
   beforeMount() {
@@ -31,16 +50,35 @@ export default {
     this.todoList = props;
   },
   methods: {
-    async clickToDelete(todo) {
-      console.log('123', todo)
-      let result = await this.deleteTodo(todo.id)
-      result ? this.updateFordelete(todo) : this.$toast.error('Something went wrong')
+    clickToDelete(todo) {
+      this.axios.post(`/todo/delete/${todo.id}`, { headers: {  "Content-Type": 'application/json' } }).then(response => {
+        if(response.data.hasOwnProperty('success')) this.updateAfterDelete(todo)
+      }).catch(error => {
+        console.log(error)
+        this.$toast.error('Something went wrong')
+      });
     },
-    updateFordelete(todo) {
+    updateAfterDelete(todo) {
       let index = this.todoList.findIndex(x=>x.id == todo.id);
       this.todoList.splice(index, 1);
       this.$toast.success('Removed successfully.')
+    },
+    clickToAdd() {
+      this.loading = true;
+      if(!this.model.newTodo.length) this.$refs.tInput.validator()
+      let newTodo = {"description": this.model.newTodo}
+      this.axios.post('/todo/add', newTodo, { headers: {  "Content-Type": 'application/json' } }).then(response => {
+        if(response.data.hasOwnProperty('success')) {
+          this.todoList = response.data.data
+          this.model.newTodo = '';
+          this.$toast.success('Added successfully.')
+        } 
+      }).catch(error => {
+        console.log(error)
+        this.$toast.success('Removed successfully.')
+      });
+      this.loading = false;
     }
-  }
+  },
 }
 </script>
