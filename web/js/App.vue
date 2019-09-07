@@ -29,6 +29,18 @@ export default {
     const props = JSON.parse(node.getAttribute('data-todos'))
     console.log('first', props)
     this.todoList = props;
+  },
+  methods: {
+    async clickToDelete(todo) {
+      console.log('123', todo)
+      let result = await this.deleteTodo(todo.id)
+      result ? this.updateFordelete(todo) : this.$toast.error('Something went wrong')
+    },
+    updateFordelete(todo) {
+      let index = this.todoList.findIndex(x=>x.id == todo.id);
+      this.todoList.splice(index, 1);
+      this.$toast.success('Removed successfully.')
+    }
   }
 }
 </script>
