@@ -1,7 +1,7 @@
 <template>
     <div class="todos__layout">
         <t-table title="Todo List:" :todoNumber="todoList.length">
-          <t-table-row v-for="(todo, index) in todoList" :todo="todo" :key="index" @click="clickToDelete"></t-table-row>
+          <t-table-row v-for="(todo, index) in todoList" :todo="todo" :key="index" @changeStatus="changeStatus" @click="clickToDelete"></t-table-row>
         </t-table>
         <br/><br/>
         <t-form :model="model" :rules="rules" title="Add New Todo">
@@ -64,8 +64,8 @@ export default {
       this.$toast.success('Removed successfully.')
     },
     clickToAdd() {
+      if(this.model.newTodo.length<2) return this.$refs.tInput.validator()
       this.loading = true;
-      if(!this.model.newTodo.length) this.$refs.tInput.validator()
       let newTodo = {"description": this.model.newTodo}
       this.axios.post('/todo/add', newTodo, { headers: {  "Content-Type": 'application/json' } }).then(response => {
         if(response.data.hasOwnProperty('success')) {
@@ -78,6 +78,17 @@ export default {
         this.$toast.success('Removed successfully.')
       });
       this.loading = false;
+    },
+    changeStatus(todo) {
+      this.axios.post(`/todo/complete/${todo.id}`, { headers: {  "Content-Type": 'application/json' } }).then(response => {
+        if(response.data.hasOwnProperty('success')) {
+          this.todoList = response.data.data
+          this.$toast.success('Added successfully.')
+        }
+      }).catch(error => {
+        console.log(error)
+        this.$toast.error('Something went wrong')
+      });
     }
   },
 }

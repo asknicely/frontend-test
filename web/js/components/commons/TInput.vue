@@ -40,10 +40,6 @@ export default {
   },
   mounted() {
     this.$on("validate", this.validator);
-    this.$on("emptyError", ()=> {
-      this.errMessage = "Please enter your description first."
-      this.errStatus = true
-    });
   },
   methods: {
     validator() {

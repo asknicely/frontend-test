@@ -2,9 +2,13 @@
 <div class="t-table--row">
     <template v-for="[key, value] of Object.entries(todo)">
         <div v-if="key == 'description'" :key="value" class="t-table--discription">{{value}}</div>
-        <div v-else-if="key == 'completed'" :key="value" :class="'text-'+getStatus(value).color" class="table__item--completed_container">
-          <div class="table__item--completed_status" v-html="iconHTML(getStatus(value).icon)"></div>
+        <div v-else-if="key == 'completed' && value==0" :key="value" :class="'text-'+getStatus(value).color" class="table__item--completed_container">
+          <div class="table__item--completed_status" @click="changeStatus(todo)" v-html="iconHTML(getStatus(value).icon)"></div>
           <div class="table__item--completed_status_indicator"></div>
+        </div>
+        <!-- when the status is completed, user couldn't toggle it back to uncompleted -->
+        <div v-else-if="key == 'completed' && value==1" :key="value" :class="'text-'+getStatus(value).color">
+          <div class="table__item--completed" v-html="iconHTML(getStatus(value).icon)"></div>
         </div>
         <div v-else :key="value">{{value}}</div>
     </template>
@@ -40,9 +44,11 @@ export default {
     },
     buttonClick(event) {
       if(this.loading){ return; }
-      console.log('12', event)
       this.$emit('click', event);
     },
+    changeStatus(todo) {
+      this.$emit('changeStatus', todo);
+    }
   },
   created() {
     console.log('this.todo', this.todo)
@@ -60,7 +66,7 @@ export default {
 .text-grey {
   color: var(--grey-medium);
 }
-.table__item--completed_status {
+.table__item--completed_status, .table__item--completed {
   width: 20px;
 }
 .table__item--completed_status:hover {

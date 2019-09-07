@@ -114,7 +114,11 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
-
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
+    $user_id = $user['id'];
+    
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
@@ -122,6 +126,8 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+        $todos = $app['db']->fetchAll($sql);
+        return json_encode(array('success' => true, 'data' => $todos));
     }
 });
