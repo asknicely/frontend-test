@@ -8,3 +8,10 @@ body {
 .login-form > div {
     margin-top: 10px;
 }
+
+.todos__layout {
+	min-width: 350px;
+	width: 80%;
+	max-width: 550px;
+	margin: auto;
+}

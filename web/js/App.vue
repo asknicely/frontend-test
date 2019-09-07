@@ -1,24 +1,34 @@
 <template>
-    <div>
-        <h1>neo test</h1>
-        <t-button class="text-primary" primary loading label="read more"></t-button>
+    <div class="todos__layout">
+        <t-table title="Todo List:" :todoNumber="todoList.length">
+          <t-table-row v-for="(todo, index) in todoList" :todo="todo" :key="index" @click="clickToDelete"></t-table-row>
+        </t-table>
     </div>
 </template>
 <script>
-import TButton from "./components/commons/TButton.vue"
+import TTable from "./components/TTable.vue"
+import TTableRow from './components/TTableRow.vue';
+import apiCalls from './mixins/apiCalls.js';
+
 export default {
   name: "app",
   components: {
-    TButton
+    TTable,
+    TTableRow
+  },
+  mixins: [ apiCalls ],
+  data() {
+      return {
+        todoList: []
+      }
   },
   beforeMount() {
     // get the todos list data from the twig template
     const id = "vue-todos"
     const node = document.getElementById(id)
     const props = JSON.parse(node.getAttribute('data-todos'))
-    console.log(props)
+    console.log('first', props)
+    this.todoList = props;
   }
 }
 </script>
-<style lang="scss">
-</style>
