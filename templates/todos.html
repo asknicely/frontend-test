@@ -33,7 +33,6 @@
         </tr>
     </table>
 </div> -->
-    {{dump(todos)}}
     <!-- inject the vue app here -->
     <div id="vue-todos" data-todos="{{ todos|json_encode|e('html_attr') }}" ></div>
     <script src="{{ app.request.basepath }}/build/app.js"></script>
