@@ -59,6 +59,7 @@ export default {
       });
     },
     updateAfterDelete(todo) {
+      // update the list data when delete operation succeeded
       let index = this.todoList.findIndex(x=>x.id == todo.id);
       this.todoList.splice(index, 1);
       this.$toast.success('Removed successfully.')
