@@ -84,7 +84,7 @@ export default {
       this.axios.post(`/todo/complete/${todo.id}`, { headers: {  "Content-Type": 'application/json' } }).then(response => {
         if(response.data.hasOwnProperty('success')) {
           this.todoList = response.data.data
-          this.$toast.success('Added successfully.')
+          this.$toast.success('Great, you completed one todo!')
         }
       }).catch(error => {
         console.log(error)
