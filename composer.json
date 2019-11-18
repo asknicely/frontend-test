@@ -23,7 +23,8 @@
         "symfony/validator": "~2.3",
         "doctrine/dbal": "~2.2",
         "deralex/yaml-config-service-provider": "1.0.x-dev",
-        "ext-json": "*"
+        "ext-json": "*",
+        "firebase/php-jwt": "^5.0"
     },
     "autoload": {
         "psr-0": { "": "src/" }
@@ -32,5 +33,8 @@
         "branch-alias": {
             "dev-master": "1.1.x-dev"
         }
-    }
+    },
+    "scripts": {
+        "start": "php -S localhost:4000 -t web/ web/index.php"
+    }    
 }
