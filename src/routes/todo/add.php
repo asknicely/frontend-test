@@ -3,8 +3,6 @@
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
-include 'auth.php';
-
 $todo_add = $app['controllers_factory'];
 $todo_add->post('/add', function (Request $request) use ($app) {
 

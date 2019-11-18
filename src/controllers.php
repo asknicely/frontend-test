@@ -6,6 +6,9 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 }));
 
 
+// include auth middleware
+include 'auth.php';
+
 include 'routes/homepage.php';
 $app->mount('/', $homepage);
 

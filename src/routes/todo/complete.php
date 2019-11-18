@@ -3,8 +3,6 @@
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
-include 'auth.php';
-
 $todo_complete = $app['controllers_factory'];
 $todo_complete->get('/complete/{id}', function ($id, Request $request) use ($app) {
 

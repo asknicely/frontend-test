@@ -3,8 +3,6 @@
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
-include 'auth.php';
-
 $todo_delete = $app['controllers_factory'];
 $todo_delete->get('/delete/{id}', function ($id, Request $request) use ($app) {
 
