@@ -4,13 +4,14 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
 $todo_delete = $app['controllers_factory'];
-$todo_delete->get('/delete/{id}', function ($id, Request $request) use ($app) {
+$todo_delete->match('/delete', function (Request $request) use ($app) {
 
     // get decoded jwt info
     global $decoded;
     
     // make these variables 
     // safe first
+    $id        = $request->get('id');
     $safe_id   = addslashes($id);
     $safe_user = addslashes($decoded->username);
 
@@ -74,5 +75,4 @@ $todo_delete->get('/delete/{id}', function ($id, Request $request) use ($app) {
     }
 
 })
-->value('id', null)
 ->before($auth);

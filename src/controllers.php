@@ -9,17 +9,20 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 // include auth middleware
 include 'auth.php';
 
+// include cors middleware
+include 'cors.php';
+$app->after($cors);
+
+// homepage
 include 'routes/homepage.php';
 $app->mount('/', $homepage);
 
+// login page
 include 'routes/login.php';
 $app->mount('/', $user_login);
 
 
 // todos
-include 'routes/todo/list.php';
-$app->mount('/todo', $todo_list);
-
 include 'routes/todo/delete.php';
 $app->mount('/todo', $todo_delete);
 
@@ -28,3 +31,6 @@ $app->mount('/todo', $todo_complete);
 
 include 'routes/todo/add.php';
 $app->mount('/todo', $todo_add);
+
+include 'routes/todo/list.php';
+$app->mount('/todo', $todo_list);

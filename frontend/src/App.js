@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from 'react';
+import { Router } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import { history } from './functions/History'
+import { Context, initial, reducer } from './redux/app'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from './components/Header';
+import Content from './components/Content';
+
+import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+const App = (props) => {
+	
+	// redux codes
+	const [state, dispatch] = useReducer(reducer, initial)
+
+	return (
+		<Context.Provider value={{ state, dispatch }}>
+			<div className="App">
+				<Router history={history}>
+					<Header />
+					<Content />
+				</Router>
+			</div>
+			<ToastContainer />
+		</Context.Provider>
+	);
 }
 
 export default App;

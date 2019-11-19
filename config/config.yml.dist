@@ -1,5 +1,10 @@
 database:
     host    : localhost
-    dbname  : ac_todos
+    dbname  : asknicely_frontend_test
     user    : root
     password:
+jwt:
+    secret  : SmJv7HEr9Luec6ysVgGgh3sywPPVkhET
+    expire  : 600
+frontend:
+    origin  : 

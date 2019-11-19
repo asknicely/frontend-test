@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
 $user_login = $app['controllers_factory'];
-$user_login->post('/login', function (Request $request) use ($app) {
+$user_login->match('/login', function (Request $request) use ($app) {
 
     // make sure these inputs are safe for SQL
     $username = addslashes($request->get('username'));

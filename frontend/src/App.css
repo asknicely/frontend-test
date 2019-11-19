@@ -1,22 +1,63 @@
 .App {
-  text-align: center;
+	text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
+	height: 40vmin;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
 }
 
 .App-link {
-  color: #09d3ac;
+	color: #09d3ac;
+}
+
+body {
+	padding-top: 50px;
+}
+
+.login-form > div {
+	margin-top: 10px;
+}
+
+td {
+	text-align: left;
+}
+
+h1 {
+	text-align: left;
+}
+
+.well {
+	text-align: left;
+}
+.input-error {
+	background-color: #fcd6d2;
+}
+.custom-button {
+	margin-right: 5px;
+}
+.custom-span {
+	margin-left: 20px;
+	margin-right: 7px;
+}
+
+/* preloader */
+.preloader {
+	margin: auto;
+	text-align: center;
+	margin-top: 120px;
+}
+.preloader .text {
+	margin-top: 30px;
+	font-size: 13px;
 }

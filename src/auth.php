@@ -8,7 +8,7 @@ $auth = function (Request $request) use ($app) {
     // prepare variable for decoded jwt info
     global $decoded;
 
-    $token = $request->headers->get('authorization');
+    $token = $request->headers->get('Authorization');
 
     // if no token found,
     // reject the request ...

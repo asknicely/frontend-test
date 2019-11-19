@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
 $todo_add = $app['controllers_factory'];
-$todo_add->post('/add', function (Request $request) use ($app) {
+$todo_add->match('/add', function (Request $request) use ($app) {
 
     // get decoded jwt info
     global $decoded;
