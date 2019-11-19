@@ -18,6 +18,14 @@ const Item = (props) => {
                 <span className="glyphicon glyphicon-remove glyphicon-white"></span>
                 </button>
 
+                <button 
+                    type="button" 
+                    className="btn btn-xs btn-success custom-button"
+                    onClick={() => { props.handleComplete(props.id) }}
+                    style={{ display: parseInt(props.completed) === 1 ? 'none' : 'inline-block' }}
+                >
+                <span className="glyphicon glyphicon-ok-sign glyphicon-white"></span>
+                </button>
 
             </td>
         </tr>
