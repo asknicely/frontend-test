@@ -19,6 +19,7 @@ const Homepage = (props) => {
 	}
 
 	useEffect(() => {
+		document.title = `Todos App Homepage`
 		if (!data.isLoaded) fetchData()
 	}, [data])
 

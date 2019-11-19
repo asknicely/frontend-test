@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Context } from '../redux/app'
-// import { history } from '../functions/History'
 
 const Login = (props) => {
 
@@ -69,7 +68,7 @@ const Login = (props) => {
 	}
 
 	useEffect(() => { 
-		// console.log('monitor', state)
+		document.title = 'Todos App - Login'
 	}, [state])
 
 	return (

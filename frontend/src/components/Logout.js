@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react'
-// import { history } from '../functions/History'
 import { Context } from '../redux/app'
 
 const Logout = (props) => {

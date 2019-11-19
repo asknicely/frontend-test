@@ -15,7 +15,6 @@ const Todos = (props) => {
 	const [ todos, setTodos ] = useState({ list: [], isLoaded: false })
 	const [ description, setDescription ] = useState('')
 	const { state } = useContext(Context)
-	// const todoId = props.match.params.id
 
 	const fetchData = async (id) => {
 
@@ -105,6 +104,8 @@ const Todos = (props) => {
 	}
 
 	useEffect(() => { 
+
+		document.title = `${Capitalize(state.username)}'s Activities`
 
 		if (!state.isLoggedIn) { props.history.push('/login') }
 		else {
