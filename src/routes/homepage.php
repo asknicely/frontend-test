@@ -1,7 +1,7 @@
 <?php
 
 $homepage = $app['controllers_factory'];
-$homepage->get('/', function () use ($app) {
+$homepage->match('/', function () use ($app) {
     return $app->json([
         'status' => 200,
         'statusTxt' => 'ok',
