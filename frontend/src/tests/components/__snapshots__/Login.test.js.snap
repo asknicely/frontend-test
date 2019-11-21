@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should give error on Login without filling user / pass 1`] = `
+<App>
+  <Login>
+    <div
+      className="col-md-4 col-md-offset-4"
+    >
+      <h1>
+        Login
+      </h1>
+      <form
+        className="form-horizontal login-form"
+        method="POST"
+        onSubmit={[Function]}
+      >
+        <div
+          className="input-group"
+        >
+          <span
+            className="input-group-addon"
+          >
+            <i
+              className="glyphicon glyphicon-user"
+            />
+          </span>
+          <input
+            className="form-control input-error"
+            name="username"
+            onChange={[Function]}
+            placeholder="Username"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="input-group"
+        >
+          <span
+            className="input-group-addon"
+          >
+            <i
+              className="glyphicon glyphicon-lock"
+            />
+          </span>
+          <input
+            className="form-control input-error"
+            name="password"
+            onChange={[Function]}
+            placeholder="Password"
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <div
+            className="col-sm-12 controls"
+          >
+            <button
+              className="btn btn-primary pull-right"
+              type="submit"
+            >
+              <i
+                className="glyphicon glyphicon-log-in"
+              />
+               login
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </Login>
+</App>
+`;
+
+exports[`should render Login correctly 1`] = `
+<App>
+  <Login>
+    <div
+      className="col-md-4 col-md-offset-4"
+    >
+      <h1>
+        Login
+      </h1>
+      <form
+        className="form-horizontal login-form"
+        method="POST"
+        onSubmit={[Function]}
+      >
+        <div
+          className="input-group"
+        >
+          <span
+            className="input-group-addon"
+          >
+            <i
+              className="glyphicon glyphicon-user"
+            />
+          </span>
+          <input
+            className="form-control"
+            name="username"
+            onChange={[Function]}
+            placeholder="Username"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="input-group"
+        >
+          <span
+            className="input-group-addon"
+          >
+            <i
+              className="glyphicon glyphicon-lock"
+            />
+          </span>
+          <input
+            className="form-control"
+            name="password"
+            onChange={[Function]}
+            placeholder="Password"
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <div
+            className="col-sm-12 controls"
+          >
+            <button
+              className="btn btn-primary pull-right"
+              type="submit"
+            >
+              <i
+                className="glyphicon glyphicon-log-in"
+              />
+               login
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </Login>
+</App>
+`;

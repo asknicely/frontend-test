@@ -1,0 +1,290 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Header correctly and display LOGIN link  1`] = `
+<App>
+  <Router
+    history={
+      Object {
+        "action": "POP",
+        "block": [Function],
+        "createHref": [Function],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "length": 1,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        },
+        "push": [Function],
+        "replace": [Function],
+      }
+    }
+  >
+    <Header>
+      <nav
+        className="navbar navbar-inverse navbar-fixed-top"
+      >
+        <div
+          className="container"
+        >
+          <div
+            className="navbar-header"
+          >
+            <Link
+              className="navbar-brand"
+              to="/"
+            >
+              <LinkAnchor
+                className="navbar-brand"
+                href="/"
+                navigate={[Function]}
+              >
+                <a
+                  className="navbar-brand"
+                  href="/"
+                  onClick={[Function]}
+                >
+                  <span
+                    className="glyphicon glyphicon-home glyphicon-white"
+                  />
+                </a>
+              </LinkAnchor>
+            </Link>
+          </div>
+          <div
+            className="collapse navbar-collapse"
+            id="navbar"
+          >
+            <ul
+              className="nav navbar-nav"
+            >
+              <li>
+                <Link
+                  to="/todo"
+                >
+                  <LinkAnchor
+                    href="/todo"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/todo"
+                      onClick={[Function]}
+                    >
+                      Todo list
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+            </ul>
+            <ul
+              className="nav navbar-nav navbar-right"
+            >
+              <li
+                style={
+                  Object {
+                    "display": "none ",
+                  }
+                }
+              >
+                <Link
+                  to="/logout"
+                >
+                  <LinkAnchor
+                    href="/logout"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/logout"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="glyphicon glyphicon-user custom-span"
+                      />
+                      <span
+                        className="glyphicon glyphicon-off custom-span"
+                      />
+                      Logout
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+              <li
+                style={
+                  Object {
+                    "display": "block",
+                  }
+                }
+              >
+                <Link
+                  to="/login"
+                >
+                  <LinkAnchor
+                    href="/login"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/login"
+                      onClick={[Function]}
+                    >
+                      Login
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </Header>
+  </Router>
+</App>
+`;
+
+exports[`should render Header correctly and display STATE.username and LOGOUT link  1`] = `
+<App>
+  <Router
+    history={
+      Object {
+        "action": "POP",
+        "block": [Function],
+        "createHref": [Function],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "length": 1,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        },
+        "push": [Function],
+        "replace": [Function],
+      }
+    }
+  >
+    <Header>
+      <nav
+        className="navbar navbar-inverse navbar-fixed-top"
+      >
+        <div
+          className="container"
+        >
+          <div
+            className="navbar-header"
+          >
+            <Link
+              className="navbar-brand"
+              to="/"
+            >
+              <LinkAnchor
+                className="navbar-brand"
+                href="/"
+                navigate={[Function]}
+              >
+                <a
+                  className="navbar-brand"
+                  href="/"
+                  onClick={[Function]}
+                >
+                  <span
+                    className="glyphicon glyphicon-home glyphicon-white"
+                  />
+                </a>
+              </LinkAnchor>
+            </Link>
+          </div>
+          <div
+            className="collapse navbar-collapse"
+            id="navbar"
+          >
+            <ul
+              className="nav navbar-nav"
+            >
+              <li>
+                <Link
+                  to="/todo"
+                >
+                  <LinkAnchor
+                    href="/todo"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/todo"
+                      onClick={[Function]}
+                    >
+                      Todo list
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+            </ul>
+            <ul
+              className="nav navbar-nav navbar-right"
+            >
+              <li
+                style={
+                  Object {
+                    "display": "none ",
+                  }
+                }
+              >
+                <Link
+                  to="/logout"
+                >
+                  <LinkAnchor
+                    href="/logout"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/logout"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="glyphicon glyphicon-user custom-span"
+                      />
+                      User123
+                      <span
+                        className="glyphicon glyphicon-off custom-span"
+                      />
+                      Logout
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+              <li
+                style={
+                  Object {
+                    "display": "block",
+                  }
+                }
+              >
+                <Link
+                  to="/login"
+                >
+                  <LinkAnchor
+                    href="/login"
+                    navigate={[Function]}
+                  >
+                    <a
+                      href="/login"
+                      onClick={[Function]}
+                    >
+                      Login
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </Header>
+  </Router>
+</App>
+`;

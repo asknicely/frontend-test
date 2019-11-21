@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render TodosForm correctly 1`] = `
+<tr>
+  <td
+    align="left"
+    colSpan="4"
+  >
+    <input
+      className="small-6 small-center"
+      name="description"
+      onChange={[Function]}
+      placeholder="Description..."
+      type="textbox"
+      value=""
+    />
+  </td>
+  <td>
+    <button
+      className="btn btn-sm btn-primary"
+      onClick={[Function]}
+      type="submit"
+    >
+      Add
+    </button>
+  </td>
+</tr>
+`;

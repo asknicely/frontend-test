@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render TodosItem correctly :: 2nd Item 1`] = `
+<tr>
+  <td>
+    3
+  </td>
+  <td>
+    345
+  </td>
+  <td>
+    <Link
+      to="/todo/3"
+    >
+      Going out to university
+    </Link>
+  </td>
+  <td />
+  <td
+    nowrap="true"
+  >
+    <button
+      className="btn btn-xs btn-danger custom-button"
+      onClick={[Function]}
+      type="button"
+    >
+      <span
+        className="glyphicon glyphicon-remove glyphicon-white"
+      />
+    </button>
+    <button
+      className="btn btn-xs btn-success custom-button"
+      onClick={[Function]}
+      style={
+        Object {
+          "display": "inline-block",
+        }
+      }
+      type="button"
+    >
+      <span
+        className="glyphicon glyphicon-ok-sign glyphicon-white"
+      />
+    </button>
+  </td>
+</tr>
+`;

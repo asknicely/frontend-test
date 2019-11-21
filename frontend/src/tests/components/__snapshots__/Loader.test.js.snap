@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Loader correctly 1`] = `
+<div>
+  <div
+    className="preloader"
+  >
+    <div
+      className="image"
+    >
+      <img
+        alt="Loading ..."
+        src="images/loading.gif"
+      />
+    </div>
+    <div
+      className="text"
+    >
+      Loading data from database ...
+    </div>
+  </div>
+</div>
+`;

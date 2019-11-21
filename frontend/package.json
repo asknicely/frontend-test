@@ -33,6 +33,15 @@
     ]
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.17.0"
+    "axios-mock-adapter": "^1.17.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "enzyme-to-json": "^3.4.3",
+    "raf": "^3.4.1"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render TodosHeader correctly 1`] = `
+<tr>
+  <th>
+    #
+  </th>
+  <th>
+    User
+  </th>
+  <th>
+    Description
+  </th>
+  <th>
+    Status
+  </th>
+  <th />
+</tr>
+`;

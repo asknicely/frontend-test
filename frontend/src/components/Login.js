@@ -6,7 +6,7 @@ import { Context } from '../redux/app'
 const Login = (props) => {
 
 	const defaultValue = {
-		value: 'user1',
+		value: '',
 		error: false
 	}
 	const [username, setUsername] = useState(defaultValue)
@@ -85,7 +85,7 @@ const Login = (props) => {
 						className={username.error ? 'form-control input-error' : 'form-control' }
 						name="username" 
 						placeholder="Username" 
-						value={username.value}
+						value={username.value ? username.value : ''}
 						onChange={(e)=> setUsername({
 							value: e.target.value,
 							error: false
@@ -104,7 +104,7 @@ const Login = (props) => {
 						className={password.error ? 'form-control input-error' : 'form-control' }
 						name="password" 
 						placeholder="Password" 
-						value={password.value}
+						value={password.value ? password.value : ''}
 						onChange={(e)=> setPassword({
 							value: e.target.value,
 							error: false

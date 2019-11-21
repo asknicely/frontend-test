@@ -26,6 +26,40 @@ Credentials:
 * mysql
 * A github account
 
+### Updated Installation Guide
+**/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
+```sh
+
+php composer.phar install
+cp config/config.yml.dist config/config.yml
+mysql -u root <database> < resources/database.sql
+mysql -u root <database> < resources/fixtures.sql
+
+
+To start the backend at port 4000 (linked to React front end), please use :
+
+php -S localhost:4000 -t web/ web/index.php
+
+
+To run PHPUnit for backend unit testing, please make sure that backend is running at port 4000 and use command :
+
+vendor/bin/phpunit
+
+
+Then please run the front end by using these commands : 
+
+cd frontend
+npm start
+
+To run Jest + Enzyme unit testing for front-end, please use : 
+
+npm test
+
+
+
+
+
+```sh
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
