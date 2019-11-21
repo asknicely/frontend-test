@@ -58,8 +58,8 @@ npm test
 
 
 
-
-```sh
+.
+```s
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
