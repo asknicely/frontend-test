@@ -1,67 +1,6 @@
-{% extends "layout.html" %} {% block content %}
-<!-- <div class="col-md-4 col-md-offset-4">
-  <h1>Todo List:</h1>
-  <table class="table table-striped">
-    <th>#</th>
-    <th>User</th>
-    <th>Description</th>
-    <th></th>
-    {% for todo in todos %}
-    <tr>
-      <td>{{ todo.id }}</td>
-      <td>{{ todo.user_id }}</td>
-      <td>
-        <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
-          {{ todo.description }}
-        </a>
-      </td>
-      <td>
-        <form
-          method="post"
-          action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}"
-        >
-          <button type="submit" class="btn btn-xs btn-danger">
-            <span class="glyphicon glyphicon-remove glyphicon-white"></span>
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-    <tr>
-      <form method="post" action="{{ app.request.baseurl }}/todo/add">
-        <td colspan="3">
-          <input
-            type="textbox"
-            name="description"
-            class="small-6 small-center"
-            placeholder="Description..."
-          />
-        </td>
-        <td>
-          <button type="submit" class="btn btn-sm btn-primary">Add</button>
-        </td>
-      </form>
-    </tr>
-  </table>
-  -->
+{% extends "layout.html" %} 
+{% block content %}
 
-<!-- try to get the flashbag from backend, can be use in Twig template,
-   when it put into React, not working, cannot figure out why -->
-<!-- {% for alert in app.session.flashbag.get("error") %}
-  <div className="error-message">
-    <div className="alert">
-      <h4>{{alert}}</h4>
-    </div>
-  </div>
-  {% endfor %} 
-  {% for alert in app.session.flashbag.get("success") %}
-  <div className="error-message">
-    <div className="alert">
-      <p>{{alert}}</p>
-    </div>
-  </div>
-  {% endfor %}
-</div>  -->
 <div id="root"></div>
 
 <script type="text/babel">
@@ -180,7 +119,28 @@
 
     //handle delete button click action, e is MouseEvent
     deleteOnClick = e => {
-      console.log(e)
+      this.setState({ loading: true });
+      fetch("{{app.request.baseurl}}/todo/delete/" + e.currentTarget.name, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => {
+          if (res.ok) {
+            this.setState({
+              snackbarOpen: true,
+              lastSnackbarStatus: "Deleted",
+              loading: false,
+              count: this.state.count - 1
+            });
+            this.fetchTodoList();
+          } else {
+            this.handleError();
+          }
+        })
+        .catch(err => this.handleError());
     };
 
     //handle snack bar close action
@@ -190,7 +150,41 @@
 
     //handle add button click action
     addOnClick = () => {
-     console.log('add click')
+      let url =
+        "{{ app.request.baseurl }}/todo/add?description=" +
+        this.state.description;
+      if (this.state.description) {
+        // if this is a value in description
+        this.setState({ loading: true });
+        fetch(url, {
+          method: "POST"
+        })
+          .then(res => {
+            if (res.ok) {
+              this.setState({
+                loading: false,
+                description: "",
+                snackbarOpen: true,
+                lastSnackbarStatus: "Added",
+                count: this.state.count + 1
+              });
+              this.fetchTodoList();
+            } else {
+              this.handleError();
+              this.setState({ description: "" }); // clear text input after click
+            }
+          })
+          .catch(err => {
+            this.handleError();
+            this.setState({ description: "" });
+          });
+      } else {
+        //if description is empty, pop up snackbar with error message
+        this.setState({
+          lastSnackbarStatus: "Description cannot be empty.",
+          snackbarOpen: true
+        });
+      }
     };
 
     //handle onchange event in text input

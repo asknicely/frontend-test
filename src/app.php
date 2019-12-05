@@ -25,8 +25,8 @@ $app->register(new DoctrineServiceProvider, array(
         'host'      => $app['config']['database']['host'],
         'dbname'    => $app['config']['database']['dbname'],
         'user'      => $app['config']['database']['user'],
-       // 'password'  => $app['config']['database']['password'],
-         'password'  => '12345678',
+        'password'  => $app['config']['database']['password'],
+        //'password'  => '12345678',
         'charset'   => 'utf8',
     ),
 ));
