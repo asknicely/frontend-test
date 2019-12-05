@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="col-md-4 col-md-offset-4">
+<!-- <div class="col-md-4 col-md-offset-4">
     <h1>Todo:</h1>
     <table class="table table-striped">
         <th>#</th><th>User</th><th>Description</th><th></th>
@@ -16,6 +16,269 @@
             </td>
         </tr>
     </table>
-</div>
+</div> -->
+<div id="root"></div>
 
+<script type="text/babel">
+  const {
+    Typography,
+    Paper,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    ButtonBase,
+    Snackbar,
+    Button
+  } = MaterialUI;
+
+  const styles = {
+    todoItemContainer: {
+      margin: "0 auto",
+      marginTop: "2rem",
+      width: "90%",
+      maxWidth: "600px",
+      minWidth: "360px",
+      position: "relative"
+    },
+    todoItemList: {
+      marginTop: "2rem",
+      paddingTop: "1px",
+      backgroundColor: "#eeeeee"
+    },
+    todoItemHeaderCell: {
+      fontSize: "2rem"
+    },
+    todoItemCell: {
+      fontSize: "1.5rem"
+    },
+    todoItemRowSuccess: {
+      backgroundColor: "#aed581"
+    },
+    todoItemDelete: {
+      marginLeft: "2rem"
+    },
+    todoItemSnackbarText: {
+      fontSize: "1.5rem"
+    },
+    todoItemHeader: {
+      marginTop: "2rem",
+      marginLeft: "2rem",
+      marginBottom: "2rem"
+    },
+    todoItemReturn: {
+      position: "absolute",
+      top: "2rem",
+      right: "2rem"
+    },
+    todoItemWaiting: {
+      marginLeft: "1rem",
+      marginBottom: "2rem"
+    },
+    todoItemTable: {
+      tableLayout: "auto"
+    }
+  };
+
+  class TodoItem extends React.Component {
+    state = {
+      snackbarOpen: false,
+      lastSnackbarStatus: "",
+      loading: false,
+      todoItem: {},
+      auth: true
+    };
+
+    id; // item id, get from url in the componentDidMount
+
+    finishOnClick = () => {
+      this.setState({ loading: true });
+      fetch("{{app.request.baseurl}}/todo/complete/" + this.state.todoItem.id, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => {
+          if (res.ok) {
+            this.setState({
+              snackbarOpen: true,
+              lastSnackbarStatus: "Finished",
+              loading: false
+            });
+            this.fetchTodoList();
+          } else {
+            this.handleError();
+          }
+        })
+        .catch(err => this.handleError());
+    };
+
+    deleteOnClick = () => {
+     console.log('delete click')
+    };
+
+    snackbarOnClose = () => {
+      this.setState({ snackbarOpen: false });
+    };
+
+    // handle return button click, return to todo page
+    returnOnClick = () => {
+      window.location.href = "{{ app.request.baseurl }}/todo";
+    };
+
+    fetchTodoList = () => {
+      fetch("{{ app.request.baseurl }}/todo/" + this.id, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(res => {
+          this.setState({
+            todoItem: res
+          });
+        })
+        .catch(err =>
+          alert("Network error, please try refreshing page manually.")
+        );
+    };
+
+    handleError = () => {
+      this.setState({
+        snackbarOpen: true,
+        lastSnackbarStatus: "Failed, network error.",
+        loading: false
+      });
+    };
+
+    componentDidMount = () => {
+      const array = window.location.href.split("/");
+      this.id = array[array.length - 1]; // get id from url
+      if ("{{auth}}" === "0") {
+        // if userid in todolist item is not equal to current user id,
+        // controller will return auth = 0,then render error message instead of component
+        this.setState({ auth: false });
+      } else if ("{{auth}}" === "1") {
+        // render component when auth = 1
+        this.fetchTodoList();
+      }
+    };
+
+    render() {
+      const { todoItem } = this.state;
+      return (
+        <div style={styles.todoItemContainer}>
+          {this.state.auth ? (
+            <React.Fragment>
+              <Paper style={styles.todoItemList}>
+                <Typography style={styles.todoItemHeader} variant="h3">
+                  Todo:
+                </Typography>
+                <Button
+                  style={styles.todoItemReturn}
+                  onClick={() => {
+                    this.returnOnClick();
+                  }}
+                >
+                  Return
+                </Button>
+                {this.state.loading ? (
+                  <Typography variant="h4" style={styles.todoItemWaiting}>
+                    Waiting...
+                  </Typography>
+                ) : null}
+                <Table style={styles.todoItemTable}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={styles.todoItemHeaderCell}>#</TableCell>
+                      <TableCell
+                        style={styles.todoItemHeaderCell}
+                        align="right"
+                      >
+                        User
+                      </TableCell>
+                      <TableCell
+                        style={styles.todoItemHeaderCell}
+                        align="center"
+                      >
+                        Description
+                      </TableCell>
+                      <TableCell
+                        style={styles.todoItemHeaderCell}
+                        align="right"
+                      ></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {!todoItem.id ? null : (
+                      <TableRow
+                        style={
+                          todoItem.completed === "1"
+                            ? styles.todoItemRowSuccess
+                            : null
+                        }
+                      >
+                        <TableCell
+                          style={styles.todoItemCell}
+                          component="th"
+                          scope="row"
+                        >
+                          {todoItem.id}
+                        </TableCell>
+                        <TableCell style={styles.todoItemCell} align="right">
+                          {todoItem.user_id}
+                        </TableCell>
+                        <TableCell style={styles.todoItemCell} align="center">
+                          {todoItem.description}
+                        </TableCell>
+                        <TableCell align="right" style={styles.todoItemCell}>
+                          {todoItem.completed === "1" ? null : (
+                            <ButtonBase onClick={() => this.finishOnClick()}>
+                              <svg className="icon">
+                                <use xlinkHref="#icon-finish"></use>
+                              </svg>
+                            </ButtonBase>
+                          )}
+                          <ButtonBase
+                            onClick={() => this.deleteOnClick()}
+                            style={styles.todoItemDelete}
+                          >
+                            <svg className="icon">
+                              <use xlinkHref="#icon-delete"></use>
+                            </svg>
+                          </ButtonBase>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </Paper>
+              <Snackbar
+                style={styles.todoItemSnackbarSuccess}
+                open={this.state.snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => this.snackbarOnClose()}
+                message={
+                  <span style={styles.todoItemSnackbarText} id="message-id">
+                    {this.state.lastSnackbarStatus}
+                  </span>
+                }
+              />
+            </React.Fragment>
+          ) : (
+            <h3>You are not authorized to view this page.</h3>
+          )}
+        </div>
+      );
+    }
+  }
+
+  ReactDOM.hydrate(<TodoItem />, document.getElementById("root"));
+</script>
 {% endblock %}
