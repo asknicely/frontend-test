@@ -3,6 +3,7 @@ services:
   db:
     image: mysql:latest
     volumes:
+      - ./tmp/mysql:/var/lib/mysql
       - ./resources:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: ac_todos
@@ -10,8 +11,8 @@ services:
   web:
     build: ./docker/php
     volumes:
-      - .:/var/www/
+      - .:/var/www/silex
     ports:
       - 8100:80
     environment:
-      APACHE_DOCUMENT_ROOT: /var/www/web
+      APACHE_DOCUMENT_ROOT: /var/www/silex
