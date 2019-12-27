@@ -1,0 +1,17 @@
+version: "3.6"
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - ./resources:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: ac_todos
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+  web:
+    build: ./docker/php
+    volumes:
+      - .:/var/www/
+    ports:
+      - 8100:80
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/web
