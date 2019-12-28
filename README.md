@@ -22,8 +22,7 @@ Credentials:
 ![Todos](/web/img/todos.png?raw=true "Todos")
 
 ### Requirements
-* php 5.3+
-* mysql
+* docker
 * A github account
 
 ### Installation
@@ -31,6 +30,7 @@ Credentials:
 ```sh
 docker-compose up
 docker-compose exec web composer install
+./scripts/install-hooks.bash
 ```
 You can change the database connection from the file `config/config.yml`.
 
