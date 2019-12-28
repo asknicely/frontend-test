@@ -3,7 +3,7 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+$app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
     return $twig;
@@ -21,12 +21,19 @@ $app->match('/login', function (Request $request) use ($app) {
     $password = $request->get('password');
 
     if ($username) {
-        $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
-        $user = $app['db']->fetchAssoc($sql);
+        $sql = "SELECT * FROM users WHERE username = ? and password = ?";
+        try {
+            $user = $app['db']->fetchAssoc($sql, [
+                $username,
+                $password
+            ]);
 
-        if ($user){
-            $app['session']->set('user', $user);
-            return $app->redirect('/todo');
+            if ($user) {
+                $app['session']->set('user', $user);
+                return $app->redirect('/todo');
+            }
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
     }
 
@@ -47,7 +54,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
 
     $contentType = $request->headers->get('Content-Type');
 
-    if ($id){
+    if ($id) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
 
@@ -72,7 +79,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
     }
 })
-->value('id', null);
+    ->value('id', null);
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
