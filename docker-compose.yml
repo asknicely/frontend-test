@@ -1,13 +1,22 @@
 version: "3.6"
 services:
   db:
-    image: mysql:latest
+    image: mysql:5.7
     volumes:
       - ./tmp/mysql:/var/lib/mysql
       - ./resources:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: ac_todos
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_USERNAME: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    expose:
+      - 3306
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8088:8080
   web:
     build: ./docker/php
     volumes:
@@ -15,4 +24,4 @@ services:
     ports:
       - 8100:80
     environment:
-      APACHE_DOCUMENT_ROOT: /var/www/silex
+      APACHE_DOCUMENT_ROOT: /var/www/silex/web
