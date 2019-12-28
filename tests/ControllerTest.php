@@ -41,8 +41,7 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/');
 
-        $this->assertTrue($client->getResponse()->isOk());
-        $this->assertCount(1, $crawler->filter('h1:contains("README")'));
+        $this->assertCount(1, $crawler->filter('div#app'));
     }
 
     /**

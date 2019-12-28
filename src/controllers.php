@@ -9,13 +9,6 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     return $twig;
 }));
 
-
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html', [
-        'readme' => file_get_contents('../README.md'),
-    ]);
-});
-
 $app->match('/login', function (Request $request) use ($app) {
     $username = $request->get('username');
     $password = $request->get('password');
@@ -141,3 +134,11 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
 
     return json_encode(array('success' => true));
 });
+
+$app->error(function () use ($app) {
+    return $app['twig']->render('vue.html');
+});
+
+//$app->match('/', function () use ($app) {
+//    return $app['twig']->render('vue.html');
+//});
