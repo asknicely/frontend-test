@@ -50,15 +50,16 @@ $app->get('/logout', function () use ($app) {
 
 
 $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
+    $user = $app['session']->get('user');
+    if (null === $user) {
         return $app->redirect('/login');
     }
 
     $contentType = $request->headers->get('Content-Type');
 
     if ($id) {
-        $sql = "SELECT * FROM todos WHERE id = '$id'";
-        $todo = $app['db']->fetchAssoc($sql);
+        $sql = "SELECT * FROM todos WHERE id = ?";
+        $todo = $app['db']->fetchAssoc($sql, [$id]);
 
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todo.html', [
@@ -69,8 +70,8 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return json_encode($todo);
     }
 
-    $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
-    $todos = $app['db']->fetchAll($sql);
+    $sql = "SELECT * FROM todos WHERE user_id = ?";
+    $todos = $app['db']->fetchAll($sql, [$user['id']]);
 
     if (strpos($contentType, 'application/json') === false) {
         return $app['twig']->render('todos.html', [
@@ -92,8 +93,11 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     $description = $request->get('description');
     $contentType = $request->headers->get('Content-Type');
 
-    $sql = "INSERT INTO todos (user_id, description) VALUES ('$userId', '$description')";
-    $app['db']->executeUpdate($sql);
+    $sql = "INSERT INTO todos (user_id, description) VALUES (?, ?)";
+    $app['db']->executeUpdate($sql, [
+        $userId,
+        $description,
+    ]);
 
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
@@ -104,9 +108,15 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
 
-    $sql = "DELETE FROM todos WHERE id = '$id'";
-    $app['db']->executeUpdate($sql);
+    $sql = "DELETE FROM todos WHERE id = ? and user_id = ?";
+    $app['db']->executeUpdate($sql, [
+        $id,
+        $user['id'],
+    ]);
 
     $contentType = $request->headers->get('Content-Type');
     if (strpos($contentType, 'application/json') === false) {
@@ -118,9 +128,15 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
 
-    $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
-    $app['db']->executeUpdate($sql);
+    $sql = "UPDATE todos SET completed = 1 WHERE id = ? and user_id = ?";
+    $app['db']->executeUpdate($sql, [
+        $id,
+        $user['id'],
+    ]);
 
     $contentType = $request->headers->get('Content-Type');
     if (strpos($contentType, 'application/json') === false) {
