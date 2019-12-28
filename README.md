@@ -23,11 +23,13 @@ Credentials:
 
 ### Requirements
 * docker
+* docker-compose
 * A github account
 
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
+docker-compose build
 docker-compose up
 docker-compose exec web composer install
 ./scripts/install-hooks.bash
