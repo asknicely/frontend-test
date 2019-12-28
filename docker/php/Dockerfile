@@ -1,5 +1,5 @@
 FROM php:apache
-WORKDIR /var/www
+WORKDIR /var/www/silex
 
 COPY composer-install.php /root/composer-install.php
 RUN apt-get update
