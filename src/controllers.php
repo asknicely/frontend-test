@@ -22,19 +22,15 @@ $app->match('/login', function (Request $request) use ($app) {
 
     if ($username) {
         $sql = "SELECT * FROM users WHERE username = ? and password = ?";
-        try {
-            $user = $app['db']->fetchAssoc($sql, [
-                $username,
-                $password,
-            ]);
+        $user = $app['db']->fetchAssoc($sql, [
+            $username,
+            $password,
+        ]);
 
-            if ($user) {
-                $app['session']->set('user', $user);
+        if ($user) {
+            $app['session']->set('user', $user);
 
-                return $app->redirect('/todo');
-            }
-        } catch (Exception $exception) {
-            return $exception->getMessage();
+            return $app->redirect('/todo');
         }
     }
 
