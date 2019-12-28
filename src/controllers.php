@@ -25,11 +25,12 @@ $app->match('/login', function (Request $request) use ($app) {
         try {
             $user = $app['db']->fetchAssoc($sql, [
                 $username,
-                $password
+                $password,
             ]);
 
             if ($user) {
                 $app['session']->set('user', $user);
+
                 return $app->redirect('/todo');
             }
         } catch (Exception $exception) {
@@ -43,6 +44,7 @@ $app->match('/login', function (Request $request) use ($app) {
 
 $app->get('/logout', function () use ($app) {
     $app['session']->set('user', null);
+
     return $app->redirect('/');
 });
 
@@ -62,22 +64,21 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
             return $app['twig']->render('todo.html', [
                 'todo' => $todo,
             ]);
-        } else {
-            return json_encode($todo);
         }
 
-    } else {
-        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
-        $todos = $app['db']->fetchAll($sql);
-
-        if (strpos($contentType, 'application/json') === false) {
-            return $app['twig']->render('todos.html', [
-                'todos' => $todos,
-            ]);
-        } else {
-            return json_encode($todos);
-        }
+        return json_encode($todo);
     }
+
+    $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+    $todos = $app['db']->fetchAll($sql);
+
+    if (strpos($contentType, 'application/json') === false) {
+        return $app['twig']->render('todos.html', [
+            'todos' => $todos,
+        ]);
+    }
+
+    return json_encode($todos);
 })
     ->value('id', null);
 
@@ -87,18 +88,18 @@ $app->post('/todo/add', function (Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
-    $user_id = $user['id'];
+    $userId = $user['id'];
     $description = $request->get('description');
     $contentType = $request->headers->get('Content-Type');
 
-    $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
+    $sql = "INSERT INTO todos (user_id, description) VALUES ('$userId', '$description')";
     $app['db']->executeUpdate($sql);
 
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
     }
+
+    return json_encode(array('success' => true));
 });
 
 
@@ -110,9 +111,9 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     $contentType = $request->headers->get('Content-Type');
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
     }
+
+    return json_encode(array('success' => true));
 });
 
 
@@ -124,7 +125,7 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     $contentType = $request->headers->get('Content-Type');
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
-    } else {
-        return json_encode(array('success' => true));
     }
+
+    return json_encode(array('success' => true));
 });
