@@ -10,5 +10,5 @@ set -e
 cd "${0%/*}/.."
 
 docker-compose run --rm web vendor/bin/phpunit && \
-docker-compose run --rm web vendor/bin/phpcs src && \
+docker-compose run --rm web vendor/bin/phpcs src tests && \
 exit 0 || exit 1

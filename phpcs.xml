@@ -4,5 +4,6 @@
     <config name="installed_paths" value="vendor/escapestudios/symfony2-coding-standard" />
     <rule ref="Symfony">
         <include-pattern>src/*</include-pattern>
+        <include-pattern>tests/*</include-pattern>
     </rule>
 </ruleset>
