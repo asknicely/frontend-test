@@ -11,7 +11,10 @@ cd "${0%/*}/.."
 
 # let's fake failing test for now
 
-docker-compose run --rm web vendor/bin/phpunit && exit 1 || exit 0
+docker-compose run --rm web vendor/bin/phpunit && \
+docker-compose run --rm web vendor/bin/phpcs src && \
+exit 0 || exit 1
+
 
 # example of commands for different languages
 # eslint .         # JS code quality check
