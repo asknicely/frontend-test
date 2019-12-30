@@ -1,34 +1,68 @@
-require('../scss/main.scss');
+/**
+ * @global backendException
+ */
+import '../scss/main.scss';
 
-const Vue = require('vue').default;
-const VueRouter = require('vue-router').default;
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import {
+    MdApp,
+    MdToolbar,
+    MdButton,
+    MdContent,
+    MdIcon,
+    MdDrawer,
+    MdList,
+    MdField,
+} from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
+import routes from './routes';
+import Api from "./api";
 
+Vue.use(MdApp);
+Vue.use(MdToolbar);
+Vue.use(MdButton);
+Vue.use(MdContent);
+Vue.use(MdIcon);
+Vue.use(MdDrawer);
+Vue.use(MdList);
+Vue.use(MdField);
 Vue.use(VueRouter);
-
-
-const Foo = { template: '<div>foo</div>' };
-const Bar = { template: '<div>bar</div>' };
-
-const routes = [
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar }
-];
 
 const router = new VueRouter({
     mode: 'history',
     routes
 });
 
+const api = new Api('/api/v1');
+
 var app = new Vue({
     router,
     delimiters: ['${', '}'],
-    watch: {
-        '$route' (to, from) {
-            document.title = to.meta.title || 'Your Website'
-        }
+    data: function () {
+        return {
+            ...serverData,
+            title: 'Isaac Frontend Test',
+            menuVisible: false,
+        };
     },
-    data: {
-        message: 'Hello Vue!',
-        title: 'Isaac Frontend Test'
+    methods: {
+        login: async function (username, password, url) {
+            const user = await api.authenticate(username, password);
+            if (user) {
+                this.$set(this, 'user', user);
+                if (url) {
+                    await this.$router.push(url);
+                }
+            }
+        },
+        logout: async function (url) {
+            await api.logout();
+            this.$set(this, 'user', null);
+            await this.$router.push(url);
+        }
     }
-}).$mount('#app');
+});
+
+app.$mount('#app');
