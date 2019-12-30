@@ -3,6 +3,7 @@
 /**
  * @license none
  */
+
 namespace FrontendTest;
 
 use Silex\Provider\DoctrineServiceProvider;
@@ -23,9 +24,9 @@ class ControllerTest extends WebTestCase
     {
         global $app;
         chdir('src');
-        $app = require __DIR__.'/../src/app.php';
-        require __DIR__.'/../config/dev.php';
-        require __DIR__.'/../src/controllers.php';
+        $app = require __DIR__.'/../../src/silex/app.php';
+        require __DIR__.'/../../config/dev.php';
+        require __DIR__.'/../../src/silex/controllers.php';
         $app['debug'] = true;
         $app['session.test'] = true;
         unset($app['exception_handler']);
@@ -41,20 +42,7 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/');
 
-        $this->assertTrue($client->getResponse()->isOk());
-        $this->assertCount(1, $crawler->filter('h1:contains("README")'));
-    }
-
-    /**
-     * Tests if the login form shows
-     */
-    public function testLoginNoUsername()
-    {
-        $client = $this->createClient();
-        $crawler = $client->request('GET', '/login');
-
-        $this->assertTrue($client->getResponse()->isOk());
-        $this->assertCount(1, $crawler->filter('form[action="/login"]'));
+        $this->assertCount(1, $crawler->filter('div#app'));
     }
 
     /**
@@ -70,24 +58,24 @@ class ControllerTest extends WebTestCase
         $db = $this->mockDb(['fetchAssoc']);
         $db->expects($this->any())
             ->method('fetchAssoc')
-            ->with("SELECT * FROM users WHERE username = ? and password = ?", [
+            ->with("SELECT * FROM users WHERE username = ? and password = SHA2(CONCAT(salt, ?, salt), 256)", [
                 'user1',
                 'user1',
             ])
             ->willReturn($user);
         $this->app['db'] = $db;
         $client = $this->createClient();
-        $client->request('POST', '/login', [
+        $client->request('POST', '/login', [], [], [], json_encode([
             'username' => 'user1',
             'password' => 'user1',
-        ]);
+        ]));
 
         // check that user is set correctly
         $this->assertEquals($user, $this->app['session']->get('user'));
 
         // check that client is redirected correctly
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals('/todo', $client->getResponse()->headers->get('location'));
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals("{\"success\":true,\"user\":{\"username\":\"user1\"}}", $client->getResponse()->getContent());
     }
 
     /**
@@ -101,14 +89,14 @@ class ControllerTest extends WebTestCase
         ]);
 
         $client = $this->createClient();
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout');
 
         // check that user is removed from the session
         $this->assertEquals(null, $this->app['session']->get('user'));
 
         // check that client is redirected correctly
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals('/', $client->getResponse()->headers->get('location'));
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals("{\"success\":true}", $client->getResponse()->getContent());
     }
 
     /**
@@ -120,7 +108,7 @@ class ControllerTest extends WebTestCase
         $this->app['session']->set('user', null);
 
         $client = $this->createClient();
-        $client->request('GET', '/todo/1');
+        $client->request('GET', '/api/v1/todo/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertEquals('/login', $client->getResponse()->headers->get('location'));
     }
@@ -154,10 +142,9 @@ class ControllerTest extends WebTestCase
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/todo');
+        $crawler = $client->request('GET', '/api/v1/todo', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('tr td a:contains("mock todo description")'));
-        $this->assertCount(1, $crawler->filter('tr td:contains("123")'));
+        $this->assertEquals('[{"id":123,"user_id":1,"description":"mock todo description"}]', $client->getResponse()->getContent());
     }
 
     /**
@@ -172,9 +159,9 @@ class ControllerTest extends WebTestCase
         ]);
 
         $todo = [
-                'id' => 123,
-                'user_id' => 1,
-                'description' => 'mock todo description',
+            'id' => 123,
+            'user_id' => 1,
+            'description' => 'mock todo description',
         ];
 
         $db = $this->mockDb(['fetchAssoc']);
@@ -188,12 +175,9 @@ class ControllerTest extends WebTestCase
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/todo/123');
+        $crawler = $client->request('GET', '/api/v1/todo/123', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('h1:contains("Todo:")'));
-        $this->assertCount(1, $crawler->filter('tr td:contains("123")'));
-        $this->assertCount(1, $crawler->filter('tr td:contains("mock todo description")'));
-        $this->assertCount(1, $crawler->filter('form[action="/todo/delete/123"]'));
+        $this->assertEquals('{"id":123,"user_id":1,"description":"mock todo description"}', $client->getResponse()->getContent());
     }
 
     /**
@@ -205,7 +189,7 @@ class ControllerTest extends WebTestCase
         $this->app['session']->set('user', null);
 
         $client = $this->createClient();
-        $client->request('POST', '/todo/add');
+        $client->request('POST', '/api/v1/todo/add');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertEquals('/login', $client->getResponse()->headers->get('location'));
     }
@@ -232,22 +216,12 @@ class ControllerTest extends WebTestCase
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        // check JSON request
-        $crawler = $client->request('POST', '/todo/add', [
+        $data = [
             'description' => 'mock todo description',
-            ], [
-            ], [
-            'CONTENT_TYPE' => 'application/json',
-        ]);
+        ];
+        $client->request('POST', '/api/v1/todo/add', $data, [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter("p:contains(\"{\"success\": \"true\"}\")"));
-
-        // check non JSON request
-        $client->request('POST', '/todo/add', [
-            'description' => 'mock todo description',
-        ]);
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals('/todo', $client->getResponse()->headers->get('location'));
+        $this->assertEquals('{"success":true}', $client->getResponse()->getContent());
     }
 
     /**
@@ -259,7 +233,7 @@ class ControllerTest extends WebTestCase
         $this->app['session']->set('user', null);
 
         $client = $this->createClient();
-        $client->request('POST', '/todo/delete/123');
+        $client->request('POST', '/api/v1/todo/delete/123');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertEquals('/login', $client->getResponse()->headers->get('location'));
     }
@@ -286,19 +260,10 @@ class ControllerTest extends WebTestCase
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        // check JSON request
-        $crawler = $client->request('POST', '/todo/delete/123', [
-            ], [
-            ], [
-            'CONTENT_TYPE' => 'application/json',
-        ]);
+        $uri = '';
+        $client->request('POST', '/api/v1/todo/delete/123', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter("p:contains(\"{\"success\": \"true\"}\")"));
-
-        // check non JSON request
-        $client->request('POST', '/todo/delete/123');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals('/todo', $client->getResponse()->headers->get('location'));
+        $this->assertEquals('{"success":true}', $client->getResponse()->getContent());
     }
 
     /**
@@ -310,7 +275,7 @@ class ControllerTest extends WebTestCase
         $this->app['session']->set('user', null);
 
         $client = $this->createClient();
-        $client->request('POST', '/todo/complete/123');
+        $client->request('POST', '/api/v1/todo/complete/123');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $this->assertEquals('/login', $client->getResponse()->headers->get('location'));
     }
@@ -337,19 +302,9 @@ class ControllerTest extends WebTestCase
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        // check JSON request
-        $crawler = $client->request('POST', '/todo/complete/123', [
-            ], [
-            ], [
-            'CONTENT_TYPE' => 'application/json',
-        ]);
+        $client->request('POST', '/api/v1/todo/complete/123', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter("p:contains(\"{\"success\": \"true\"}\")"));
-
-        // check non JSON request
-        $client->request('POST', '/todo/complete/123');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals('/todo', $client->getResponse()->headers->get('location'));
+        $this->assertEquals('{"success":true}', $client->getResponse()->getContent());
     }
 
     /**
