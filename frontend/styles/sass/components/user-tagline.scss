@@ -1,0 +1,16 @@
+/**
+ * COMPONENTS.USER TAGLINE
+ *
+ * @description : User Tagline styles
+ *
+ */
+
+.user-tagline {
+  display: inline-flex;
+  margin-right: 16px;
+  align-items: baseline;
+}
+
+.user-tagline__name {
+  margin-left: 8px;
+}

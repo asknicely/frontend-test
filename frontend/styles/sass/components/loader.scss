@@ -1,0 +1,47 @@
+/**
+ * COMPONENTS.LOADER
+ *
+ * @description : Loader styles
+ *
+ */
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+}
+
+.loader-dash {
+  margin: 0 15px;
+  width: 35px;
+  height: 15px;
+  border-radius: 8px;
+  background: $loader-bg;
+  box-shadow: 0 0 10px 0 $loader-shadow;
+}
+
+.loader-dash--one {
+  margin-right: -18px;
+  transform-origin: center left;
+  animation: spin 3s linear infinite;
+}
+
+.loader-dash--two {
+  transform-origin: center right;
+  animation: spin2 3s linear infinite;
+  animation-delay: 0.2s;
+}
+
+.loader-dash--three {
+  transform-origin: center right;
+  animation: spin3 3s linear infinite;
+  animation-delay: 0.3s;
+}
+
+.loader-dash--four {
+  transform-origin: center right;
+  animation: spin4 3s linear infinite;
+  animation-delay: 0.4s;
+}

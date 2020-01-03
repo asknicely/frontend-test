@@ -1,52 +1,16 @@
-body {
-  padding-top: 50px;
-}
+/**
+ * MAIN.SCSS
+ *
+ * @Project     : TASK DONE APP
+ * @Author      : Diego Sieg [diegosieg@gmail.com]
+ *
+ */
 
-.login-form > div {
-  margin-top: 10px;
-}
+@import 'sass/settings/colors.scss';
+@import 'sass/settings/animations.scss';
+@import 'sass/settings/utils.scss';
+@import 'sass/settings/base.scss';
 
-// Navbar
-.navbar-brand {
-  display: flex;
-  & > img {
-    height: 24px;
-  }
-}
-
-.navbar-brand__name {
-  margin-left: 8px;
-  color: #ffffff;
-}
-
-.navbar-brand__icon {
-  color: #ffaaff;
-}
-
-// User tagline
-.user-tagline {
-  display: inline-flex;
-  margin-right: 16px;
-  align-items: baseline;
-}
-
-.user-tagline__name {
-  margin-left: 8px;
-}
-
-// utils
-.u-mt--lg {
-  margin-top: 5rem;
-}
-
-.u-mb--lg {
-  margin-bottom: 5rem;
-}
-
-.u-mt--sm {
-  margin-top: 1rem;
-}
-
-.u-mb--sm {
-  margin-bottom: 1rem;
-}
+@import 'sass/components/loader.scss';
+@import 'sass/components/navbar.scss';
+@import 'sass/components/user-tagline.scss';

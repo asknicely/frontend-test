@@ -1,5 +1,16 @@
 'use strict';
 
+function Loader() {
+  return (
+    <div className="loader">
+      <div className="loader-dash loader-dash--one"></div>
+      <div className="loader-dash loader-dash--two"></div>
+      <div className="loader-dash loader-dash--three"></div>
+      <div className="loader-dash loader-dash--four"></div>
+    </div>
+  );
+}
+
 function TodoList(props) {
   const list = props.list;
   const listItems = Object.keys(list).map(key => (
@@ -26,7 +37,7 @@ class TodoListApp extends React.Component {
     super(props);
     this.state = {
       todoList: {},
-      loading: false,
+      loading: true,
     };
   }
 
@@ -41,7 +52,10 @@ class TodoListApp extends React.Component {
         return results.json();
       })
       .then(results => {
-        this.setState({ todoList: results });
+        this.setState({
+          todoList: results,
+          loading: false,
+        });
       })
       .catch(err =>
         alert('Network error, please try refreshing page manually.'),
@@ -53,7 +67,11 @@ class TodoListApp extends React.Component {
   };
 
   render() {
-    const { todoList } = this.state;
+    const { todoList, loading } = this.state;
+
+    if (loading) {
+      return <Loader />;
+    }
 
     return (
       <section

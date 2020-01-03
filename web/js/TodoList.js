@@ -8,6 +8,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function Loader() {
+  return React.createElement(
+    "div",
+    { className: "loader" },
+    React.createElement("div", { className: "loader-dash loader-dash--one" }),
+    React.createElement("div", { className: "loader-dash loader-dash--two" }),
+    React.createElement("div", { className: "loader-dash loader-dash--three" }),
+    React.createElement("div", { className: "loader-dash loader-dash--four" })
+  );
+}
+
 function TodoList(props) {
   var list = props.list;
   var listItems = Object.keys(list).map(function (key) {
@@ -68,7 +79,10 @@ var TodoListApp = function (_React$Component) {
       }).then(function (results) {
         return results.json();
       }).then(function (results) {
-        _this.setState({ todoList: results });
+        _this.setState({
+          todoList: results,
+          loading: false
+        });
       }).catch(function (err) {
         return alert('Network error, please try refreshing page manually.');
       });
@@ -80,7 +94,7 @@ var TodoListApp = function (_React$Component) {
 
     _this.state = {
       todoList: {},
-      loading: false
+      loading: true
     };
     return _this;
   }
@@ -88,8 +102,14 @@ var TodoListApp = function (_React$Component) {
   _createClass(TodoListApp, [{
     key: "render",
     value: function render() {
-      var todoList = this.state.todoList;
+      var _state = this.state,
+          todoList = _state.todoList,
+          loading = _state.loading;
 
+
+      if (loading) {
+        return React.createElement(Loader, null);
+      }
 
       return React.createElement(
         "section",

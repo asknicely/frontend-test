@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch-js": "npx babel --watch frontend --out-dir web/js --presets react-app/prod",
-    "watch-sass": "sass --watch frontend/styles:web/css"
+    "watch-sass": "sass --watch frontend/styles/main.scss:web/css/main.css"
   },
   "repository": {
     "type": "git",

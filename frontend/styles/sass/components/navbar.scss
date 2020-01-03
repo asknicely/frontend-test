@@ -1,0 +1,22 @@
+/**
+ * COMPONENTS.NAVBAR
+ *
+ * @description : Navbar styles
+ *
+ */
+
+.navbar-brand {
+  display: flex;
+  & > img {
+    height: 24px;
+  }
+}
+
+.navbar-brand__name {
+  margin-left: 8px;
+  color: $white;
+}
+
+.navbar-brand__icon {
+  color: $brand-color--pri;
+}
