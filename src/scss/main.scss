@@ -65,6 +65,25 @@ body,
 
           .md-list.md-theme-default {
             background-color: transparent;
+
+            .md-list-item-text {
+              position: relative;
+
+              .strikethrough {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                height: 1px;
+                width: 0;
+                background-color: black;
+                pointer-events: none;
+                transition: width 0.3s ease-out;
+
+                &.active {
+                  width: 100%;
+                }
+              }
+            }
           }
         }
       }

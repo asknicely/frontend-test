@@ -55,6 +55,27 @@ class Api {
         return [];
     }
 
+    async setTodoStatus(id, completed)
+    {
+        try {
+            const body = JSON.stringify({
+                completed
+            });
+            const response = await Fetch(`${this.api_base}/todo/complete/${id}`, {
+                body,
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            });
+            const json = await response.json();
+            if (json.success) {
+                return true;
+            }
+        } catch (e) {
+        }
+
+        return false;
+    }
+
     async removeTodo(id)
     {
         try {
