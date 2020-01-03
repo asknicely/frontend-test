@@ -6,11 +6,12 @@ body {
   margin-top: 10px;
 }
 
+// Navbar
 .navbar-brand {
   display: flex;
-}
-.navbar-brand > img {
-  height: 24px;
+  & > img {
+    height: 24px;
+  }
 }
 
 .navbar-brand__name {
@@ -22,6 +23,7 @@ body {
   color: #ffaaff;
 }
 
+// User tagline
 .user-tagline {
   display: inline-flex;
   margin-right: 16px;
@@ -32,6 +34,7 @@ body {
   margin-left: 8px;
 }
 
+// utils
 .u-mt--lg {
   margin-top: 5rem;
 }
@@ -47,5 +50,3 @@ body {
 .u-mb--sm {
   margin-bottom: 1rem;
 }
-
-/*# sourceMappingURL=main.css.map */

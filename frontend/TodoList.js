@@ -56,9 +56,13 @@ class TodoListApp extends React.Component {
     const { todoList } = this.state;
 
     return (
-      <div>
-        <h1>Todo List:</h1>
-        <p>{todoList.length}</p>
+      <section
+        className="col-md-8 col-md-offset-2"
+        role="application"
+        aria-roledescription="To Do List App"
+        aria-describedby="Displays the list of tasks by user"
+      >
+        <h1>List of tasks</h1>
 
         <table className="table table-striped">
           <thead>
@@ -70,8 +74,31 @@ class TodoListApp extends React.Component {
             </tr>
           </thead>
           <tbody>{todoList.length >= 1 && <TodoList list={todoList} />}</tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="4">
+                <form
+                  method="post"
+                  action="/todo/add"
+                  aria-label="Add a todo task"
+                >
+                  <label htmlFor="description">Type a new task</label>
+                  <input
+                    id="description"
+                    type="textbox"
+                    name="description"
+                    className="small-6 small-center"
+                    placeholder="e.g: Eat Donuts :)"
+                  />
+                  <button type="submit" className="btn btn-sm btn-primary">
+                    Add
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tfoot>
         </table>
-      </div>
+      </section>
     );
   }
 }

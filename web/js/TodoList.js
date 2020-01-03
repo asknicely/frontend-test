@@ -92,17 +92,17 @@ var TodoListApp = function (_React$Component) {
 
 
       return React.createElement(
-        "div",
-        null,
+        "section",
+        {
+          className: "col-md-8 col-md-offset-2",
+          role: "application",
+          "aria-roledescription": "To Do List App",
+          "aria-describedby": "Displays the list of tasks by user"
+        },
         React.createElement(
           "h1",
           null,
-          "Todo List:"
-        ),
-        React.createElement(
-          "p",
-          null,
-          todoList.length
+          "List of tasks"
         ),
         React.createElement(
           "table",
@@ -135,6 +135,43 @@ var TodoListApp = function (_React$Component) {
             "tbody",
             null,
             todoList.length >= 1 && React.createElement(TodoList, { list: todoList })
+          ),
+          React.createElement(
+            "tfoot",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              React.createElement(
+                "td",
+                { colSpan: "4" },
+                React.createElement(
+                  "form",
+                  {
+                    method: "post",
+                    action: "/todo/add",
+                    "aria-label": "Add a todo task"
+                  },
+                  React.createElement(
+                    "label",
+                    { htmlFor: "description" },
+                    "Type a new task"
+                  ),
+                  React.createElement("input", {
+                    id: "description",
+                    type: "textbox",
+                    name: "description",
+                    className: "small-6 small-center",
+                    placeholder: "e.g: Eat Donuts :)"
+                  }),
+                  React.createElement(
+                    "button",
+                    { type: "submit", className: "btn btn-sm btn-primary" },
+                    "Add"
+                  )
+                )
+              )
+            )
           )
         )
       );

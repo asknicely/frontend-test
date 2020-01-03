@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="{{ app.request.basepath }}/favicon.ico" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="Task Done App"
+      content="Web application for managing your awesome to-do list"
+    />
     <title>{% block title '' %} - Todos</title>
 
     <link
@@ -16,7 +22,9 @@
       type="text/css"
     />
   </head>
+
   <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -32,9 +40,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"
-            ><span class="glyphicon glyphicon-home glyphicon-white"></span
-          ></a>
+          <a class="navbar-brand" href="/">
+            <span
+              class="navbar-brand__icon glyphicon glyphicon-ok-circle glyphicon-white"
+            ></span>
+            <span class="navbar-brand__name">Task Done</span>
+          </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -43,10 +54,15 @@
           <ul class="nav navbar-nav navbar-right">
             {% if user %}
             <li>
-              <a href="/logout"
-                ><span class="glyphicon glyphicon-user"></span> {{ user.username
-                }} Logout</a
-              >
+              <a href="/logout">
+                <div class="user-tagline">
+                  <span
+                    class="user-tagline__icon glyphicon glyphicon-user"
+                  ></span>
+                  <span class="user-tagline__name">{{ user.username }}</span>
+                </div>
+                <span>Logout</span>
+              </a>
             </li>
             {% else %}
             <li><a href="/login">Login</a></li>
@@ -56,11 +72,11 @@
       </div>
     </nav>
 
-    <div class="container">
+    <main class="container">
       <div class="row">
         {% block content %}{% endblock %}
       </div>
-    </div>
+    </main>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
