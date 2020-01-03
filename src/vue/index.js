@@ -19,6 +19,7 @@ import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import routes from './routes';
 import Api from "./api";
+import * as cookies from 'browser-cookies';
 
 Vue.use(MdApp);
 Vue.use(MdToolbar);
@@ -41,20 +42,53 @@ var app = new Vue({
     router,
     delimiters: ['${', '}'],
     data: function () {
+        let user = null;
+        if (cookies.get('username')) {
+            user = {
+                username: cookies.get('username')
+            };
+            api.getTodos().then(todos => {
+                this.$set(this, 'todos', todos);
+            })
+        }
+
         return {
-            ...serverData,
+            todos: null,
+            user,
+            loginError: null,
             title: 'Isaac Frontend Test',
             menuVisible: false,
-        };
+            exception: {
+                code: cookies.get('code'),
+                message: cookies.get('message')
+            }
+        }
     },
     methods: {
         login: async function (username, password, url) {
-            const user = await api.authenticate(username, password);
-            if (user) {
-                this.$set(this, 'user', user);
-                if (url) {
-                    await this.$router.push(url);
+            try {
+                const user = await api.authenticate(username, password);
+                if (user) {
+                    this.$set(this, 'user', user);
+                    if (url) {
+                        this.$set(this, 'todos', null);
+                        await this.$router.push(url);
+                        const todos = await api.getTodos();
+                        this.$set(this, 'todos', todos);
+                    }
                 }
+            } catch (e) {
+                this.$set(this, 'loginError', e.message);
+            }
+        },
+        removetodo: async function (todo) {
+            await api.removeTodo(todo.id);
+            this.$delete(this.todos, this.todos.indexOf(todo));
+        },
+        addtodo: async function (newTodoName) {
+            const todo = await api.addTodo(newTodoName);
+            if (todo) {
+                this.todos.push(todo);
             }
         },
         logout: async function (url) {

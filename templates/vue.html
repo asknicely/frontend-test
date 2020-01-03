@@ -27,11 +27,6 @@
                     <span class="md-list-item-text">Home</span>
                 </md-list-item>
 
-                <md-list-item @click="$router.push('/todo'); menuVisible = false" v-if="user">
-                    <md-icon>move_to_inbox</md-icon>
-                    <span class="md-list-item-text">Todo</span>
-                </md-list-item>
-
                 <md-list-item @click="logout('/login'); menuVisible = false" v-if="user">
                     <md-icon>send</md-icon>
                     <span class="md-list-item-text">Logout</span>
@@ -43,37 +38,20 @@
                 </md-list-item>
             </md-list>
         </md-app-drawer>
-        <md-app-content class="app-content">
+        <md-app-content class="app-content" v-bind:class="{ locked: !user }">
             <transition name="slow-fade">
-                <router-view :user="user" @login="login"></router-view>
+                <router-view
+                        :user="user"
+                        :login-error="loginError"
+                        :todos="todos"
+                        @login="login"
+                        @removetodo="removetodo"
+                        @addtodo="addtodo">
+                </router-view>
             </transition>
         </md-app-content>
     </md-app>
 </div>
-<script>
-    var serverData = {
-        exception: {
-            code: -1,
-            message: null
-        },
-        user: null
-    };
-
-
-    {% if code is defined and code is not null %}
-    serverData.exception.code = "{{ code }}";
-    {% endif %}
-    {% if message is defined and code is not null %}
-    serverData.exception.message = "{{ message|e('js') }}";
-    {% endif %}
-    {% if username is defined and username is not null %}
-    serverData.user = {
-        username: "{{ username|e('js') }}"
-    };
-    {% endif %}
-
-
-</script>
 <script src="{{ app.request.basepath }}/js/bundle.js"></script>
 </body>
 </html>
