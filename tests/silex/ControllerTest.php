@@ -309,14 +309,19 @@ class ControllerTest extends WebTestCase
 
         $db->expects($this->any())
             ->method('executeUpdate')
-            ->with("UPDATE todos SET completed = 1 WHERE id = ? and user_id = ?", [
+            ->with("UPDATE todos SET completed = ? WHERE id = ? and user_id = ?", [
+                '1',
                 123,
                 1,
             ]);
         $this->app['db'] = $db;
 
+        $body = json_encode([
+            'completed' => '1',
+        ]);
+
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/todo/complete/123', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $client->request('POST', '/api/v1/todo/complete/123', [], [], ['CONTENT_TYPE' => 'application/json'], $body);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals('{"success":true}', $client->getResponse()->getContent());
     }

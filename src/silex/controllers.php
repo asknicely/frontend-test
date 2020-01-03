@@ -164,12 +164,27 @@ $app->post(API_BASE.'/todo/delete/{id}', function (Request $request, $id) use ($
 
 $app->post(API_BASE.'/todo/complete/{id}', function (Request $request, $id) use ($app) {
     $user = $app['session']->get('user');
+    try {
+        $body = json_decode($request->getContent());
+        $completed = '0';
+        if (isset($body->completed)) {
+            if ($body->completed) {
+                $completed = '1';
+            } else {
+                $completed = '0';
+            }
+        }
 
-    $sql = "UPDATE todos SET completed = 1 WHERE id = ? and user_id = ?";
-    $app['db']->executeUpdate($sql, [
-        $id,
-        $user['id'],
-    ]);
+        $sql = "UPDATE todos SET completed = ? WHERE id = ? and user_id = ?";
+        $app['db']->executeUpdate($sql, [
+            $completed,
+            $id,
+            $user['id'],
+        ]);
 
-    return json_encode(array('success' => true));
+        return json_encode(['success' => true]);
+    } catch (Exception $ex) {
+    }
+
+    return json_encode(['success' => false]);
 });

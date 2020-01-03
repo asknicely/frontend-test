@@ -85,6 +85,11 @@ var app = new Vue({
             await api.removeTodo(todo.id);
             this.$delete(this.todos, this.todos.indexOf(todo));
         },
+        settodostatus: async function (todo, completed) {
+            todo.completed = completed;
+            await api.setTodoStatus(todo.id, completed);
+            this.$set(this.todos, this.todos.indexOf(todo), todo);
+        },
         addtodo: async function (newTodoName) {
             const todo = await api.addTodo(newTodoName);
             if (todo) {

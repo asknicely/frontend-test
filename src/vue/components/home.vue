@@ -6,11 +6,14 @@
                 <md-list>
                     <transition-group name="slow-fade">
                         <md-list-item v-for="(todo, index)  in todos" :key="todo.id">
-                            <span class="clickable">
-                                <md-icon>check_box</md-icon>
+                            <span @click="$emit('settodostatus', todo, todo.completed === '1' ? '0' : '1')"
+                                  class="clickable">
+                                <md-icon v-if="todo.completed === '1'">check_box</md-icon>
+                                <md-icon v-else>check_box_outline_blank</md-icon>
                             </span>
                             <div class="md-list-item-text">
                                 {{todo.description}}
+                                <div class="strikethrough" :class="{'active': todo.completed === '1'}"></div>
                             </div>
                             <span @click="$emit('removetodo', todo)" class="clickable">
                                 <md-icon>delete</md-icon>
