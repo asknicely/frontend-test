@@ -11,7 +11,7 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
     return false;
 }
 
-$app = require __DIR__.'/../src/app.php';
+$app = require __DIR__ . '/../src/silex/app.php';
 require __DIR__.'/../config/dev.php';
-require __DIR__.'/../src/controllers.php';
+require __DIR__ . '/../src/silex/controllers.php';
 $app->run();

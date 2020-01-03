@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Isaac Frontend Test - Todos</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
+</head>
+<body>
+<div id="app">
+
+    <md-app md-mode="reveal">
+        <md-app-toolbar class="md-primary">
+            <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
+                <md-icon>menu</md-icon>
+            </md-button>
+            <span class="md-title">${title}</span>
+        </md-app-toolbar>
+
+        <md-app-drawer :md-active.sync="menuVisible">
+            <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
+
+            <md-list>
+                <md-list-item @click="$router.push('/'); menuVisible = false">
+                    <md-icon>move_to_inbox</md-icon>
+                    <span class="md-list-item-text">Home</span>
+                </md-list-item>
+
+                <md-list-item @click="logout('/login'); menuVisible = false" v-if="user">
+                    <md-icon>send</md-icon>
+                    <span class="md-list-item-text">Logout</span>
+                </md-list-item>
+
+                <md-list-item @click="$router.push('/login'); menuVisible = false" v-if="!user">
+                    <md-icon>delete</md-icon>
+                    <span class="md-list-item-text">Login</span>
+                </md-list-item>
+            </md-list>
+        </md-app-drawer>
+        <md-app-content class="app-content" v-bind:class="{ locked: !user }">
+            <transition name="slow-fade">
+                <router-view
+                        :user="user"
+                        :login-error="loginError"
+                        :todos="todos"
+                        @login="login"
+                        @settodostatus="settodostatus"
+                        @removetodo="removetodo"
+                        @addtodo="addtodo">
+                </router-view>
+            </transition>
+        </md-app-content>
+    </md-app>
+</div>
+<script src="{{ app.request.basepath }}/js/bundle.js"></script>
+</body>
+</html>

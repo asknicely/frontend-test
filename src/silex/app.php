@@ -11,15 +11,23 @@ use Silex\Provider\DoctrineServiceProvider;
 use DerAlex\Silex\YamlConfigServiceProvider;
 
 $app = new Application();
-$app->register(new SessionServiceProvider());
+
+$app['session.storage.options'] = [
+    'cookie_httponly' => false,
+];
+$app->register(new SessionServiceProvider(), [
+    'session.storage.options' => [
+        'cookie_httponly' => false,
+    ],
+]);
 $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
 
-$app->register(new YamlConfigServiceProvider(__DIR__.'/../config/config.yml'));
-$app->register(new DoctrineServiceProvider, array(
+$app->register(new YamlConfigServiceProvider(__DIR__.'/../../config/config.yml'));
+$app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'    => 'pdo_mysql',
         'host'      => $app['config']['database']['host'],
@@ -29,5 +37,6 @@ $app->register(new DoctrineServiceProvider, array(
         'charset'   => 'utf8',
     ),
 ));
+
 
 return $app;

@@ -1,0 +1,132 @@
+body,
+#app {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.md-app {
+  flex-grow: 1;
+
+  .app-content {
+    padding: 0;
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-image:url(/img/bg-clear.png);
+    transition: background-image 0.3s ease;
+
+    &.locked {
+      background-image: url(/img/bg-blur.png);
+    }
+
+    // https://stackoverflow.com/questions/1373142/preloading-css-images
+    &::after {
+      position:absolute; width:0; height:0; overflow:hidden; z-index:-1; // hide images
+      content: url(/img/bg-clear.png) url(/img/bg-blur.png); // load images
+    }
+
+    .md-layout {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      padding: 16px;
+      min-height: 100%;
+
+      &.home-layout {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+
+        .content {
+          flex-grow: 1;
+          max-width: 500px;
+          min-height: 50vh;
+          margin: auto;
+          padding: 16px;
+          border-radius: 8px;
+          background-color: rgba(255, 255, 255, 0.8);
+          box-shadow: 0 0 16px 0 #45546d;
+
+          &.unauthenticated {
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            align-content: space-evenly;
+            text-align: center;
+            justify-content: center;
+
+            > * {
+              margin: 16px auto;
+            }
+          }
+
+          .md-list.md-theme-default {
+            background-color: transparent;
+
+            .md-list-item-text {
+              position: relative;
+
+              .strikethrough {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                height: 1px;
+                width: 0;
+                background-color: black;
+                pointer-events: none;
+                transition: width 0.3s ease-out;
+
+                &.active {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.slow-fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.slow-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slow-fade-enter, .slow-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+
+  .login-form-background {
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 16px 0 #45546d;
+
+    .md-button {
+      margin: 16px;
+    }
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}

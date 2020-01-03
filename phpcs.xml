@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="custom">
+    <description>Coding Standard for Frontend Test</description>
+    <config name="installed_paths" value="vendor/escapestudios/symfony2-coding-standard" />
+    <rule ref="Symfony">
+        <include-pattern>src/*</include-pattern>
+        <include-pattern>tests/*</include-pattern>
+    </rule>
+</ruleset>

@@ -22,18 +22,17 @@ Credentials:
 ![Todos](/web/img/todos.png?raw=true "Todos")
 
 ### Requirements
-* php 5.3+
-* mysql
+* docker
+* docker-compose
 * A github account
 
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
-php composer.phar install
-cp config/config.yml.dist config/config.yml
-mysql -u root <database> < resources/database.sql
-mysql -u root <database> < resources/fixtures.sql
-php -S localhost:1337 -t web/ web/index.php
+docker-compose build
+docker-compose up
+docker-compose exec web composer install
+./scripts/install-hooks.bash
 ```
 You can change the database connection from the file `config/config.yml`.
 
