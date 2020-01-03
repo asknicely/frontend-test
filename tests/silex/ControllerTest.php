@@ -127,15 +127,15 @@ class ControllerTest extends WebTestCase
         $todos = [
             [
                 'id' => 123,
-                'user_id' => 1,
                 'description' => 'mock todo description',
+                'completed' => '1',
             ],
         ];
 
         $db = $this->mockDb(['fetchAll']);
         $db->expects($this->any())
             ->method('fetchAll')
-            ->with("SELECT * FROM todos WHERE user_id = ?", [
+            ->with("SELECT id, description, completed FROM todos WHERE user_id = ?", [
                 1,
             ])
             ->willReturn($todos);
@@ -144,7 +144,7 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/api/v1/todo', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertEquals('[{"id":123,"user_id":1,"description":"mock todo description"}]', $client->getResponse()->getContent());
+        $this->assertEquals('{"success":true,"todos":[{"id":123,"description":"mock todo description","completed":"1"}]}', $client->getResponse()->getContent());
     }
 
     /**
@@ -160,15 +160,15 @@ class ControllerTest extends WebTestCase
 
         $todo = [
             'id' => 123,
-            'user_id' => 1,
             'description' => 'mock todo description',
+            'completed' => '1',
         ];
 
         $db = $this->mockDb(['fetchAssoc']);
 
         $db->expects($this->any())
             ->method('fetchAssoc')
-            ->with("SELECT * FROM todos WHERE id = ?", [
+            ->with("SELECT id, description, completed FROM todos WHERE id = ?", [
                 123,
             ])
             ->willReturn($todo);
@@ -177,7 +177,7 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/api/v1/todo/123', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertEquals('{"id":123,"user_id":1,"description":"mock todo description"}', $client->getResponse()->getContent());
+        $this->assertEquals('{"success":true,"todo":{"id":123,"description":"mock todo description","completed":"1"}}', $client->getResponse()->getContent());
     }
 
     /**
@@ -205,23 +205,37 @@ class ControllerTest extends WebTestCase
             'password' => 'user1',
         ]);
 
-        $db = $this->mockDb(['executeUpdate']);
+        $db = $this->mockDb(['insert', 'fetchAssoc', 'lastInsertId']);
 
         $db->expects($this->any())
-            ->method('executeUpdate')
-            ->with("INSERT INTO todos (user_id, description) VALUES (?, ?)", [
-                1,
-                'mock todo description',
+            ->method('insert')
+            ->with("todos", [
+                "user_id" => 1,
+                "description" => 'mock todo description',
+                'completed' => '0',
             ]);
+        $db->expects($this->any())
+            ->method('lastInsertId')
+            ->willReturn(1234);
+
+        $db->expects($this->any())
+            ->method('fetchAssoc')
+            ->with("SELECT id, description, completed FROM todos WHERE id = ?", [1234])
+            ->willReturn([
+                'id' => 1234,
+                'description' => 'mock todo description',
+                'completed' => '0',
+            ]);
+
         $this->app['db'] = $db;
 
         $client = $this->createClient();
-        $data = [
+        $data = json_encode([
             'description' => 'mock todo description',
-        ];
-        $client->request('POST', '/api/v1/todo/add', $data, [], ['CONTENT_TYPE' => 'application/json']);
+        ]);
+        $client->request('POST', '/api/v1/todo/add', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertEquals('{"success":true}', $client->getResponse()->getContent());
+        $this->assertEquals('{"success":true,"todo":{"id":1234,"description":"mock todo description","completed":"0"}}', $client->getResponse()->getContent());
     }
 
     /**

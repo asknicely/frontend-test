@@ -26,19 +26,71 @@ class Api {
             username,
             password
         });
+        const response = await Fetch(`/login`, {
+            method: 'POST',
+            body,
+            headers: {'Content-Type': 'application/json'},
+        });
+        const json = await response.json();
+        if (json.success) {
+            return json.user;
+        }
+        throw new Error(json.reason);
+    }
+
+    async getTodos()
+    {
         try {
-            const response = await Fetch(`/login`, {
-                method: 'POST',
-                body,
+            const response = await Fetch(`${this.api_base}/todo`, {
+                method: 'GET',
                 headers: {'Content-Type': 'application/json'},
             });
-            const user = await response.json();
-            if (user.success) {
-                return user.user;
+            const json = await response.json();
+            if (json.success) {
+                return json.todos;
             }
-        } catch (ex) {
-            console.error(ex);
+        } catch (e) {
         }
+
+        return [];
+    }
+
+    async removeTodo(id)
+    {
+        try {
+            const response = await Fetch(`${this.api_base}/todo/delete/${id}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            });
+            const json = await response.json();
+            if (json.success) {
+                return true;
+            }
+        } catch (e) {
+        }
+
+        return false;
+    }
+
+    async addTodo(description)
+    {
+        try {
+            const body = JSON.stringify({
+                description
+            });
+            const response = await Fetch(`${this.api_base}/todo/add`, {
+                body,
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            });
+            const json = await response.json();
+            if (json.success) {
+                return json.todo;
+            }
+        } catch (e) {
+        }
+
+        return false;
     }
 }
 
