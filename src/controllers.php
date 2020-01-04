@@ -46,11 +46,22 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
+    $user_id = $user['id'];
     $contentType = $request->headers->get('Content-Type');
 
     if ($id){
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
+
+        // Error if item not found
+        if ($todo == null) {
+          return new Response('Not found', 404);
+      }
+
+      // Error if item belongs to a different user
+        if ($user_id != $todo['user_id']) {
+          return new Response('Forbidden', 403);
+      }
 
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todo.html', [
