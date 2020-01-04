@@ -1,4 +1,5 @@
-'use strict';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 function Loader() {
   return (
@@ -121,5 +122,4 @@ class TodoListApp extends React.Component {
   }
 }
 
-let domContainer = document.querySelector('#todo-app');
-ReactDOM.render(<TodoListApp />, domContainer);
+export default TodoListApp;

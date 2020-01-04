@@ -2,11 +2,12 @@
   "name": "frontend-test",
   "version": "1.0.0",
   "description": "AskNicely PHP frontend test ===========================",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-js": "npx babel --watch frontend --out-dir web/js --presets react-app/prod",
-    "watch-sass": "sass --watch frontend/styles/main.scss:web/css/main.css"
+    "sass": "sass --watch frontend/styles/main.scss:web/css/main.css --style compressed",
+    "watch": "webpack --watch",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,18 @@
   },
   "homepage": "https://github.com/diegosieg/frontend-test#readme",
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^3.1.2"
+    "babel-preset-react-app": "^3.1.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }

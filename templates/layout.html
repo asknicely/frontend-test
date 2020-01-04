@@ -81,18 +81,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-    <!-- Load React. -->
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <script
-      src="https://unpkg.com/react@16/umd/react.development.js"
-      crossorigin
-    ></script>
-    <script
-      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
-      crossorigin
-    ></script>
-
-    <!-- Load our React component. -->
-    <script src="{{ app.request.basepath }}/js/TodoList.js"></script>
+    <!-- Load Bundle for React App. -->
+    <script src="{{ app.request.basepath }}/js/main.js"></script>
   </body>
 </html>
