@@ -86,6 +86,22 @@ class TodoListApp extends React.Component {
       });
   };
 
+  handlToggleCompleteTask = id => {
+    axios
+      .patch(`/todo/complete/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log(response);
+        this.fetchTodoList();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   componentDidMount = () => {
     this.fetchTodoList();
   };
@@ -114,6 +130,7 @@ class TodoListApp extends React.Component {
           title="List of tasks"
           todoList={todoList}
           handleDeleteTodo={this.handleDeleteTodo}
+          handlToggleCompleteTask={this.handlToggleCompleteTask}
         />
         {shouldDisplayAddForm && (
           <AddTaskForm
