@@ -108,6 +108,10 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 });
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
+  if (null === $user = $app['session']->get('user')) {
+    return $app->redirect('/login');
+  }
+
 
     $sql = "DELETE FROM todos WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
@@ -117,6 +121,10 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+  if (null === $user = $app['session']->get('user')) {
+    return $app->redirect('/login');
+  }
+
     $sql = "UPDATE todos SET completed = 1 - completed WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
 
