@@ -1,7 +1,8 @@
 import React from 'react';
 
 function TodoListItem(props) {
-  const list = props.list;
+  const { list, handleDeleteTodo } = props;
+
   const listItems = Object.keys(list).map(key => (
     <tr key={list[key].id}>
       <td>{list[key].id}</td>
@@ -10,11 +11,12 @@ function TodoListItem(props) {
         <a href={`/todo/${list[key].id}`}>{list[key].description}</a>
       </td>
       <td>
-        <form method="post" action="/todo/delete/{ list[key].id }">
-          <button type="submit" className="btn btn-xs btn-danger">
-            <span className="glyphicon glyphicon-remove glyphicon-white"></span>
-          </button>
-        </form>
+        <button
+          className="btn btn-xs btn-danger"
+          onClick={() => handleDeleteTodo(list[key].id)}
+        >
+          <span className="glyphicon glyphicon-remove glyphicon-white"></span>
+        </button>
       </td>
     </tr>
   ));
