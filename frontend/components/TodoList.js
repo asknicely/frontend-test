@@ -1,37 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-function Loader() {
-  return (
-    <div className="loader">
-      <div className="loader-dash loader-dash--one"></div>
-      <div className="loader-dash loader-dash--two"></div>
-      <div className="loader-dash loader-dash--three"></div>
-      <div className="loader-dash loader-dash--four"></div>
-    </div>
-  );
-}
-
-function TodoList(props) {
-  const list = props.list;
-  const listItems = Object.keys(list).map(key => (
-    <tr key={list[key].id}>
-      <td>{list[key].id}</td>
-      <td>{list[key].user_id}</td>
-      <td>
-        <a href={`/todo/${list[key].id}`}>{list[key].description}</a>
-      </td>
-      <td>
-        <form method="post" action="/todo/delete/{ list[key].id }">
-          <button type="submit" className="btn btn-xs btn-danger">
-            <span className="glyphicon glyphicon-remove glyphicon-white"></span>
-          </button>
-        </form>
-      </td>
-    </tr>
-  ));
-  return listItems;
-}
+import Loader from './Loader';
+import TodoListItem from './TodoListItem';
 
 class TodoListApp extends React.Component {
   constructor(props) {
@@ -92,7 +61,9 @@ class TodoListApp extends React.Component {
               <th></th>
             </tr>
           </thead>
-          <tbody>{todoList.length >= 1 && <TodoList list={todoList} />}</tbody>
+          <tbody>
+            {todoList.length >= 1 && <TodoListItem list={todoList} />}
+          </tbody>
           <tfoot>
             <tr>
               <td colSpan="4">
