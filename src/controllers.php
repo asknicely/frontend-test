@@ -40,6 +40,25 @@ $app->get('/logout', function () use ($app) {
     return $app->redirect('/');
 });
 
+$app->get('/todo/', function (Request $request) use ($app) {
+  if (null === $user = $app['session']->get('user')) {
+      return $app->redirect('/login');
+  }
+
+  $contentType = $request->headers->get('Content-Type');
+
+  $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+  $todos = $app['db']->fetchAll($sql);
+
+  if (strpos($contentType, 'application/json') === false) {
+      return $app['twig']->render('todos.html', [
+          'todos' => $todos,
+      ]);
+  } else {
+      return json_encode($todos);
+  }
+
+});
 
 $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     if (null === $user = $app['session']->get('user')) {

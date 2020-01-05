@@ -6,7 +6,7 @@ function isCompleted(infoComplete) {
 }
 
 function TodoListItem(props) {
-  const { list, handleDeleteTodo, handlToggleCompleteTask } = props;
+  const { list, openDeleteConfirmation, handlToggleCompleteTask } = props;
 
   const listItems = Object.keys(list).map(key => {
     let itemIsCompleted = isCompleted(list[key].completed);
@@ -40,7 +40,7 @@ function TodoListItem(props) {
         <td>
           <button
             className="btn btn-xs btn-danger"
-            onClick={() => handleDeleteTodo(list[key].id)}
+            onClick={() => openDeleteConfirmation(list[key].id)}
           >
             <span className="glyphicon glyphicon-remove glyphicon-white"></span>
           </button>

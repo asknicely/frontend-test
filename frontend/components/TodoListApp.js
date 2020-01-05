@@ -3,6 +3,7 @@ import Loader from './Loader';
 import TodoTable from './TodoTable';
 import AddTaskForm from './AddTaskForm';
 import axios from 'axios';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 class TodoListApp extends React.Component {
   constructor(props) {
@@ -13,6 +14,10 @@ class TodoListApp extends React.Component {
       shouldDisplayAddForm: true,
       addTaskField: '',
       addButtonIsActive: false,
+      isCompletedListDisplayed: true,
+      urlId: null,
+      visibleAlert: false,
+      itemToBeDeleted: null,
     };
   }
 
@@ -27,8 +32,31 @@ class TodoListApp extends React.Component {
         return results.json();
       })
       .then(results => {
+        // console.log(results);
         this.setState({
           todoList: results,
+          loading: false,
+        });
+      })
+      .catch(err =>
+        alert('Network error, please try refreshing page manually.'),
+      );
+  };
+
+  fetchTodoListItem = id => {
+    fetch(`/todo/${id}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(results => {
+        return results.json();
+      })
+      .then(results => {
+        // console.log(results);
+        this.setState({
+          todoList: [results],
           loading: false,
         });
       })
@@ -74,12 +102,26 @@ class TodoListApp extends React.Component {
     }
   };
 
-  handleDeleteTodo = id => {
+  openDeleteConfirmation = id => {
+    this.setState({
+      visibleAlert: true,
+      itemToBeDeleted: id,
+    });
+  };
+
+  closeDeleteConfirmation = () => {
+    this.setState({ visibleAlert: false });
+  };
+
+  handleDeleteTodo = () => {
+    let id = this.state.itemToBeDeleted;
+
     axios
       .delete(`/todo/delete/${id}`)
       .then(response => {
         console.log(response);
-        this.fetchTodoList();
+        this.fetchListBasedOnURL();
+        this.setState({ visibleAlert: false });
       })
       .catch(error => {
         console.log(error);
@@ -95,16 +137,46 @@ class TodoListApp extends React.Component {
       })
       .then(response => {
         console.log(response);
-        this.fetchTodoList();
+        this.fetchListBasedOnURL();
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  componentDidMount = () => {
-    this.fetchTodoList();
+  fetchListBasedOnURL = () => {
+    const { isCompletedListDisplayed, urlId } = this.state;
+
+    isCompletedListDisplayed
+      ? this.fetchTodoList()
+      : this.fetchTodoListItem(urlId);
   };
+
+  populateTodoItemPage = () => {
+    let pathName = document.location.pathname;
+    let pathArray = window.location.pathname.split('/');
+    let urlId = pathArray[2] ? pathArray[2] : null;
+
+    // Apply specific changes for /todo/item page
+    if (
+      pathName.indexOf('/todo/') == 0 &&
+      pathName.length > 6 &&
+      urlId !== null
+    ) {
+      this.fetchTodoListItem(urlId);
+
+      this.setState({
+        shouldDisplayAddForm: false,
+        isCompletedListDisplayed: false,
+        urlId: urlId,
+      });
+    }
+  };
+
+  componentDidMount() {
+    this.fetchListBasedOnURL();
+    this.populateTodoItemPage();
+  }
 
   render() {
     const {
@@ -113,6 +185,7 @@ class TodoListApp extends React.Component {
       shouldDisplayAddForm,
       addTaskField,
       addButtonIsActive,
+      visibleAlert,
     } = this.state;
 
     if (loading) {
@@ -129,7 +202,7 @@ class TodoListApp extends React.Component {
         <TodoTable
           title="List of tasks"
           todoList={todoList}
-          handleDeleteTodo={this.handleDeleteTodo}
+          openDeleteConfirmation={this.openDeleteConfirmation}
           handlToggleCompleteTask={this.handlToggleCompleteTask}
         />
         {shouldDisplayAddForm && (
@@ -139,6 +212,20 @@ class TodoListApp extends React.Component {
             addTaskField={addTaskField}
             addButtonIsActive={addButtonIsActive}
           />
+        )}
+        {visibleAlert && (
+          <SweetAlert
+            danger
+            showCancel
+            confirmBtnText="Yes, delete it!"
+            confirmBtnBsStyle="danger"
+            title="Are you sure?"
+            onConfirm={this.handleDeleteTodo}
+            onCancel={this.closeDeleteConfirmation}
+            focusCancelBtn
+          >
+            You will not be able to recover this todo item later!
+          </SweetAlert>
         )}
       </section>
     );

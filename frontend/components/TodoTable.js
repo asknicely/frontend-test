@@ -3,7 +3,12 @@ import TodoListItem from './TodoListItem';
 import TodoTableHeader from './TodoTableHeader';
 
 function TodoTable(props) {
-  const { title, todoList, handleDeleteTodo, handlToggleCompleteTask } = props;
+  const {
+    title,
+    todoList,
+    openDeleteConfirmation,
+    handlToggleCompleteTask,
+  } = props;
 
   return (
     <React.Fragment>
@@ -15,7 +20,7 @@ function TodoTable(props) {
           {todoList.length >= 1 && (
             <TodoListItem
               list={todoList}
-              handleDeleteTodo={handleDeleteTodo}
+              openDeleteConfirmation={openDeleteConfirmation}
               handlToggleCompleteTask={handlToggleCompleteTask}
             />
           )}
