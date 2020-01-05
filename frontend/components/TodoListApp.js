@@ -11,7 +11,7 @@ class TodoListApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todoList: {},
+      todoList: [],
       loading: true,
       shouldDisplayAddForm: true,
       addTaskField: '',
@@ -74,7 +74,7 @@ class TodoListApp extends React.Component {
 
   handleAddTaskSubmit = e => {
     e.preventDefault();
-    console.log(this.state.addTaskField);
+    // console.log(this.state.addTaskField);
     let myDescription = this.state.addTaskField;
 
     axios
@@ -90,7 +90,7 @@ class TodoListApp extends React.Component {
         },
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.fetchTodoList();
         this.setState({ addTaskField: '' });
 
@@ -129,7 +129,7 @@ class TodoListApp extends React.Component {
     axios
       .delete(`/todo/delete/${id}`)
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.fetchListBasedOnURL();
         this.setState({ visibleAlert: false });
         toast.success('👍 TODO deleted!');
@@ -148,12 +148,12 @@ class TodoListApp extends React.Component {
         },
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.fetchListBasedOnURL();
         let isAlreadyCompleted = this.state.listOfCompletedItems.find(
           item => item === id,
         );
-        console.log(isAlreadyCompleted);
+        // console.log(isAlreadyCompleted);
         if (isAlreadyCompleted) {
           toast.info('TODO undone!');
         } else {

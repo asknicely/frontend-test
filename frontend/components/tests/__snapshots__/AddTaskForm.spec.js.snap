@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddTaskForm should render AddTaskForm correctly 1`] = `ShallowWrapper {}`;
+
+exports[`AddTaskForm snapshot renders 1`] = `
+<form
+  aria-label="Create a task"
+  className="add-task-form"
+>
+  <label
+    htmlFor="description"
+  >
+    Add a new todo task
+  </label>
+  <input
+    className="small-6 small-center"
+    id="description"
+    name="description"
+    placeholder="e.g. Eat Donuts 🍩:)"
+    type="textbox"
+  />
+  <button
+    className="btn btn-sm btn-primary"
+    disabled={true}
+    type="submit"
+  >
+    Add
+  </button>
+</form>
+`;

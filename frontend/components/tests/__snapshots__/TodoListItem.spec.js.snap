@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodoListItem should render TodoListItem correctly 1`] = `ShallowWrapper {}`;
+
+exports[`TodoListItem snapshot renders 1`] = `null`;

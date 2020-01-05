@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loader should render Loader correctly 1`] = `ShallowWrapper {}`;
+
+exports[`Loader snapshot renders 1`] = `
+<div
+  className="loader"
+>
+  <div
+    className="loader-dash loader-dash--one"
+  />
+  <div
+    className="loader-dash loader-dash--two"
+  />
+  <div
+    className="loader-dash loader-dash--three"
+  />
+  <div
+    className="loader-dash loader-dash--four"
+  />
+</div>
+`;

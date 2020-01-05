@@ -17,7 +17,7 @@ function TodoTable(props) {
       <table className="table">
         <TodoTableHeader />
 
-        {todoList.length >= 1 && (
+        {todoList && todoList.length >= 1 && (
           <TodoListItem
             list={todoList}
             openDeleteConfirmation={openDeleteConfirmation}

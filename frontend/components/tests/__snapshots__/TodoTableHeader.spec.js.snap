@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodoTableHeader should render TodoTableHeader correctly 1`] = `ShallowWrapper {}`;
+
+exports[`TodoTableHeader snapshot renders 1`] = `
+<thead>
+  <tr>
+    <th>
+      #
+    </th>
+    <th>
+      User
+    </th>
+    <th>
+      Description
+    </th>
+    <th />
+  </tr>
+</thead>
+`;
