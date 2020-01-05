@@ -1,0 +1,15 @@
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #ecf0f1;
+  padding: 1.8rem;
+
+  @media (min-width: 992px) {
+    margin-top: 62px;
+  }
+
+  input {
+    margin: 2rem 0 2.6rem;
+    padding: 0.9rem 0.6rem;
+  }
+}

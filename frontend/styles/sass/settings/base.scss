@@ -9,6 +9,20 @@ body {
   padding-top: 50px;
 }
 
+a {
+  color: #34495e;
+  transition: color 0.06s ease;
+  &:hover {
+    color: #3498db;
+  }
+}
+
+.page-title {
+  font-size: 2.4rem;
+  color: #2980b9;
+  margin-bottom: 16px;
+}
+
 .login-form > div {
   margin-top: 10px;
 }

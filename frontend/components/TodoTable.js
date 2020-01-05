@@ -12,19 +12,18 @@ function TodoTable(props) {
 
   return (
     <React.Fragment>
-      <h1>{title}</h1>
+      <h1 className="page-title">{title}</h1>
 
-      <table className="table table-striped">
+      <table className="table">
         <TodoTableHeader />
-        <tbody>
-          {todoList.length >= 1 && (
-            <TodoListItem
-              list={todoList}
-              openDeleteConfirmation={openDeleteConfirmation}
-              handlToggleCompleteTask={handlToggleCompleteTask}
-            />
-          )}
-        </tbody>
+
+        {todoList.length >= 1 && (
+          <TodoListItem
+            list={todoList}
+            openDeleteConfirmation={openDeleteConfirmation}
+            handlToggleCompleteTask={handlToggleCompleteTask}
+          />
+        )}
       </table>
     </React.Fragment>
   );

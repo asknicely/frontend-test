@@ -21,6 +21,7 @@ class TodoListApp extends React.Component {
       visibleAlert: false,
       itemToBeDeleted: null,
       listOfCompletedItems: [],
+      titleListPage: 'List of tasks',
     };
   }
 
@@ -190,6 +191,7 @@ class TodoListApp extends React.Component {
         shouldDisplayAddForm: false,
         isCompletedListDisplayed: false,
         urlId: urlId,
+        titleListPage: 'Todo item',
       });
     }
   };
@@ -219,6 +221,7 @@ class TodoListApp extends React.Component {
       addTaskField,
       addButtonIsActive,
       visibleAlert,
+      titleListPage,
     } = this.state;
 
     if (loading) {
@@ -226,26 +229,40 @@ class TodoListApp extends React.Component {
     }
 
     return (
-      <section
-        className="col-md-8 col-md-offset-2 u-mt--lg u-mb--lg"
-        role="application"
-        aria-roledescription="To-Do List App"
-        aria-describedby="Displays the list of tasks by user"
-      >
-        <TodoTable
-          title="List of tasks"
-          todoList={todoList}
-          openDeleteConfirmation={this.openDeleteConfirmation}
-          handlToggleCompleteTask={this.handlToggleCompleteTask}
-        />
-        {shouldDisplayAddForm && (
-          <AddTaskForm
-            handleAddTaskSubmit={this.handleAddTaskSubmit}
-            handleChangeAddTaskField={this.handleChangeAddTaskField}
-            addTaskField={addTaskField}
-            addButtonIsActive={addButtonIsActive}
+      <React.Fragment>
+        <section
+          className={
+            shouldDisplayAddForm
+              ? 'col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-0 u-mt--lg'
+              : 'col-md-8 col-md-offset-2 u-mt--lg'
+          }
+          role="application"
+          aria-roledescription="To-Do List App"
+          aria-describedby="Displays the list of tasks by user"
+        >
+          <TodoTable
+            title={titleListPage}
+            todoList={todoList}
+            openDeleteConfirmation={this.openDeleteConfirmation}
+            handlToggleCompleteTask={this.handlToggleCompleteTask}
           />
+        </section>
+
+        {shouldDisplayAddForm && (
+          <section
+            className="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-1 u-mb--lg u-mt--lg"
+            role="region"
+            aria-describedby="Form area where the user can add a new todo item"
+          >
+            <AddTaskForm
+              handleAddTaskSubmit={this.handleAddTaskSubmit}
+              handleChangeAddTaskField={this.handleChangeAddTaskField}
+              addTaskField={addTaskField}
+              addButtonIsActive={addButtonIsActive}
+            />
+          </section>
         )}
+
         {visibleAlert && (
           <SweetAlert
             danger
@@ -260,6 +277,7 @@ class TodoListApp extends React.Component {
             You will not be able to recover this todo item later!
           </SweetAlert>
         )}
+
         <ToastContainer
           position="bottom-right"
           autoClose={5000}
@@ -271,7 +289,7 @@ class TodoListApp extends React.Component {
           draggable
           pauseOnHover
         />
-      </section>
+      </React.Fragment>
     );
   }
 }
