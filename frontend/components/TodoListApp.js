@@ -4,6 +4,8 @@ import TodoTable from './TodoTable';
 import AddTaskForm from './AddTaskForm';
 import axios from 'axios';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.min.css';
 
 class TodoListApp extends React.Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class TodoListApp extends React.Component {
       urlId: null,
       visibleAlert: false,
       itemToBeDeleted: null,
+      listOfCompletedItems: [],
     };
   }
 
@@ -37,9 +40,10 @@ class TodoListApp extends React.Component {
           todoList: results,
           loading: false,
         });
+        this.updateCompletedList(results);
       })
       .catch(err =>
-        alert('Network error, please try refreshing page manually.'),
+        toast.error('👎 Network error, please try refreshing page manually.'),
       );
   };
 
@@ -55,13 +59,15 @@ class TodoListApp extends React.Component {
       })
       .then(results => {
         // console.log(results);
+        let finalResults = [results];
         this.setState({
-          todoList: [results],
+          todoList: finalResults,
           loading: false,
         });
+        this.updateCompletedList(finalResults);
       })
       .catch(err =>
-        alert('Network error, please try refreshing page manually.'),
+        toast.error('👎 Network error, please try refreshing page manually.'),
       );
   };
 
@@ -86,9 +92,12 @@ class TodoListApp extends React.Component {
         console.log(response);
         this.fetchTodoList();
         this.setState({ addTaskField: '' });
+
+        toast.success('👍 You added a new TODO!');
       })
       .catch(error => {
         console.log(error);
+        toast.error('👎 Sorry, an error occurred!');
       });
   };
 
@@ -122,9 +131,11 @@ class TodoListApp extends React.Component {
         console.log(response);
         this.fetchListBasedOnURL();
         this.setState({ visibleAlert: false });
+        toast.success('👍 TODO deleted!');
       })
       .catch(error => {
         console.log(error);
+        toast.error('👎 Sorry, an error occurred!');
       });
   };
 
@@ -138,9 +149,19 @@ class TodoListApp extends React.Component {
       .then(response => {
         console.log(response);
         this.fetchListBasedOnURL();
+        let isAlreadyCompleted = this.state.listOfCompletedItems.find(
+          item => item === id,
+        );
+        console.log(isAlreadyCompleted);
+        if (isAlreadyCompleted) {
+          toast.info('TODO undone!');
+        } else {
+          toast.success('TODO completed!');
+        }
       })
       .catch(error => {
         console.log(error);
+        toast.error('👎 Sorry, an error occurred!');
       });
   };
 
@@ -173,7 +194,19 @@ class TodoListApp extends React.Component {
     }
   };
 
-  componentDidMount() {
+  updateCompletedList = todoList => {
+    let listItemsIds = Object.keys(todoList).map(key => {
+      if (todoList[key].completed === '1') {
+        return todoList[key].id;
+      }
+    });
+
+    let finalList = listItemsIds.filter(item => item !== undefined);
+
+    this.setState({ listOfCompletedItems: finalList });
+  };
+
+  componentDidMount(prevState) {
     this.fetchListBasedOnURL();
     this.populateTodoItemPage();
   }
@@ -227,6 +260,17 @@ class TodoListApp extends React.Component {
             You will not be able to recover this todo item later!
           </SweetAlert>
         )}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
+        />
       </section>
     );
   }
