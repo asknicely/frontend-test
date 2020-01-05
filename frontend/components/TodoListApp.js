@@ -49,27 +49,35 @@ class TodoListApp extends React.Component {
   };
 
   fetchTodoListItem = id => {
-    fetch(`/todo/${id}`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(results => {
-        return results.json();
+    const { itemToBeDeleted } = this.state;
+
+    if (itemToBeDeleted !== id) {
+      fetch(`/todo/${id}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       })
-      .then(results => {
-        // console.log(results);
-        let finalResults = [results];
-        this.setState({
-          todoList: finalResults,
-          loading: false,
-        });
-        this.updateCompletedList(finalResults);
-      })
-      .catch(err =>
-        toast.error('👎 Network error, please try refreshing page manually.'),
-      );
+        .then(results => {
+          return results.json();
+        })
+        .then(results => {
+          // console.log(results);
+          let finalResults = [results];
+          this.setState({
+            todoList: finalResults,
+            loading: false,
+          });
+          this.updateCompletedList(finalResults);
+        })
+        .catch(err =>
+          toast.error('👎 Network error, please try refreshing page manually.'),
+        );
+    } else {
+      this.setState({
+        todoList: [],
+      });
+    }
   };
 
   handleAddTaskSubmit = e => {
@@ -124,6 +132,7 @@ class TodoListApp extends React.Component {
   };
 
   handleDeleteTodo = () => {
+    const { isCompletedListDisplayed } = this.state;
     let id = this.state.itemToBeDeleted;
 
     axios
@@ -133,6 +142,11 @@ class TodoListApp extends React.Component {
         this.fetchListBasedOnURL();
         this.setState({ visibleAlert: false });
         toast.success('👍 TODO deleted!');
+        if (!isCompletedListDisplayed) {
+          setTimeout(() => {
+            window.location.replace('/todo');
+          }, 1000);
+        }
       })
       .catch(error => {
         console.log(error);
