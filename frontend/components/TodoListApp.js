@@ -5,7 +5,7 @@ import AddTaskForm from './AddTaskForm';
 import axios from 'axios';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.min.css';
+import ReactTooltip from 'react-tooltip';
 
 class TodoListApp extends React.Component {
   constructor(props) {
@@ -289,6 +289,8 @@ class TodoListApp extends React.Component {
           draggable
           pauseOnHover
         />
+
+        <ReactTooltip type="warning" />
       </React.Fragment>
     );
   }

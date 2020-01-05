@@ -25,7 +25,14 @@ function TodoListItem(props) {
           }
         >
           <td>
-            <div className="form-check">
+            <div
+              className="form-check"
+              data-tip={
+                itemIsCompleted
+                  ? 'Uncheck to undo a task'
+                  : 'Check to complete a task'
+              }
+            >
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -47,6 +54,7 @@ function TodoListItem(props) {
             <button
               className="btn btn-xs btn-danger"
               onClick={() => openDeleteConfirmation(list[key].id)}
+              data-tip="Delete"
             >
               <span className="glyphicon glyphicon-remove glyphicon-white"></span>
             </button>

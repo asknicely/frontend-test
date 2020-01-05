@@ -14,13 +14,13 @@ function AddTaskForm(props) {
       aria-label="Create a task"
       className="add-task-form"
     >
-      <label htmlFor="description">Add a new todo</label>
+      <label htmlFor="description">Add a new todo task</label>
       <input
         id="description"
         type="textbox"
         name="description"
         className="small-6 small-center"
-        placeholder="e.g: Eat Donuts :)"
+        placeholder="e.g. Eat Donuts 🍩:)"
         value={addTaskField}
         onChange={handleChangeAddTaskField}
       />
