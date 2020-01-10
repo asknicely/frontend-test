@@ -27,6 +27,7 @@ $app->register(new DoctrineServiceProvider, array(
         'user'      => $app['config']['database']['user'],
         'password'  => $app['config']['database']['password'],
         'charset'   => 'utf8',
+        'unix_socket' => '/tmp/mysql.sock'
     ),
 ));
 
