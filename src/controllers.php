@@ -82,7 +82,8 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     }
 
     $user_id = $user['id'];
-    $description = $request->get('description');
+    $data = json_decode($request->getContent(), true);
+    $description = $data['description'];
     $contentType = $request->headers->get('Content-Type');
 
     $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
