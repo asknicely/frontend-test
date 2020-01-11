@@ -10,6 +10,7 @@ var app = new Vue({
 		this.getTodos();
 	},
 	methods: {
+		// fetch todo list
 		getTodos() {
 			axios({
 				method: 'get',
@@ -17,6 +18,7 @@ var app = new Vue({
 				data: {}
 			})
 				.then((response) => {
+					console.log(response.data);
 					this.todoList = response.data;
 				})
 				.catch((error) => {
@@ -25,9 +27,9 @@ var app = new Vue({
 				})
 				.finally(() => (this.loading = false));
 		},
+		// add new todo
 		addTodo() {
-			const value = this.newTodo && this.newTodo.trim();
-			if (!value) {
+			if (!this.newTodo) {
 				return;
 			}
 			axios({
@@ -38,6 +40,7 @@ var app = new Vue({
 				}
 			})
 				.then((response) => {
+					// have to fetch todo list again, since the API doesn't return the added todo with id. *future improvement
 					this.getTodos();
 				})
 				.catch((error) => {
@@ -45,6 +48,7 @@ var app = new Vue({
 				})
 				.finally(() => (this.newTodo = ''));
 		},
+		// delete todo
 		deleteTodo(todo) {
 			axios({
 				method: 'post',
@@ -52,8 +56,23 @@ var app = new Vue({
 				data: {}
 			})
 				.then((response) => {
+					// filter out the deleted todo from the list
 					this.todoList = this.todoList.filter((item) => item.id !== todo.id);
 				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		// toggle todo completed property
+		toggleTodo(todo) {
+			axios({
+				method: 'post',
+				url: '/todo/complete/' + todo.id,
+				data: {
+					completed: todo.completed
+				}
+			})
+				.then((response) => {})
 				.catch((error) => {
 					console.log(error);
 				});
