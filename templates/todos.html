@@ -1,25 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="col-md-4 col-md-offset-4">
+<section class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <tr><th>#</th><th>User</th><th></th><th>Description</th><th></th></tr>
-
-
         <tr v-for="todo in todoList" :key="todo.id">
             <td v-text="todo.id"></td>
             <td v-text="todo.user_id"></td>
             <td>
-                <input class="toggle" type="checkbox" v-model="todo.completed" true-value="1" false-value="0" @change="toggleTodo(todo)">
+                <input class="toggle" type="checkbox" v-model="todo.completed" true-value="1" false-value="0"    @change="toggleTodo(todo)">
             </td>
             <td>
                 <a @click="navigateToDetail(todo)" v-text="todo.description"></a>
             </td>
             <td>
-                <button type="submit" class="btn btn-xs btn-danger" @click="deleteTodo(todo)"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
+                <button type="submit" class="btn btn-xs btn-danger" @click="deleteTodo(todo)"><span class="glyphicon    glyphicon-remove glyphicon-white"></span></button>
             </td>
-           
         </tr>
         <tr>
             <td colspan="3">
@@ -31,8 +28,6 @@
                 <button type="submit" class="btn btn-sm btn-primary" @click="addTodo">Add</button>
             </td>
         </tr>
-
-
     </table>
-</div>
+</section>
 {% endblock %}

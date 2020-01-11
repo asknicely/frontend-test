@@ -4,17 +4,19 @@ var app = new Vue({
 		todoList: [],
 		newTodo: '',
 		loading: true,
-		isError: false
+		isError: false,
+		isList: true
 	},
 	mounted() {
 		this.getTodos();
+		this.isList = window.location.pathname === '/todo';
 	},
 	methods: {
 		// fetch todo list
 		getTodos() {
 			axios({
 				method: 'get',
-				url: '/todo',
+				url: window.location.pathname,
 				data: {}
 			})
 				.then((response) => {
@@ -56,8 +58,13 @@ var app = new Vue({
 				data: {}
 			})
 				.then((response) => {
-					// filter out the deleted todo from the list
-					this.todoList = this.todoList.filter((item) => item.id !== todo.id);
+					if (this.isList) {
+						// filter out the deleted todo from the list
+						this.todoList = this.todoList.filter((item) => item.id !== todo.id);
+					} else {
+						// or go back to list view
+						this.navigateToList();
+					}
 				})
 				.catch((error) => {
 					console.log(error);
@@ -80,6 +87,9 @@ var app = new Vue({
 		// navigate to todo detail
 		navigateToDetail(todo) {
 			window.location.href = '/todo/' + todo.id;
+		},
+		navigateToList() {
+			window.location.href = '/todo';
 		}
 	}
 });

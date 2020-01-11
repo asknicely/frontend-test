@@ -4,15 +4,16 @@
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
+        <tr><th>#</th><th>User</th><th></th><th>Description</th><th></th></tr>
         <tr>
-            <td>{{ todo.id }}</td>
-            <td>{{ todo.user_id }}</td>
-            <td>{{ todo.description }}</td>
+            <td v-text="todoList.id"></td>
+            <td v-text="todoList.user_id"></td>
             <td>
-                <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                    <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                </form>
+                <input class="toggle" type="checkbox" v-model="todoList.completed" true-value="1" false-value="0"    @change="toggleTodo(todoList)">
+            </td>
+            <td v-text="todoList.description"></td>
+            <td>
+                <button type="submit" class="btn btn-xs btn-danger" @click="deleteTodo(todoList)"><span class="glyphicon    glyphicon-remove glyphicon-white"></span></button>
             </td>
         </tr>
     </table>
