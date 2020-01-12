@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="col-md-8 col-md-offset-2">
+<section class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <tr><th>#</th><th>User</th><th></th><th>Description</th><th></th></tr>
@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <td colspan="4">
-                <input type="textbox" name="description" class="small-6 small-center" autofocus autocomplete="off"
+                <input type="textbox" name="description" class="small-6 small-center todo-add" autofocus autocomplete="off"
                 placeholder="Description..."
                 v-model.trim="newTodo" @keyup.enter="addTodo">
             </td>

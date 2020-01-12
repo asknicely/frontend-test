@@ -8,6 +8,7 @@ body {
 
 .round {
 	position: relative;
+	min-width: 24px;
 }
 
 .round label {
@@ -59,6 +60,10 @@ body {
 
 .todo-link:hover {
 	cursor: pointer;
+}
+
+.todo-add {
+	width: 100%;
 }
 
 .completed {
