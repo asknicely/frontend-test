@@ -9,11 +9,16 @@
             <td v-text="todoList.id"></td>
             <td v-text="todoList.user_id"></td>
             <td>
-                <input class="toggle" type="checkbox" v-model="todoList.completed" true-value="1" false-value="0"    @change="toggleTodo(todoList)">
+                <div class="round">
+                    <input type="checkbox" :id="todoList.id" v-model="todoList.completed" true-value="1" false-value="0" @change="toggleTodo(todoList)" />
+                    <label :for="todoList.id"></label>
+                </div>
             </td>
-            <td v-text="todoList.description"></td>
+            <td >
+                <div class="todo-description strikethrough" :class="{ completed: todoList.completed === '1' }" v-text="todoList.description"></div>
+            </td>
             <td>
-                <button type="submit" class="btn btn-xs btn-danger" @click="deleteTodo(todoList)"><span class="glyphicon    glyphicon-remove glyphicon-white"></span></button>
+                <button type="submit" class="close" title="Delete" aria-label="Delete" @click="deleteTodo(todoList)"><span aria-hidden="true">&times;</span></button>
             </td>
         </tr>
     </table>

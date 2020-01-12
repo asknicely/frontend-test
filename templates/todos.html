@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="col-md-4 col-md-offset-4">
+<section class="col-md-8 col-md-offset-2">
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <tr><th>#</th><th>User</th><th></th><th>Description</th><th></th></tr>
@@ -9,17 +9,20 @@
             <td v-text="todo.id"></td>
             <td v-text="todo.user_id"></td>
             <td>
-                <input class="toggle" type="checkbox" v-model="todo.completed" true-value="1" false-value="0"    @change="toggleTodo(todo)">
+                <div class="round">
+                    <input type="checkbox" :id="todo.id" v-model="todo.completed" true-value="1" false-value="0" @change="toggleTodo(todo)" />
+                    <label :for="todo.id"></label>
+                </div>
             </td>
             <td>
-                <a @click="navigateToDetail(todo)" v-text="todo.description"></a>
+                <a class="todo-description todo-link strikethrough" :class="{ completed: todo.completed === '1' }" @click="navigateToDetail(todo)" v-text="todo.description"></a>
             </td>
             <td>
-                <button type="submit" class="btn btn-xs btn-danger" @click="deleteTodo(todo)"><span class="glyphicon    glyphicon-remove glyphicon-white"></span></button>
+                <button type="submit" class="close" title="Delete" aria-label="Delete" @click="deleteTodo(todo)"><span aria-hidden="true">&times;</span></button>
             </td>
         </tr>
         <tr>
-            <td colspan="3">
+            <td colspan="4">
                 <input type="textbox" name="description" class="small-6 small-center" autofocus autocomplete="off"
                 placeholder="Description..."
                 v-model.trim="newTodo" @keyup.enter="addTodo">
