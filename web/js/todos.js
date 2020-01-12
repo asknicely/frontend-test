@@ -9,6 +9,7 @@ var app = new Vue({
 	},
 	mounted() {
 		this.getTodos();
+		// check if the current view is "todo list" or "todo item"
 		this.isList = window.location.pathname === '/todo';
 	},
 	methods: {
@@ -31,6 +32,7 @@ var app = new Vue({
 		},
 		// add new todo
 		addTodo() {
+			// if it is an empty string, then don't do anything
 			if (!this.newTodo) {
 				return;
 			}
@@ -88,6 +90,7 @@ var app = new Vue({
 		navigateToDetail(todo) {
 			window.location.href = '/todo/' + todo.id;
 		},
+		// navigate to todo list
 		navigateToList() {
 			window.location.href = '/todo';
 		}
