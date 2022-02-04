@@ -10,3 +10,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+nav a {
+  transition: color 0.3s ease-in-out;
+}
