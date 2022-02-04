@@ -5,3 +5,8 @@ body {
 .login-form > div {
     margin-top: 10px;
 }
+
+.add-todo-row {
+  display: flex;
+  justify-content: space-between;
+}
