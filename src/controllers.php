@@ -3,11 +3,11 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+$app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
     return $twig;
-}));
+});
 
 
 $app->get('/', function () use ($app) {
@@ -16,14 +16,14 @@ $app->get('/', function () use ($app) {
     ]);
 });
 
-
 $app->match('/login', function (Request $request) use ($app) {
     $username = $request->get('username');
     $password = $request->get('password');
 
     if ($username) {
         $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
-        $user = $app['db']->fetchAssoc($sql);
+//        var_dump($app['db']); die;
+        $user = $app['db']->fetchAssociative($sql);
 
         if ($user){
             $app['session']->set('user', $user);
@@ -62,7 +62,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
 
     } else {
         $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
-        $todos = $app['db']->fetchAll($sql);
+        $todos = $app['db']->fetchAllAssociative($sql);
 
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todos.html', [
@@ -73,7 +73,26 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
     }
 })
-->value('id', null);
+    ->value('id', null);
+
+$app->get('todo/list', function (Request $request) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
+
+    $contentType = $request->headers->get('Content-Type');
+
+    $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+    $todos = $app['db']->fetchAllAssociative($sql);
+
+    if (strpos($contentType, 'application/json') === false) {
+        return $app['twig']->render('todos.html', [
+            'todos' => $todos,
+        ]);
+    } else {
+        return json_encode($todos);
+    }
+});
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
@@ -91,7 +110,8 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+//        return json_encode(array('success' => true));
+        return $app->json(['response' => 'success']);
     }
 });
 
