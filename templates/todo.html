@@ -4,11 +4,25 @@
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
+        <th>#</th><th>User</th><th>Description</th><th></th><th></th>
         <tr>
             <td>{{ todo.id }}</td>
             <td>{{ todo.user_id }}</td>
-            <td>{{ todo.description }}</td>
+            <td>
+                <!-- Adding strikethrough to description text if todo is completed -->
+                {% if todo.completed == 1 %}
+                    <del>{{ todo.description }}</del>
+                {% else %}
+                    {{ todo.description }}
+                {% endif %}
+            <td>
+                <!-- Only showing 'complete' button if todo is not completed -->
+                {% if todo.completed == 0 %}
+                <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
+                    <button type="submit" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok glyphicon-white"></span></button>
+                </form>
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
                     <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
