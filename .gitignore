@@ -1,5 +1,6 @@
 .idea
 composer.lock
+package-lock.json
 vendor
 node_modules
 config/config.yml

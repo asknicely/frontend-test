@@ -7,6 +7,7 @@ use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\AssetServiceProvider;
 use Rpodwika\Silex\YamlConfigServiceProvider;
 
 $app = new Application();
@@ -15,6 +16,7 @@ $app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
+$app->register(new AssetServiceProvider());
 
 $app->register(new YamlConfigServiceProvider(__DIR__.'/../config/config.yml'));
 $app->register(new DoctrineServiceProvider, array(

@@ -9,7 +9,11 @@
         "silex/web-profiler": "~2.0",
         "dflydev/doctrine-orm-service-provider": "^2.0",
         "rpodwika/yaml-config-service-provider": "dev-master",
-        "doctrine/dbal": "^3.3"
+        "doctrine/dbal": "^3.3",
+        "symfony/asset": "^3.2",
+        "symfony/twig-bridge": "^3.2",
+        "symfony/webpack-encore-bundle": "*",
+        "symfony/assetic-bundle": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "^3.2"

@@ -1,5 +1,6 @@
 <?php
 
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -9,12 +10,55 @@ $app->extend('twig', function($twig, $app) {
     return $twig;
 });
 
-
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html', [
-        'readme' => file_get_contents('README.md'),
-    ]);
+$app->match('/', function () use ($app) {
+    return $app['twig']->render('index.html');
 });
+
+$app->match('/{path}', function () use ($app) {
+    return $app['twig']->render('index.html');
+});
+
+
+$app->get('/api/todo/{id}', function ($id, Request $request) use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
+
+    $contentType = $request->headers->get('Content-Type');
+
+    if ($id){
+        $sql = "SELECT * FROM todos WHERE id = '$id'";
+        $todo = $app['db']->fetchAssoc($sql);
+
+        if (strpos($contentType, 'application/json') === false) {
+        } else {
+            return json_encode($todo);
+        }
+
+    } else {
+        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+        $todos = $app['db']->fetchAllAssociative($sql);
+
+        if (strpos($contentType, 'application/json') === false) {
+        } else {
+            return json_encode($todos);
+        }
+    }
+})
+    ->value('id', null);
+
+$app->match('/api/list', function () use ($app) {
+    if (null === $user = $app['session']->get('user')) {
+        return json_encode(array('authenticated' => false));
+    }
+
+    $sql = "SELECT * FROM todos";
+    $todos = $app['db']->fetchAllAssociative($sql);
+
+    return $app->json($todos);
+});
+
+
 
 $app->match('/login', function (Request $request) use ($app) {
     $username = $request->get('username');
@@ -41,58 +85,7 @@ $app->get('/logout', function () use ($app) {
 });
 
 
-$app->get('/todo/{id}', function ($id, Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
 
-    $contentType = $request->headers->get('Content-Type');
-
-    if ($id){
-        $sql = "SELECT * FROM todos WHERE id = '$id'";
-        $todo = $app['db']->fetchAssoc($sql);
-
-        if (strpos($contentType, 'application/json') === false) {
-            return $app['twig']->render('todo.html', [
-                'todo' => $todo,
-            ]);
-        } else {
-            return json_encode($todo);
-        }
-
-    } else {
-        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
-        $todos = $app['db']->fetchAllAssociative($sql);
-
-        if (strpos($contentType, 'application/json') === false) {
-            return $app['twig']->render('todos.html', [
-                'todos' => $todos,
-            ]);
-        } else {
-            return json_encode($todos);
-        }
-    }
-})
-    ->value('id', null);
-
-$app->get('todo/list', function (Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
-
-    $contentType = $request->headers->get('Content-Type');
-
-    $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
-    $todos = $app['db']->fetchAllAssociative($sql);
-
-    if (strpos($contentType, 'application/json') === false) {
-        return $app['twig']->render('todos.html', [
-            'todos' => $todos,
-        ]);
-    } else {
-        return json_encode($todos);
-    }
-});
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
@@ -130,7 +123,7 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 });
 
 
-$app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+$app->match('/api/todo/complete/{id}', function (Request $request, $id) use ($app) {
 
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
