@@ -24,7 +24,6 @@ function TodoList() {
 
   const completeTodo = async (id) => {
     const { data } = await axios.post(`/todo/complete/${id}`, {}, headers);
-
     if (data.success) {
       setTodos(todos.map((t) => t.id === id ? ({ ...t, completed: '1' }) : t));
     }
