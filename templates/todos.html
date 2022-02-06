@@ -1,4 +1,19 @@
 {% extends "layout.html" %} {% block content %}
 <div id="todo_list"></div>
+<tr>
+  <form method="post" action="{{ app.request.baseurl }}/todo/add">
+    <td colspan="3">
+      <input
+        type="textbox"
+        name="description"
+        class="small-6 small-center"
+        placeholder="Description..."
+      />
+    </td>
+    <td>
+      <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    </td>
+  </form>
+</tr>
 <span> {{ app.request.baseurl }}</span>
 {% endblock %}
