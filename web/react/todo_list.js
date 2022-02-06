@@ -38,7 +38,7 @@ function TodoList() {
     }
   }
 
-  return !todos ? <div>Loading todos</div> :
+  return !todos ? <div class="loader" /> :
     (<React.Fragment><h1>Todo List:</h1><table class="table table-striped">
       <thead>
         <tr>
@@ -54,7 +54,6 @@ function TodoList() {
       </tbody>
     </table></React.Fragment>
     );
-
 }
 
 const domContainer = document.querySelector('#todo_list');
