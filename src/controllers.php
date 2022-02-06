@@ -49,7 +49,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
     $contentType = $request->headers->get('Content-Type');
 
     if ($id){
-        $sql = "SELECT * FROM todos WHERE id = '$id'";
+        $sql = "SELECT * FROM todos WHERE id = '$id' AND user_id = '${user['id']}'";
         $todo = $app['db']->fetchAssoc($sql);
 
         if (strpos($contentType, 'application/json') === false) {
