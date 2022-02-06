@@ -28,6 +28,13 @@ Credentials:
 
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
+
+sudo apt install php7.5-fpm (install php)
+sudo update-alternatives --config php (change php version if required)
+php composer.phar install 
+sudo apt-get install php7.4-mysql (required for db layer) then continue with the rest below
+
+
 ```sh
 php composer.phar install
 cp config/config.yml.dist config/config.yml
