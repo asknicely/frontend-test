@@ -2,22 +2,41 @@
 
 const e = React.createElement;
 
+// TODO: Refactor with axios interceptor so we don't have to repeat definition of headers 
+const headers = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  data: {}
+};
+
 function TodoList() {
   const [todos, setTodos] = React.useState();
 
   React.useEffect(() => {
     const todos = async () => {
-      const response = await axios.get("/todo", {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        data: {}
-      });
+      const response = await axios.get("/todo", headers);
       setTodos(response.data);
     }
     todos();
   }, []);
+
+  const completeTodo = async (id) => {
+    const { data } = await axios.post(`/todo/complete/${id}`, {}, headers);
+
+    if (data.success) {
+      setTodos(todos.map((t) => t.id === id ? ({ ...t, completed: '1' }) : t));
+    }
+  }
+
+  const deleteTodo = async (id) => {
+    const { data } = await axios.post(`/todo/delete/${id}`, {}, headers);
+
+    if (data.success) {
+      setTodos(todos.filter(t => t.id !== id));
+    }
+  }
 
   return !todos ? <div>Loading todos</div> :
     (<React.Fragment><table class="table table-striped">
@@ -31,7 +50,7 @@ function TodoList() {
         </tr>
       </thead>
       <tbody>
-        {todos.map((t) => { return <TodoItem todo={t} /> })}
+        {todos.map((t) => { return <TodoItem todo={t} completeTodo={completeTodo} deleteTodo={deleteTodo} /> })}
       </tbody>
     </table></React.Fragment>
     );
