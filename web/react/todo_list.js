@@ -39,7 +39,7 @@ function TodoList() {
   }
 
   return !todos ? <div>Loading todos</div> :
-    (<React.Fragment><table class="table table-striped">
+    (<React.Fragment><h1>Todo List:</h1><table class="table table-striped">
       <thead>
         <tr>
           <th>#</th>
