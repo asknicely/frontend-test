@@ -40,6 +40,10 @@ mysql -u root <database> < resources/fixtures.sql
 
 # start server
 php -S localhost:1337 -t web/ web/index.php
+
+# vue unit test
+npm run test:unit
+
 ```
 You can change the database connection from the file `config/config.yml`.
 

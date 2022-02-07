@@ -26,6 +26,8 @@
       <span>mysql -u root &lt;database&gt; < resources/fixtures.sql</span>
       <span class="note"># start server</span>
       <span>php -S localhost:1337 -t web/ web/index.php</span>
+	  <span class="note"># vue unit test</span>
+      <span>npm run test:unit</span>
     </pre>
   </div>
 </template>
