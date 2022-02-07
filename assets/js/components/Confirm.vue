@@ -1,37 +1,48 @@
 <template>
-	<b-modal ref="confirm-modal" :title="title" no-close-on-backdrop>
-		<p>User: {{ user }}</p>
-		<p>Description: {{ description }}</p>
+	<BModal ref="confirm-modal" :title="title" no-close-on-backdrop>
+		<p>{{ body }}</p>
+		<div>
+			<span>User: {{ user }}</span>
+			<br>
+			<span>Description: {{ description }}</span>
+		</div>
 		<template #modal-footer="{ cancel }">
-			<b-button size="sm" variant="outline-danger" @click="cancel()">
+			<BButton size="sm" variant="outline-danger" @click="cancel()">
 				Cancel
-			</b-button>
-			<b-button size="sm" variant="success" @click="confirmed">
+			</BButton>
+			<BButton size="sm" variant="success" @click="confirmed">
 				{{ confirmText }}
-			</b-button>
+			</BButton>
 		</template>
-<!--		<b-button class="mt-3" variant="outline-danger" block @click="hideModal">Cancel</b-button>-->
-	</b-modal>
+	</BModal>
 </template>
 
 <script>
+import { BModal, BButton } from 'bootstrap-vue'
 export default {
-	name : "ConfirmModal",
+	name : "Confirm",
 	props: {
-		task : Object
+		modal : Object
+	},
+	components: {
+		BModal,
+		BButton
 	},
 	computed: {
 		title () {
-			return this.task?.title || ''
+			return this.modal?.title || ''
+		},
+		body () {
+			return this.modal?.body || ''
 		},
 		user () {
-			return this.task?.data?.user_id || ''
+			return this.modal?.data?.user_id || ''
 		},
 		description () {
-			return this.task?.data?.description || ''
+			return this.modal?.data?.description || ''
 		},
 		confirmText () {
-			return this.task?.confirmText || ''
+			return this.modal?.confirmText || ''
 		}
 	},
 	methods: {
@@ -41,12 +52,8 @@ export default {
 
 		confirmed () {
 			this.$refs['confirm-modal'].hide();
-			this.$emit('confirmed', this.task.data.id);
+			this.modal.callback && this.modal.callback(this.modal.data.id);
 		}
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

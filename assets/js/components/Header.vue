@@ -1,31 +1,105 @@
 <template>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" @click="$route.push('/')"><span class="glyphicon glyphicon-home glyphicon-white"></span></a>
-			</div>
-			<div id="navbar" class="collapse navbar-collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="/todo">Todo list</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					{% if user %}
-					<li><a href="/logout"><span class="glyphicon glyphicon-user"></span> {{ user.username }} Logout</a></li>
-					{% else %}
-					<li><a href="/login">Login</a></li>
-					{% endif %}
-				</ul>
-			</div>
+	<BNavbar type="dark" variant="dark">
+		<div class="container px-0">
+			<BNavbarNav>
+				<BNavItem to="/">
+					<BIconHouseFill></BIconHouseFill>
+					<BNavText>Home</BNavText>
+				</BNavItem>
+
+				<BNavItem v-if="user" to="/todo">
+					<BIconListCheck></BIconListCheck>
+					<BNavText>Todo</BNavText>
+				</BNavItem>
+			</BNavbarNav>
+			<BNavbarNav class="ml-auto">
+				<BButton v-if="user" @click="logout">
+					<span>Logout {{ username }}</span>
+				</BButton>
+				<BNavItem v-else to="/login">
+					<BButton class="login-btn">
+						<BIconBoxArrowRight></BIconBoxArrowRight>
+						<span>Login</span>
+					</BButton>
+				</BNavItem>
+			</BNavbarNav>
 		</div>
-	</nav>
+	</BNavbar>
 </template>
 
 <script>
+import {
+	BNavbar,
+	BNavbarNav,
+	BNavItem,
+	BNavText,
+	BIconHouseFill,
+	BIconListCheck,
+	BButton,
+	BIconBoxArrowRight,
+} from 'bootstrap-vue';
+import { mapState, mapActions } from 'vuex';
+import { axiosRequest } from "../utils/fetch.utils";
+
 export default {
-	name : "Header"
+	name : "Header",
+	components: {
+		BNavbar,
+		BNavbarNav,
+		BNavItem,
+		BNavText,
+		BIconHouseFill,
+		BIconListCheck,
+		BButton,
+		BIconBoxArrowRight
+	},
+	computed: {
+		...mapState(['user']),
+
+		username () {
+			return this.user?.username || ''
+		}
+	},
+	methods: {
+		...mapActions(['removeAuth', 'removeToken']),
+
+		logout () {
+			axiosRequest('GET', '/api/logout')
+				.then(([error, data]) => {
+					if (error) {
+					} else {
+						if (data.success) {
+							const toast = {
+								message : 'Bye!',
+								title   : 'Logout success'
+						  	}
+							this.removeAuth();
+							this.removeToken();
+							this.$router.push('/login');
+					  		this.showToast(toast, 'primary')
+            			}
+					}
+				})
+		}
+	}
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+	.btn {
+		&.login-btn {
+			span {
+				max-width: 0;
+				display: inline-flex;
+				white-space: nowrap;
+				transition: max-width 0.5s;
+				overflow: hidden;
+			}
+			&:hover, &:focus {
+				span {
+					max-width: 100px;
+				}
+			}
+		}
+	}
 </style>

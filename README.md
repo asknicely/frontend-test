@@ -29,10 +29,16 @@ Credentials:
 ### Installation
 **/!\ You need to fork this repository. See [How to submit your work?](#how-to-submit-your-work)**
 ```sh
+# install packages
 php composer.phar install
+npm install
+
+# setup database
 cp config/config.yml.dist config/config.yml
 mysql -u root <database> < resources/database.sql
 mysql -u root <database> < resources/fixtures.sql
+
+# start server
 php -S localhost:1337 -t web/ web/index.php
 ```
 You can change the database connection from the file `config/config.yml`.

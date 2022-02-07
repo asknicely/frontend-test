@@ -1,6 +1,6 @@
 {
     "name": "asknicely/frontend-test",
-    "description": "The AskNicely frontend test",
+    "description": "The AskNicely frontend tests",
     "license": "MIT",
     "type": "project",
     "require": {

@@ -1,13 +1,22 @@
 import axios from "axios";
-import { appBusy, appIdle } from './functions.utils';
+import { getCookie } from "./cookies.utils";
 
-export const axiosRequest = (method, url, data, busy) => {
-	appBusy(busy);
+axios.interceptors.request.use(config => {
+	if (config.url.includes('/api/requestAuth')) {
+		return config;
+	} else {
+		const xsrfToken = getCookie('authT');
+		config.headers = { 'authorization' : xsrfToken }
 
+		return config;
+	}
+})
+
+export const axiosRequest = (method, url, params = {}) => {
 	return axios({
 		method,
 		url,
-		data
+		params
 	})
 		.then(response => {
 			if (response.status === 200) {
@@ -15,23 +24,8 @@ export const axiosRequest = (method, url, data, busy) => {
 			} else {
 				throw new Error(response)
 			}
-	})
+		})
 		.catch(error => {
-		// Error
-
-			console.log(error)
-		// store.dispatch('popError', {
-		// 	body : {
-		// 		code   : error.code || error.status,
-		// 		msg    : error.message,
-		// 		path   : url,
-		// 		method : method
-		// 	},
-		// 	title : 'Fetch Error'
-		// });
-		return [error]
-	})
-		.finally(() => {
-			appIdle(busy)
+			return [error]
 		})
 };

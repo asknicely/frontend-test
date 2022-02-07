@@ -3,8 +3,10 @@
 		<Header></Header>
 		<main>
 			<div class="container">
-				<div class="row">
-					<router-view></router-view>
+				<div class="row pt-3">
+					<transition name="fade" mode="out-in">
+						<router-view :key="$route.fullPath"></router-view>
+					</transition>
 				</div>
 			</div>
 		</main>
@@ -12,15 +14,20 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Header from "./Header";
 export default {
 	name : "App",
 	components: {
 		Header
+	},
+	computed: {
+		...mapState(['user'])
+	},
+	created () {
 	}
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
 </style>

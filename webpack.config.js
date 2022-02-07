@@ -6,7 +6,7 @@ Encore
 
 	.setPublicPath('/build')
 
-	.addEntry('app', './assets/js/app.js')
+	.addEntry('app', './assets/js/main.js')
 
 	.enableVueLoader(() => {}, {
 		useJsx: true,
