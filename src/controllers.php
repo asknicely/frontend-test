@@ -127,7 +127,7 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     }
 });
 
-
+// Handle error pages, comment out for debugging
 $app->error(function (\Exception $e, $code) use ($app) {
   switch ($code) {
       case 404:

@@ -4,30 +4,8 @@
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th><th></th>
-        {% for todo in todos %}
-            <tr class="{{ todo.completed ? 'success' : '' }}">
-                <td>{{ todo.id }}</td>
-                <td>{{ todo.user_id }}</td>
-                <td>
-                    <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
-                       {{ todo.description }}
-                    </a>
-                </td>
-                <td>
-                    <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                        <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                    </form>
-                </td>
-                <td>
-                    {% if not todo.completed %}
-                        <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
-                            <button type="submit" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok glyphicon-white"></span></button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
+        <th></th><th>Description</th><th></th><th></th>
+        <div id="react-todolist"></div>
         <tr>
             <form method="post" action="{{ app.request.baseurl }}/todo/add">
                 <td colspan="3">
@@ -40,4 +18,6 @@
         </tr>
     </table>
 </div>
+
+<script type="text/babel" src="{{ app.request.baseurl }}/js/react-todo-list.js"></script>
 {% endblock %}
