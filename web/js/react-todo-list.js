@@ -61,7 +61,10 @@ function Todo(props) {
   } = props;
   const updating = updatingList === id;
   const hasCompleted = completed === "1";
-  const wrapperClassName = [];
+  const wrapperClassName = [
+    'animate__animated',
+    'animate__fadeIn',
+  ];
 
   if (hasCompleted) {
     wrapperClassName.push('success');
