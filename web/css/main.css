@@ -45,3 +45,12 @@ body {
   text-align: center;
   width: 40px;
 }
+
+.table {
+  margin-bottom: 0;
+}
+
+.table-sticky {
+  bottom: 0;
+  position: sticky;
+}

@@ -3,15 +3,15 @@
 {% block content %}
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
-    <table class="table table-striped">
-        <div id="react-todolist">
-          <!-- Display skeleton loader while loading -->
-          <div class="skeleton-box"></div>
-          <div class="skeleton-box"></div>
-          <div class="skeleton-box"></div>
-          <div class="skeleton-box"></div>
-          <div class="skeleton-box"></div>
-        </div>
+    <div id="react-todolist">
+      <!-- Display skeleton loader while loading -->
+      <div class="skeleton-box"></div>
+      <div class="skeleton-box"></div>
+      <div class="skeleton-box"></div>
+      <div class="skeleton-box"></div>
+      <div class="skeleton-box"></div>
+    </div>
+    <table class="table table-striped table-sticky">
         <tr>
             <form method="post" action="{{ app.request.baseurl }}/todo/add">
                 <td colspan="3">
