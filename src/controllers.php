@@ -61,7 +61,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
 
     } else {
-        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}'";
+        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}' ORDER BY completed";
         $todos = $app['db']->fetchAll($sql);
 
         if (strpos($contentType, 'application/json') === false) {
