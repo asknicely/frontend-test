@@ -54,3 +54,7 @@ body {
   bottom: 0;
   position: sticky;
 }
+
+button {
+  transition: background 0.25s ease;
+}

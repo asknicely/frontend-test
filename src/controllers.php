@@ -114,8 +114,10 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     $description = $request->get('description');
     $contentType = $request->headers->get('Content-Type');
 
-    $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
-    $app['db']->executeUpdate($sql);
+    if ($description !== "") {
+      $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
+      $app['db']->executeUpdate($sql);
+    }
 
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');

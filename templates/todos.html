@@ -18,7 +18,7 @@
                     <input type="textbox" name="description" autofocus class="small-6 small-center form-control" placeholder="Description...">
                 </td>
                 <td colspan="2">
-                    <button type="submit" class="btn btn btn-primary btn-block">Add</button>
+                    <button type="submit" disabled class="btn btn btn-disabled btn-block btn-add-todo">Add</button>
                 </td>
             </form>
         </tr>
@@ -26,4 +26,20 @@
 </div>
 
 <script type="text/babel" src="{{ app.request.baseurl }}/js/react-todo-list.js"></script>
+<script type="text/javaScript">
+  document.querySelector('[name="description"]').addEventListener('keyup', function(e) {
+    const value = e.target.value;
+    const addBtn = document.querySelector('.btn-add-todo');
+    
+    if (value) {
+      addBtn.removeAttribute('disabled');
+      addBtn.classList.remove('btn-disabled');
+      addBtn.classList.add('btn-primary');
+    } else {
+      addBtn.setAttribute('disabled', true);
+      addBtn.classList.add('btn-disabled');
+      addBtn.classList.remove('btn-primary');
+    }
+  });
+</script>
 {% endblock %}
