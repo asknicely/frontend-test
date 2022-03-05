@@ -6,7 +6,7 @@
     <table class="table table-striped">
         <th>#</th><th>User</th><th>Description</th><th></th><th></th>
         {% for todo in todos %}
-            <tr>
+            <tr class="{{ todo.completed ? 'success' : '' }}">
                 <td>{{ todo.id }}</td>
                 <td>{{ todo.user_id }}</td>
                 <td>
@@ -20,21 +20,21 @@
                     </form>
                 </td>
                 <td>
-                  {% if not todo.completed %}
-                    <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
-                        <button type="submit" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok glyphicon-white"></span></button>
-                    </form>
-                  {% endif %}
+                    {% if not todo.completed %}
+                        <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
+                            <button type="submit" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok glyphicon-white"></span></button>
+                        </form>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
         <tr>
             <form method="post" action="{{ app.request.baseurl }}/todo/add">
                 <td colspan="3">
-                    <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
+                    <input type="textbox" name="description" autofocus class="small-6 small-center form-control" placeholder="Description...">
                 </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                <td colspan="2">
+                    <button type="submit" class="btn btn btn-primary btn-block">Add</button>
                 </td>
             </form>
         </tr>
