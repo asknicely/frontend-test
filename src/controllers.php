@@ -3,6 +3,12 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+function fetchUserTodo($app) {
+  $user = $app['session']->get('user');
+  $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}' ORDER BY completed";
+  return $app['db']->fetchAll($sql);
+}
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
@@ -65,8 +71,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
 
     } else {
-        $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}' ORDER BY completed";
-        $todos = $app['db']->fetchAll($sql);
+        $todos = fetchUserTodo($app);
 
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todos.html', [
@@ -95,7 +100,7 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return json_encode(fetchUserTodo($app));
     }
 });
 
@@ -109,7 +114,7 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return json_encode(fetchUserTodo($app));
     }
 });
 
@@ -123,7 +128,7 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return json_encode(fetchUserTodo($app));
     }
 });
 
