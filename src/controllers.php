@@ -126,3 +126,15 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
         return json_encode(array('success' => true));
     }
 });
+
+
+$app->error(function (\Exception $e, $code) use ($app) {
+  switch ($code) {
+      case 404:
+          $message = $app['twig']->render('404.html');
+          break;
+      default:
+          $message = $app['twig']->render('500.html');
+  }
+  return new Response($message, $code);
+});
