@@ -9,6 +9,22 @@ function fetchUserTodo($app) {
   return $app['db']->fetchAll($sql);
 }
 
+function hasAccess($app, $id) {
+  $user = $app['session']->get('user');
+  $sql = "SELECT * FROM todos WHERE id = '$id'";
+  $todo = $app['db']->fetchAssoc($sql);
+
+  if ($todo === false) {
+    return false;
+  }
+
+  if ($todo['user_id'] !== $user['id']) {
+    return false;
+  }
+
+  return true;
+}
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
@@ -110,6 +126,9 @@ $app->post('/todo/add', function (Request $request) use ($app) {
 
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
+    if (!hasAccess($app, $id)) {
+      return $app->redirect('/todo');
+    };
 
     $sql = "DELETE FROM todos WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
@@ -124,6 +143,9 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
+    if (!hasAccess($app, $id)) {
+      return $app->redirect('/todo');
+    };
 
     $sql = "UPDATE todos SET completed = 1 WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
