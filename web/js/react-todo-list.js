@@ -75,7 +75,7 @@ function Todo(props) {
       <td>
         { updating ? (
           <i className="fas fa-spinner fa-spin" />
-        ) : ''}
+        ) : id}
       </td>
       <td>
         <a href={`/todo/${id}`}>
@@ -109,7 +109,7 @@ function TodoList() {
     <table className="table table-striped">
       <thead>
         <tr>
-          <th></th><th>Description</th><th></th><th></th>
+          <th>#</th><th>Description</th><th></th><th></th>
         </tr>
       </thead>
       <tbody>
