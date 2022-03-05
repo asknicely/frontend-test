@@ -40,3 +40,8 @@ body {
   animation: shimmer 2s infinite;
   content: '';
 }
+
+.todo-action {
+  text-align: center;
+  width: 40px;
+}

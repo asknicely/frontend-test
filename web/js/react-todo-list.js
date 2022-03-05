@@ -82,12 +82,13 @@ function Todo(props) {
           { description }
         </a>
       </td>
-      <td>
+      <td className="todo-action">
         <button type="button" className="btn btn-xs btn-danger" onClick={() => deleteTodo(id)}>
           <span className="glyphicon glyphicon-remove glyphicon-white" />
         </button>
       </td>
-      <td>
+      <td className="todo-action">
+        { hasCompleted ? <span className="glyphicon glyphicon-ok text-success" /> : '' }
         { !hasCompleted &&
           <button type="button" className="btn btn-xs btn-success" onClick={() => completeTodo(id)}>
             <span className="glyphicon glyphicon-ok glyphicon-white" />
