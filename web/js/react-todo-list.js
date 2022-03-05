@@ -5,6 +5,7 @@ function useRequestQuery() {
   const [todoList, setTodoList] = useState([]);
   const [fetchingList, setFetchingList] = useState(false);
   const [updatingList, setUpdatingList] = useState(null);
+  const [error, setError] = useState(false);
   
   async function fetchRequest(method, url) {
     const request = new Request(url, {
@@ -14,7 +15,12 @@ function useRequestQuery() {
       },
     });
 
-    return await fetch(request).then(res => res.json());
+    setError(false);
+    return await fetch(request)
+      .then(res => res.json())
+      .catch(() => {
+        setError(true);
+      });
   }
 
   async function fetchTodoList() {
@@ -41,11 +47,12 @@ function useRequestQuery() {
   useEffect(() => fetchTodoList(), [])
 
   return {
+    completeTodo,
     deleteTodo,
+    error,
     fetchTodoList,
     fetchingList,
     todoList,
-    completeTodo,
     updatingList,
   };
 }
@@ -99,8 +106,27 @@ function Todo(props) {
   )
 }
 
+function TodoMessageRow({
+  children,
+  theme = "default",
+}) {
+  const rowClasses =[
+    theme,
+    `text-${theme}`,
+    'text-center',
+  ]
+
+  return (
+    <tr className={rowClasses.join(' ')}>
+      <td colSpan={5}>
+        {children}
+      </td>
+    </tr>
+  )
+}
+
 function TodoList() {
-  const { todoList, fetchingList, ...restRequestProps } = useRequestQuery();
+  const { error, fetchingList, todoList, ...restRequestProps } = useRequestQuery();
 
   if (fetchingList) {
     return  [...Array(5).keys()].map((number) => <div key={`skeleton-${number}`} className="skeleton-box" />);
@@ -114,7 +140,19 @@ function TodoList() {
         </tr>
       </thead>
       <tbody>
-        { todoList.map(todo => (
+        { error && (
+          <TodoMessageRow theme="danger">
+            Whoops! Something went wrong, please try again later
+            {' '}
+            <i className="fas fa-frown"/>
+          </TodoMessageRow>
+        )}
+        { todoList && todoList.length === 0 && (
+          <TodoMessageRow>
+            Nothing to do, let's add something to start a productive day!
+          </TodoMessageRow>
+        )}
+        { todoList && todoList.map(todo => (
           <Todo
             key={todo.id}
             {...todo}
