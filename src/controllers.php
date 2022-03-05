@@ -52,6 +52,10 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
 
+        if ($todo['user_id'] !== $user['id']) {
+          return $app['twig']->render('403.html');
+        }
+
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todo.html', [
                 'todo' => $todo,

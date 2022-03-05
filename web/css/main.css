@@ -5,3 +5,11 @@ body {
 .login-form > div {
     margin-top: 10px;
 }
+
+.page-error {
+  padding-top: 15vh;
+}
+
+.page-error p {
+  font-size: 1.8rem;
+}
