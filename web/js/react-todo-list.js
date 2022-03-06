@@ -134,6 +134,8 @@ function TodoMessageRow({
 
 function TodoList() {
   const { error, fetchingList, todoList, ...restRequestProps } = useRequestQuery();
+  const noList = todoList && todoList.length === 0;
+  const noActiveList = todoList && !noList && todoList.every(({ completed }) => completed === "1");
 
   if (fetchingList) {
     return  [...Array(5).keys()].map((number) => <div key={`skeleton-${number}`} className="skeleton-box" />);
@@ -154,9 +156,14 @@ function TodoList() {
             <i className="fas fa-frown"/>
           </TodoMessageRow>
         )}
-        { todoList && todoList.length === 0 && (
+        { noList && (
           <TodoMessageRow>
             Nothing to do, let's add something to start a productive day!
+          </TodoMessageRow>
+        )}
+        { noActiveList && (
+          <TodoMessageRow>
+            Great job! You have completed everything! Let's keep the momentum going.
           </TodoMessageRow>
         )}
         { todoList && todoList.map(todo => (
