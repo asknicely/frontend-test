@@ -11,7 +11,12 @@
     </TransitionGroup>
     <div class="todo-add">
       <form ref="addTodo" method="post" action="/todo/add">
-        <input type="textbox" name="description" placeholder="Description..." />
+        <input
+          type="textbox"
+          name="description"
+          placeholder="Description..."
+          v-model="todo"
+        />
       </form>
       <button @click="addTodo">
         <font-awesome-icon icon="fa-solid fa-plus" />
@@ -38,7 +43,9 @@ export default {
   },
   methods: {
     addTodo() {
-      this.$refs.addTodo.submit();
+      if (this.todo.length > 0) {
+        this.$refs.addTodo.submit();
+      }
     },
   },
   computed: {

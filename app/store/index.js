@@ -17,19 +17,6 @@ export default new Vuex.Store({
         })
         .then(function (response) {
           state.todoList = response.data;
-          console.log(response);
-        });
-    },
-    addTodo(state, todo) {
-      axios
-        .post("/todo/add", {
-          description: todo,
-          complete: 0,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            state.todoList.push(todo);
-          }
         });
     },
     markComplete(state, id) {
