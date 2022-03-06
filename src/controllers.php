@@ -91,7 +91,7 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return $app->json(array('success' => true));
     }
 });
 
@@ -105,7 +105,7 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return $app->json(array('success' => true));
     }
 });
 
@@ -119,6 +119,6 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(array('success' => true));
+        return $app->json(array('success' => true));
     }
 });
