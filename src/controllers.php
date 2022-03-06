@@ -2,28 +2,35 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Silex\Application;
 
-function fetchUserTodo($app) {
-  $user = $app['session']->get('user');
-  $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}' ORDER BY completed";
-  return $app['db']->fetchAll($sql);
+function fetch_user_todo($app) {
+    $user = $app['session']->get('user');
+    $sql = "SELECT * FROM todos WHERE user_id = '${user['id']}' ORDER BY completed";
+    return $app['db']->fetchAll($sql);
 }
 
-function hasAccess($app, $id) {
-  $user = $app['session']->get('user');
-  $sql = "SELECT * FROM todos WHERE id = '$id'";
-  $todo = $app['db']->fetchAssoc($sql);
+function has_access($app, $id) {
+    $user = $app['session']->get('user');
+    $sql = "SELECT * FROM todos WHERE id = '$id'";
+    $todo = $app['db']->fetchAssoc($sql);
 
-  if ($todo === false) {
-    return false;
-  }
+    if ($todo === false) {
+        return false;
+    }
 
-  if ($todo['user_id'] !== $user['id']) {
-    return false;
-  }
+    if ($todo['user_id'] !== $user['id']) {
+        return false;
+    }
 
-  return true;
+    return true;
 }
+
+$check_user_logged_in = function (Request $request, Application $app) {
+    if (null === $user = $app['session']->get('user')) {
+        return $app->redirect('/login');
+    }
+};
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
@@ -64,13 +71,10 @@ $app->get('/logout', function () use ($app) {
 
 
 $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
-
     $contentType = $request->headers->get('Content-Type');
 
     if ($id){
+        $user = $app['session']->get('user');
         $sql = "SELECT * FROM todos WHERE id = '$id'";
         $todo = $app['db']->fetchAssoc($sql);
 
@@ -91,7 +95,7 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
 
     } else {
-        $todos = fetchUserTodo($app);
+        $todos = fetch_user_todo($app);
 
         if (strpos($contentType, 'application/json') === false) {
             return $app['twig']->render('todos.html', [
@@ -102,14 +106,11 @@ $app->get('/todo/{id}', function ($id, Request $request) use ($app) {
         }
     }
 })
-->value('id', null);
+->value('id', null)->before($check_user_logged_in);
 
 
 $app->post('/todo/add', function (Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
-
+    $user = $app['session']->get('user');
     $user_id = $user['id'];
     $description = $request->get('description');
     $contentType = $request->headers->get('Content-Type');
@@ -122,13 +123,13 @@ $app->post('/todo/add', function (Request $request) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(fetchUserTodo($app));
+        return json_encode(fetch_user_todo($app));
     }
-});
+})->before($check_user_logged_in);
 
 
 $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
-    if (!hasAccess($app, $id)) {
+    if (!has_access($app, $id)) {
       return $app->redirect('/todo');
     };
 
@@ -139,13 +140,13 @@ $app->match('/todo/delete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(fetchUserTodo($app));
+        return json_encode(fetch_user_todo($app));
     }
-});
+})->before($check_user_logged_in);
 
 
 $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
-    if (!hasAccess($app, $id)) {
+    if (!has_access($app, $id)) {
       return $app->redirect('/todo');
     };
 
@@ -156,9 +157,9 @@ $app->match('/todo/complete/{id}', function (Request $request, $id) use ($app) {
     if (strpos($contentType, 'application/json') === false) {
         return $app->redirect('/todo');
     } else {
-        return json_encode(fetchUserTodo($app));
+        return json_encode(fetch_user_todo($app));
     }
-});
+})->before($check_user_logged_in);
 
 // Handle error pages, comment out for debugging
 $app->error(function (\Exception $e, $code) use ($app) {
