@@ -1,0 +1,66 @@
+.todo-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e5e5e5;
+  border-radius: 12px;
+  padding: 0.5em;
+  margin: 0.2em;
+  max-width: 400px;
+  transition: background-color 0.2s ease;
+}
+
+.todo-item-title {
+  font-size: 24px;
+  font-family: "Helvetica Neue";
+}
+
+.todo-actions button {
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.todo-item.item-complete {
+  background-color: rgb(158, 238, 158);
+}
+
+.todo-add {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+form > input {
+  flex: 1 1 150px;
+  line-height: 20px;
+  border-radius: 4px;
+  padding: 1em 2em;
+}
+
+.container {
+  position: relative;
+  padding: 0;
+}
+
+/* 1. declare transition */
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.fade-leave-active {
+  position: absolute;
+}
