@@ -1,4 +1,3 @@
-
 const { useEffect, useState } = React;
 
 function useRequestQuery() {
@@ -23,6 +22,14 @@ function useRequestQuery() {
       });
   }
 
+  function startUpdatingList(id) {
+    setUpdatingList(id);
+  }
+
+  function finishedUpdatingList(id) {
+    setUpdatingList(null);
+  }
+
   async function fetchTodoList() {
     setFetchingList(true);
     const data = await fetchRequest('GET', '/todo');
@@ -31,17 +38,17 @@ function useRequestQuery() {
   }
 
   async function completeTodo(id) {
-    setUpdatingList(id);
+    startUpdatingList(id);
     const data = await fetchRequest('GET', `/todo/complete/${id}`)
     setTodoList(data);
-    setUpdatingList(null);
+    finishedUpdatingList(id);
   }
 
   async function deleteTodo(id) {
-    setUpdatingList(id);
+    startUpdatingList(id);
     const data = await fetchRequest('GET', `/todo/delete/${id}`)
     setTodoList(data);
-    setUpdatingList(null);
+    finishedUpdatingList(id);
   }
 
   useEffect(() => fetchTodoList(), [])
@@ -90,14 +97,14 @@ function Todo(props) {
         </a>
       </td>
       <td className="todo-action">
-        <button type="button" className="btn btn-xs btn-danger" onClick={() => deleteTodo(id)}>
+        <button type="button" disabled={updatingList} className="btn btn-xs btn-danger" onClick={() => deleteTodo(id)}>
           <span className="glyphicon glyphicon-remove glyphicon-white" />
         </button>
       </td>
       <td className="todo-action">
         { hasCompleted ? <span className="glyphicon glyphicon-ok text-success" /> : '' }
         { !hasCompleted &&
-          <button type="button" className="btn btn-xs btn-success" onClick={() => completeTodo(id)}>
+          <button type="button" disabled={updatingList} className="btn btn-xs btn-success" onClick={() => completeTodo(id)}>
             <span className="glyphicon glyphicon-ok glyphicon-white" />
           </button>
         }
