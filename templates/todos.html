@@ -1,50 +1,22 @@
 {% extends "layout.html" %}
 
+{% block title 'Todos' %}
+
 {% block content %}
-<div class="col-md-4 col-md-offset-4">
-    <h1>Todo List:</h1>
-    <table class="table table-striped">
-        <th>#</th>
-        <th>User</th>
-        <th>Description</th>
-        <th></th>
-        <th></th>
-        {% for todo in todos %}
-        <tr>
-            <td>{{ todo.id }}</td>
-            <td>{{ todo.user_id }}</td>
-            <td>
-                <a href="{{ app.request.baseurl }}/todo/{{ todo.id }}">
-                    {{ todo.description }}
-                </a>
-            </td>
-            <td>
-                <form method="post" action="{{ app.request.baseurl }}/todo/complete/{{ todo.id }}">
-                    <button type="submit" class="btn btn-xs btn-primary">
-                        {{ todo.completed is same as('1') ?
-                        '<span class="glyphicon glyphicon-check glyphicon-white"></span>' :
-                        '<span class="glyphicon glyphicon-unchecked glyphicon-white"></span>' }}
-                    </button>
-                </form>
-            </td>
-            <td>
-                <form method="post" action="{{ app.request.baseurl }}/todo/delete/{{ todo.id }}">
-                    <button type="submit" class="btn btn-xs btn-danger"><span
-                            class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <form method="post" action="{{ app.request.baseurl }}/todo/add">
-                <td colspan="3">
-                    <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary">Add</button>
-                </td>
-            </form>
-        </tr>
-    </table>
+
+<div class="col-xs-12 col-md-8 col-md-offset-2">
+  <h1>Todos</h1>
+  <div id="todos">
+    <div id="todos-loading">
+      <i class="glyphicon glyphicon-refresh spinner"></i>
+    </div>
+  </div>
 </div>
+
+
+<script>
+  const BASE_URL = "{{ app.request.baseurl }}";
+  const OPEN_TODO_ID = "{{ todo_id }}";
+</script>
+<script src="{{ app.request.basepath }}/js/todos.min.js"></script>
 {% endblock %}
